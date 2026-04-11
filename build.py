@@ -193,6 +193,7 @@ FOOTER = """\
 
 # ── 读取所有 _posts/*.md ──────────────────────────────────
 posts_dir = PROJECT / '_posts'
+posts_dir.mkdir(exist_ok=True)
 posts = []
 
 for md_file in sorted(posts_dir.glob('*.md'), reverse=False):
