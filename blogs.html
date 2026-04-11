@@ -322,6 +322,70 @@
         // Update count
         blogsHtml = blogsHtml.replace(/(\d+) posts/, (_, n) => `${Math.max(0, +n - 1)} posts`);
 
+        // If deleted post was the featured/latest, update featured card + index.html
+        const featuredHref = document.getElementById('featured-post')?.getAttribute('href');
+        if (featuredHref === href) {
+          const doc2 = new DOMParser().parseFromString(blogsHtml, 'text/html');
+          const next = doc2.querySelector('.feed-item');
+          if (next) {
+            const nHref    = next.getAttribute('href');
+            const nTitle   = next.querySelector('.feed-title')?.textContent?.trim() || '';
+            const nExcerpt = next.querySelector('.feed-excerpt')?.textContent?.trim() || '';
+            const metaSpans = [...next.querySelectorAll('.feed-meta > span:not(.feed-meta-dot)')];
+            const nDate    = metaSpans[0]?.textContent?.trim() || '';
+            const nCat     = metaSpans[1]?.textContent?.trim() || '';
+            const esc2 = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+            // Update featured post block in blogs.html
+            const newFeatured =
+              `        <a id="featured-post" class="feed-featured"\n` +
+              `           href="${nHref}"\n` +
+              `           data-search-title="${esc2(nTitle)}"\n` +
+              `           data-search-excerpt="${esc2(nExcerpt)}">\n` +
+              `          <div class="feed-featured-header">\n` +
+              `            <span class="feed-featured-tag">Latest</span>\n` +
+              `            <span class="feed-featured-date">${nDate}</span>\n` +
+              `          </div>\n` +
+              `          <span class="feed-featured-title">${esc2(nTitle)}</span>\n` +
+              `          <p class="feed-featured-excerpt">${esc2(nExcerpt)}</p>\n` +
+              `          <div class="feed-featured-footer">\n` +
+              `            <div class="feed-featured-meta"><span>${nCat || nDate}</span></div>\n` +
+              `            <span class="feed-featured-cta">Read post →</span>\n` +
+              `          </div>\n` +
+              `        </a>`;
+            blogsHtml = blogsHtml.replace(/<a id="featured-post"[\s\S]*?<\/a>/, newFeatured);
+
+            // Update index.html latest card
+            const ri = await fetch(`${API}/index.html`, {
+              headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' }
+            });
+            const di = await ri.json();
+            let indexHtml = b64dec(di.content);
+            const newCard =
+              `        <!-- Latest blog — text card -->\n` +
+              `        <a class="home-card home-card-sm" href="${nHref}">\n` +
+              `          <div>\n` +
+              `            <div class="home-card-badge">Latest Blog</div>\n` +
+              `            <h3 class="home-card-title">${esc2(nTitle)}</h3>\n` +
+              `            <p class="home-card-excerpt">${esc2(nExcerpt)}</p>\n` +
+              `          </div>\n` +
+              `          <div class="home-card-footer">\n` +
+              `            <span class="home-card-date">${nDate}</span>\n` +
+              `            <span class="home-card-arrow">→</span>\n` +
+              `          </div>\n` +
+              `        </a>`;
+            indexHtml = indexHtml.replace(
+              /<!-- LATEST_BLOG_START -->[\s\S]*?<!-- LATEST_BLOG_END -->/,
+              `<!-- LATEST_BLOG_START -->\n${newCard}\n        <!-- LATEST_BLOG_END -->`
+            );
+            await fetch(`${API}/index.html`, {
+              method: 'PUT',
+              headers: { Authorization: `token ${token}`, 'Content-Type': 'application/json' },
+              body: JSON.stringify({ message: `index: update latest after delete`, content: b64enc(indexHtml), sha: di.sha, branch: BRANCH })
+            });
+          }
+        }
+
         await fetch(`${API}/blogs.html`, {
           method: 'PUT',
           headers: { Authorization: `token ${token}`, 'Content-Type': 'application/json' },
