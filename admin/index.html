@@ -177,10 +177,12 @@
     <div class="toolbar">
       <button class="btn btn-ghost active" id="btnW" onclick="tab('write')">Write</button>
       <button class="btn btn-ghost" id="btnP" onclick="tab('preview')">Preview</button>
-      <span class="toolbar-hint">## 标题 &nbsp;·&nbsp; **粗体** &nbsp;·&nbsp; > 引用 &nbsp;·&nbsp; - 列表</span>
+      <button class="btn btn-ghost" id="btnImg" onclick="document.getElementById('imgPicker').click()">+ 图片</button>
+      <input type="file" id="imgPicker" accept="image/*" style="display:none" onchange="handleImgFile(this.files[0]); this.value=''">
+      <span class="toolbar-hint">## 标题 &nbsp;·&nbsp; **粗体** &nbsp;·&nbsp; > 引用 &nbsp;·&nbsp; 拖拽图片上传</span>
     </div>
 
-    <textarea class="body-textarea" id="bodyIn" placeholder="开始写作…"></textarea>
+    <textarea class="body-textarea" id="bodyIn" placeholder="开始写作…&#10;&#10;可直接拖拽图片到此处上传"></textarea>
     <div class="preview" id="previewPane"></div>
   </div>
 </div>
@@ -575,7 +577,88 @@ function setStatus(msg, cls='') {
   el.className = 'status' + (cls ? ' '+cls : '');
 }
 
+// ── Image upload ─────────────────────────────────────────
+async function handleImgFile(file) {
+  if (!file || !file.type.startsWith('image/')) return;
+
+  const btn = document.getElementById('btnImg');
+  btn.disabled = true;
+  setStatus('上传图片中…');
+
+  try {
+    // Sanitize filename with timestamp prefix to avoid collisions
+    const ext  = file.name.split('.').pop().toLowerCase() || 'jpg';
+    const base = file.name.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9\u4e00-\u9fff_-]/g, '-').slice(0, 40);
+    const name = `${Date.now()}-${base}.${ext}`;
+    const path = `images/${name}`;
+
+    // Read as base64
+    const b64 = await new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onload  = () => res(r.result.split(',')[1]);
+      r.onerror = rej;
+      r.readAsDataURL(file);
+    });
+
+    // Check if file already exists (need SHA to update)
+    let sha = null;
+    try { sha = (await ghGet(path)).sha; } catch(e) {}
+
+    // Upload — images are binary, send raw base64 directly
+    const body = { message: `Upload image: ${name}`, content: b64, branch: BRANCH };
+    if (sha) body.sha = sha;
+    const r = await fetch(`${API}/${path}`, {
+      method: 'PUT',
+      headers: { Authorization: `token ${getToken()}`, 'Content-Type': 'application/json', Accept: 'application/vnd.github.v3+json' },
+      body: JSON.stringify(body)
+    });
+    if (!r.ok) { const e = await r.json().catch(()=>({})); throw new Error(e.message || r.status); }
+
+    // Insert markdown at cursor
+    insertAtCursor(`![](../images/${name})`);
+    setStatus(`图片已上传 ✓  ${name}`, 'ok');
+  } catch(err) {
+    setStatus('图片上传失败: ' + err.message, 'err');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function insertAtCursor(text) {
+  const ta  = document.getElementById('bodyIn');
+  const pos = ta.selectionStart;
+  const before = ta.value.slice(0, pos);
+  const after  = ta.value.slice(ta.selectionEnd);
+  // Ensure image is on its own line
+  const prefix = before.length && !before.endsWith('\n') ? '\n' : '';
+  const suffix = after.length  && !after.startsWith('\n') ? '\n' : '';
+  ta.value = before + prefix + text + suffix + after;
+  const newPos = pos + prefix.length + text.length + suffix.length;
+  ta.selectionStart = ta.selectionEnd = newPos;
+  ta.focus();
+}
+
+// Drag-and-drop images onto textarea
+function initDragDrop() {
+  const ta = document.getElementById('bodyIn');
+  ta.addEventListener('dragover', e => {
+    e.preventDefault();
+    ta.style.background = 'rgba(44,95,163,0.05)';
+    ta.style.borderRadius = '8px';
+  });
+  ta.addEventListener('dragleave', () => {
+    ta.style.background = '';
+  });
+  ta.addEventListener('drop', e => {
+    e.preventDefault();
+    ta.style.background = '';
+    const file = [...e.dataTransfer.files].find(f => f.type.startsWith('image/'));
+    if (file) handleImgFile(file);
+  });
+}
+
 boot();
+initDragDrop();
 </script>
 </body>
 </html>
