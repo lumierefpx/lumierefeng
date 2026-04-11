@@ -232,6 +232,13 @@ function saveModalToken() {
   closeModal();
 }
 
+// ── Edit mode state ──────────────────────────────────────
+let editHref = null;
+let editSha  = null;
+
+// ── Image blob cache (for instant preview) ────────────────
+const imgBlobs = {}; // filename → blob URL
+
 // ── Boot ─────────────────────────────────────────────────
 function boot() {
   if (!getToken()) return;
@@ -239,6 +246,44 @@ function boot() {
   document.getElementById('writer').classList.add('on');
   document.getElementById('bottomBar').style.display = 'flex';
   document.getElementById('dateIn').value = new Date().toISOString().slice(0,10);
+
+  // Check for ?edit= param
+  const params = new URLSearchParams(location.search);
+  const editParam = params.get('edit');
+  if (editParam) loadForEdit(editParam);
+}
+
+async function loadForEdit(href) {
+  editHref = href;
+  setStatus('加载文章中…');
+  try {
+    const { content, sha } = await ghGet(href);
+    editSha = sha;
+
+    // Parse with DOM — much more reliable than regex
+    const doc = new DOMParser().parseFromString(content, 'text/html');
+
+    const title = doc.querySelector('.post-header h1')?.textContent.trim() || '';
+    const date  = doc.querySelector('.post-date')?.textContent.trim() || new Date().toISOString().slice(0,10);
+
+    // Extract body and convert HTML → markdown for clean editing
+    const postContent = doc.querySelector('.post-content');
+    postContent?.querySelector('.back-link')?.remove();
+    const body = htmlToMd(postContent?.innerHTML || '');
+
+    // Populate form
+    document.getElementById('titleIn').value   = title;
+    document.getElementById('dateIn').value    = date;
+    document.getElementById('bodyIn').value    = body;
+    document.getElementById('excerptIn').value = '';
+
+    // Update UI
+    document.querySelector('.topbar-label').textContent = 'Edit Post';
+    document.getElementById('pubBtn').textContent = '保存修改 →';
+    setStatus(`正在编辑: ${title}`, 'ok');
+  } catch(e) {
+    setStatus('加载失败: ' + e.message, 'err');
+  }
 }
 
 // ── Tabs ─────────────────────────────────────────────────
@@ -251,9 +296,49 @@ function tab(t) {
     document.getElementById('btnP').classList.remove('active');
   } else {
     ta.style.display = 'none'; pv.classList.add('on');
-    pv.innerHTML = mdHtml(ta.value);
+    let html = mdHtml(ta.value);
+    // Substitute blob URLs for freshly uploaded images (instant preview)
+    Object.entries(imgBlobs).forEach(([name, blobUrl]) => {
+      html = html.replace(new RegExp(`src="\\.\\./images/${name}"`, 'g'), `src="${blobUrl}"`);
+    });
+    // Fall back to GitHub raw URL for any remaining ../images/ references
+    html = html.replace(/src="\.\.\/images\//g,
+      `src="https://raw.githubusercontent.com/${OWNER}/${REPO}/main/images/`);
+    pv.innerHTML = html;
     document.getElementById('btnW').classList.remove('active');
     document.getElementById('btnP').classList.add('active');
+  }
+}
+
+// ── HTML → Markdown ──────────────────────────────────────
+function htmlToMd(html) {
+  const doc = new DOMParser().parseFromString(`<div>${html}</div>`, 'text/html');
+  return nodeMd(doc.querySelector('div')).trim();
+}
+
+function nodeMd(node) {
+  if (node.nodeType === 3) return node.textContent; // text node
+
+  const tag = node.tagName?.toLowerCase();
+  const inner = () => [...node.childNodes].map(nodeMd).join('');
+
+  switch (tag) {
+    case 'p':          return inner().trim() + '\n\n';
+    case 'h1':         return `# ${inner().trim()}\n\n`;
+    case 'h2':         return `## ${inner().trim()}\n\n`;
+    case 'h3':         return `### ${inner().trim()}\n\n`;
+    case 'strong':
+    case 'b':          return `**${inner()}**`;
+    case 'em':
+    case 'i':          return `*${inner()}*`;
+    case 'a':          return `[${inner()}](${node.getAttribute('href') || ''})`;
+    case 'img':        return `![${node.getAttribute('alt') || ''}](${node.getAttribute('src') || ''})`;
+    case 'blockquote': return inner().trim().split('\n').map(l => `> ${l}`).join('\n') + '\n\n';
+    case 'ul':
+    case 'ol':         return inner() + '\n';
+    case 'li':         return `- ${inner().trim()}\n`;
+    case 'br':         return '\n';
+    default:           return inner();
   }
 }
 
@@ -522,23 +607,65 @@ function patchIndex(html, {title, date, excerpt, href}) {
   );
 }
 
-// ── Publish ──────────────────────────────────────────────
+// ── Publish / Save ───────────────────────────────────────
 async function publish() {
   const title   = document.getElementById('titleIn').value.trim();
   const date    = document.getElementById('dateIn').value;
   const cat     = document.getElementById('catIn').value;
-  const bodyMd  = document.getElementById('bodyIn').value.trim();
+  const bodyRaw = document.getElementById('bodyIn').value.trim();
   let   excerpt = document.getElementById('excerptIn').value.trim();
 
-  if (!title)  return setStatus('请填写标题', 'err');
-  if (!date)   return setStatus('请选择日期', 'err');
-  if (!bodyMd) return setStatus('正文不能为空', 'err');
-  if (!excerpt) excerpt = firstLine(bodyMd);
+  if (!title)   return setStatus('请填写标题', 'err');
+  if (!date)    return setStatus('请选择日期', 'err');
+  if (!bodyRaw) return setStatus('正文不能为空', 'err');
 
-  const s   = slug(title);
-  const href = `posts/${s}.html`;
-  const btn  = document.getElementById('pubBtn');
+  const btn = document.getElementById('pubBtn');
   btn.disabled = true;
+
+  // ── EDIT MODE ─────────────────────────────────────────
+  if (editHref) {
+    try {
+      if (!excerpt) excerpt = firstLine(bodyRaw) || title;
+      const bodyHtml = mdHtml(bodyRaw);
+
+      setStatus('保存文章…');
+      await ghPut(editHref, makePostHtml(title, date, bodyHtml), editSha, `Edit: ${title}`);
+
+      setStatus('更新 blogs.html…');
+      const { content: bc, sha: bs } = await ghGet('blogs.html');
+      // Update existing feed item (replace old href entry with new data)
+      let newBlogs = bc;
+      const esc = editHref.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const e = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      const newItem =
+        `<a class="feed-item" href="${editHref}">\n` +
+        `              <div class="feed-item-inner">\n` +
+        `                <div class="feed-body">\n` +
+        `                  <span class="feed-title">${e(title)}</span>\n` +
+        `                  <p class="feed-excerpt">${e(excerpt)}</p>\n` +
+        `                  <div class="feed-meta"><span>${fmtL(date)}</span>` +
+        `<span class="feed-meta-dot"></span><span>${cat}</span></div>\n` +
+        `                </div>\n` +
+        `                <span class="feed-arrow">→</span>\n` +
+        `              </div>\n` +
+        `            </a>`;
+      newBlogs = newBlogs.replace(new RegExp(`<a class="feed-item" href="${esc}">[\\s\\S]*?<\\/a>`), newItem);
+      await ghPut('blogs.html', newBlogs, bs, `blogs: edit "${title}"`);
+
+      setStatus(`保存成功 ✓ &nbsp;<a href="https://lumierefeng.com/${editHref}" target="_blank" style="color:var(--accent)">查看文章 →</a>`, 'ok');
+    } catch(err) {
+      console.error(err);
+      setStatus('保存失败: ' + err.message, 'err');
+    } finally {
+      btn.disabled = false;
+    }
+    return;
+  }
+
+  // ── NEW POST MODE ──────────────────────────────────────
+  if (!excerpt) excerpt = firstLine(bodyRaw);
+  const s    = slug(title);
+  const href = `posts/${s}.html`;
 
   try {
     setStatus('检查文章是否已存在…');
@@ -546,7 +673,7 @@ async function publish() {
     try { sha = (await ghGet(href)).sha; } catch(e) {}
 
     setStatus('创建文章文件…');
-    await ghPut(href, makePostHtml(title, date, mdHtml(bodyMd)), sha, `Add post: ${title}`);
+    await ghPut(href, makePostHtml(title, date, mdHtml(bodyRaw)), sha, `Add post: ${title}`);
 
     setStatus('更新 blogs.html…');
     const { content: bc, sha: bs } = await ghGet('blogs.html');
@@ -557,11 +684,10 @@ async function publish() {
     await ghPut('index.html', patchIndex(ic, {title,date,excerpt,href}), is, `index: latest "${title}"`);
 
     setStatus(`发布成功 ✓ &nbsp;约 1-2 分钟后生效 &nbsp;<a href="https://lumierefeng.com/${href}" target="_blank" style="color:var(--accent)">查看文章 →</a>`, 'ok');
-
-    document.getElementById('titleIn').value = '';
-    document.getElementById('bodyIn').value  = '';
+    document.getElementById('titleIn').value  = '';
+    document.getElementById('bodyIn').value   = '';
     document.getElementById('excerptIn').value = '';
-    document.getElementById('dateIn').value  = new Date().toISOString().slice(0,10);
+    document.getElementById('dateIn').value   = new Date().toISOString().slice(0,10);
 
   } catch(err) {
     console.error(err);
@@ -578,48 +704,72 @@ function setStatus(msg, cls='') {
 }
 
 // ── Image upload ─────────────────────────────────────────
-async function handleImgFile(file) {  // returns promise
+// Compress image to JPEG ≤ 1920px, quality 0.85 (keeps under GitHub 1MB limit)
+function compressImage(file) {
+  return new Promise(resolve => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const MAX = 1920;
+      let w = img.width, h = img.height;
+      if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      URL.revokeObjectURL(url);
+      canvas.toBlob(resolve, 'image/jpeg', 0.85);
+    };
+    img.src = url;
+  });
+}
+
+async function handleImgFile(file) {
   if (!file || !file.type.startsWith('image/')) return;
 
   const btn = document.getElementById('btnImg');
   btn.disabled = true;
-  setStatus('上传图片中…');
+  setStatus('处理图片中…');
 
   try {
-    // Sanitize filename with timestamp prefix to avoid collisions
-    const ext  = file.name.split('.').pop().toLowerCase() || 'jpg';
+    // Compress before upload
+    const compressed = await compressImage(file);
     const base = file.name.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9\u4e00-\u9fff_-]/g, '-').slice(0, 40);
-    const name = `${Date.now()}-${base}.${ext}`;
+    const name = `${Date.now()}-${base}.jpg`;  // always jpg after compression
     const path = `images/${name}`;
 
-    // Read as base64
+    // Blob URL for instant preview
+    imgBlobs[name] = URL.createObjectURL(compressed);
+
+    // Read compressed file as base64
     const b64 = await new Promise((res, rej) => {
       const r = new FileReader();
       r.onload  = () => res(r.result.split(',')[1]);
       r.onerror = rej;
-      r.readAsDataURL(file);
+      r.readAsDataURL(compressed);
     });
 
-    // Check if file already exists (need SHA to update)
-    let sha = null;
-    try { sha = (await ghGet(path)).sha; } catch(e) {}
-
-    // Upload — images are binary, send raw base64 directly
+    setStatus('上传图片中…');
+    // Upload to GitHub
     const body = { message: `Upload image: ${name}`, content: b64, branch: BRANCH };
-    if (sha) body.sha = sha;
     const r = await fetch(`${API}/${path}`, {
       method: 'PUT',
       headers: { Authorization: `token ${getToken()}`, 'Content-Type': 'application/json', Accept: 'application/vnd.github.v3+json' },
       body: JSON.stringify(body)
     });
-    if (!r.ok) { const e = await r.json().catch(()=>({})); throw new Error(e.message || r.status); }
+    if (!r.ok) {
+      const e = await r.json().catch(() => ({}));
+      throw new Error(e.message || `HTTP ${r.status}`);
+    }
 
-    // Insert markdown at cursor then show preview
+    // Insert markdown and switch to preview to confirm
+    // First switch to write tab to ensure textarea is visible for insertAtCursor
+    tab('write');
     insertAtCursor(`![](../images/${name})`);
     tab('preview');
-    setStatus(`图片已上传 ✓ 点 Write 继续写作`, 'ok');
+    setStatus('图片已上传 ✓ — 点 Write 继续写作', 'ok');
   } catch(err) {
     setStatus('图片上传失败: ' + err.message, 'err');
+    console.error(err);
   } finally {
     btn.disabled = false;
   }

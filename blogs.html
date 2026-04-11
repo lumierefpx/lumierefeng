@@ -281,5 +281,111 @@
     </div>
   </footer>
   <script src="js/main.js"></script>
+  <script>
+  // ── Admin controls (only visible when token exists) ───────
+  (function() {
+    const token = localStorage.getItem('lf_token');
+    if (!token) return;
+
+    const OWNER = 'lumierefpx', REPO = 'lumierefeng', BRANCH = 'main';
+    const API = `https://api.github.com/repos/${OWNER}/${REPO}/contents`;
+
+    // Inject styles
+    const style = document.createElement('style');
+    style.textContent = `
+      /* Buttons sit on the meta line (date · category), flush right, hover only */
+      .feed-meta { display: flex; align-items: center; gap: 0; flex-wrap: nowrap; }
+      .feed-admin-gap { flex: 1; }
+      .feed-admin {
+        display: flex; gap: 6px; align-items: center;
+        opacity: 0; pointer-events: none; transition: opacity 0.15s;
+      }
+      .feed-item:hover .feed-admin { opacity: 1; pointer-events: auto; }
+      .feed-admin a, .feed-admin button {
+        font-size: 10.5px; font-weight: 500; padding: 2px 8px; border-radius: 4px;
+        text-decoration: none; cursor: pointer; border: none; font-family: inherit;
+        letter-spacing: 0.2px; white-space: nowrap; transition: background 0.15s;
+      }
+      .feed-edit { background: #e8eef8; color: #2c5fa3; }
+      .feed-edit:hover { background: #d0dcf0; }
+      .feed-del  { background: #fde8e8; color: #c0392b; }
+      .feed-del:hover { background: #fbd0d0; }
+
+    `;
+    document.head.appendChild(style);
+
+    // Inject Edit/Delete into the .feed-meta line of each feed item
+    document.querySelectorAll('.feed-item').forEach(item => {
+      const href = item.getAttribute('href');
+      const meta = item.querySelector('.feed-meta');
+      if (!meta) return;
+      const gap = document.createElement('span');
+      gap.className = 'feed-admin-gap';
+      const actions = document.createElement('div');
+      actions.className = 'feed-admin';
+      actions.innerHTML =
+        `<a class="feed-edit" href="/admin/?edit=${encodeURIComponent(href)}"
+            onclick="event.stopPropagation()">Edit</a>` +
+        `<button class="feed-del"
+            onclick="event.preventDefault();event.stopPropagation();doDelete('${href}',this)">Delete</button>`;
+      meta.appendChild(gap);
+      meta.appendChild(actions);
+    });
+
+
+    // ── Delete ────────────────────────────────────────────
+    async function doDelete(href, btn) {
+      if (!confirm('确定要删除这篇文章吗？\n' + href)) return;
+      btn.disabled = true;
+      btn.textContent = '删除中…';
+      try {
+        // Get file SHA then delete
+        const r1 = await fetch(`${API}/${href}`, {
+          headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' }
+        });
+        if (!r1.ok) throw new Error('获取文件失败');
+        const { sha } = await r1.json();
+
+        await fetch(`${API}/${href}`, {
+          method: 'DELETE',
+          headers: { Authorization: `token ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: `Delete: ${href}`, sha, branch: BRANCH })
+        });
+
+        // Remove from blogs.html on GitHub
+        const r2 = await fetch(`${API}/blogs.html`, {
+          headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' }
+        });
+        const d2 = await r2.json();
+        const b64dec = s => { const b=atob(s.replace(/\n/g,'')),u=new Uint8Array(b.length); for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i); return new TextDecoder().decode(u); };
+        const b64enc = s => { const b=new TextEncoder().encode(s);let r=''; b.forEach(x=>r+=String.fromCharCode(x)); return btoa(r); };
+        let blogsHtml = b64dec(d2.content);
+
+        // Remove feed item
+        const esc = href.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        blogsHtml = blogsHtml.replace(new RegExp(`\\s*<a class="feed-item" href="${esc}">[\\s\\S]*?</a>`), '');
+        // Remove empty year groups
+        blogsHtml = blogsHtml.replace(/<div class="year-group"[^>]*>\s*<div class="year-divider">[^<]*<\/div>\s*<\/div>\s*/g, '');
+        // Update count
+        blogsHtml = blogsHtml.replace(/(\d+) posts/, (_, n) => `${Math.max(0, +n - 1)} posts`);
+
+        await fetch(`${API}/blogs.html`, {
+          method: 'PUT',
+          headers: { Authorization: `token ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: `Remove post from feed: ${href}`, content: b64enc(blogsHtml), sha: d2.sha, branch: BRANCH })
+        });
+
+        // Remove from DOM
+        const el = btn.closest('.feed-item, #featured-post');
+        el?.remove();
+        alert('已删除，页面将在 1-2 分钟后更新。');
+      } catch(e) {
+        alert('删除失败: ' + e.message);
+        btn.disabled = false;
+        btn.textContent = 'Delete';
+      }
+    }
+  })();
+  </script>
 </body>
 </html>
