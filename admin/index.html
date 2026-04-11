@@ -578,7 +578,7 @@ function setStatus(msg, cls='') {
 }
 
 // ── Image upload ─────────────────────────────────────────
-async function handleImgFile(file) {
+async function handleImgFile(file) {  // returns promise
   if (!file || !file.type.startsWith('image/')) return;
 
   const btn = document.getElementById('btnImg');
@@ -614,9 +614,10 @@ async function handleImgFile(file) {
     });
     if (!r.ok) { const e = await r.json().catch(()=>({})); throw new Error(e.message || r.status); }
 
-    // Insert markdown at cursor
+    // Insert markdown at cursor then show preview
     insertAtCursor(`![](../images/${name})`);
-    setStatus(`图片已上传 ✓  ${name}`, 'ok');
+    tab('preview');
+    setStatus(`图片已上传 ✓ 点 Write 继续写作`, 'ok');
   } catch(err) {
     setStatus('图片上传失败: ' + err.message, 'err');
   } finally {
