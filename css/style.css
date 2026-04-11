@@ -696,7 +696,7 @@ footer {
 
 /* ── HOME PAGE ── */
 .home-hero {
-  padding: 80px 0 64px;
+  padding: 48px 0 36px;
   border-bottom: 1px solid var(--border);
 }
 
@@ -705,39 +705,39 @@ footer {
   letter-spacing: 4px;
   text-transform: uppercase;
   color: var(--muted);
-  margin-bottom: 28px;
+  margin-bottom: 16px;
 }
 
 .home-hero h1 {
-  font-size: clamp(2.4rem, 5.5vw, 4rem);
+  font-size: clamp(1.9rem, 4vw, 3rem);
   font-weight: 300;
-  letter-spacing: -2px;
+  letter-spacing: -1.5px;
   line-height: 1.1;
   color: var(--text);
-  margin-bottom: 28px;
+  margin-bottom: 16px;
 }
 
 .home-hero-sub {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--muted);
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
 }
 
 .home-section {
-  padding: 64px 0;
+  padding: 40px 0;
   border-bottom: 1px solid var(--border);
 }
 
 .home-section:last-child {
   border-bottom: none;
-  padding-bottom: 120px;
+  padding-bottom: 80px;
 }
 
 .home-section-header {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 28px;
+  margin-bottom: 18px;
 }
 
 .home-section-header .section-label { margin-bottom: 0; }
@@ -751,13 +751,11 @@ footer {
 }
 .section-more:hover { opacity: 1; }
 
-/* Bento grid */
+/* Bento grid — 3 equal columns */
 .home-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 14px;
-  min-height: 320px;
 }
 
 .home-card {
@@ -769,6 +767,7 @@ footer {
   text-decoration: none;
   color: var(--text);
   overflow: hidden;
+  height: 260px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.04);
   transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
 }
@@ -780,14 +779,15 @@ footer {
 }
 
 .home-card-lg {
-  grid-row: span 2;
+  grid-row: span 1;
   padding: 0;
   position: relative;
-  min-height: 320px;
 }
 
-/* Photo fills the whole large card, text overlays bottom */
-.home-card-lg .home-card-cover {
+/* Image card — full-bleed photo with overlay text */
+.home-card-img-full { position: relative; padding: 0; }
+
+.home-card-img-full .home-card-cover {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -796,46 +796,33 @@ footer {
   display: block;
 }
 
-.home-card-lg .home-card-overlay {
+.home-card-img-full .home-card-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(10,14,28,0.82) 0%, rgba(10,14,28,0.15) 55%, transparent 100%);
+  background: linear-gradient(to top, rgba(10,14,28,0.8) 0%, rgba(10,14,28,0.1) 60%, transparent 100%);
   border-radius: var(--radius);
 }
 
-.home-card-lg .home-card-body {
+.home-card-img-full .home-card-body {
   position: relative;
   z-index: 2;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 30px 32px;
+  padding: 22px 24px;
 }
 
-.home-card-lg .home-card-badge {
-  color: rgba(255,255,255,0.6);
-  margin-bottom: 10px;
-}
-
-.home-card-lg .home-card-title {
-  font-size: 1.55rem;
-  letter-spacing: -0.5px;
-  line-height: 1.3;
-  color: #fff;
-  margin-bottom: 14px;
-}
-
-.home-card:hover .home-card-lg .home-card-title,
-.home-card-lg:hover .home-card-title { color: #fff; }
-
-.home-card-lg .home-card-footer { border-top: 1px solid rgba(255,255,255,0.15); padding-top: 14px; }
-.home-card-lg .home-card-date { color: rgba(255,255,255,0.55); }
-.home-card-lg .home-card-arrow { color: rgba(255,255,255,0.5); }
-.home-card-lg:hover .home-card-arrow { color: #fff; opacity: 1; }
+.home-card-img-full .home-card-badge { color: rgba(255,255,255,0.6); margin-bottom: 6px; }
+.home-card-img-full .home-card-title { font-size: 1.05rem; color: #fff; margin-bottom: 12px; }
+.home-card-img-full:hover .home-card-title { color: #fff; }
+.home-card-img-full .home-card-footer { border-top: 1px solid rgba(255,255,255,0.15); padding-top: 12px; }
+.home-card-img-full .home-card-date { color: rgba(255,255,255,0.5); font-size: 11px; }
+.home-card-img-full .home-card-arrow { color: rgba(255,255,255,0.45); }
+.home-card-img-full:hover .home-card-arrow { color: #fff; opacity: 1; }
 
 .home-card-sm {
-  padding: 24px 26px;
+  padding: 22px 24px;
   justify-content: space-between;
 }
 
@@ -924,7 +911,7 @@ footer {
   grid-template-columns: 72px 1fr auto;
   align-items: baseline;
   gap: 16px;
-  padding: 15px 0;
+  padding: 12px 0;
   border-bottom: 1px solid var(--border);
   text-decoration: none;
   color: var(--text);
@@ -993,8 +980,8 @@ footer {
   nav { padding: 0 20px; position: relative; }
   .blogs-layout { grid-template-columns: 1fr; gap: 40px; padding: 60px 0 80px; }
   .blogs-sidebar { position: static; }
-  .home-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
-  .home-card-lg { grid-row: span 1; min-height: auto; }
+  .home-grid { grid-template-columns: 1fr; }
+  .home-card { height: 220px; }
   .podcast-grid { grid-template-columns: 1fr; }
   .home-hero h1 { letter-spacing: -1px; }
   .home-post-item { grid-template-columns: 58px 1fr; }

@@ -9,21 +9,23 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
   <style>
-    .post-header { padding: 80px 0 48px; border-bottom: 1px solid var(--border); margin-bottom: 48px; }
-    .post-date { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
-    .post-header h1 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 300; letter-spacing: -1px; line-height: 1.2; }
-    .post-content { max-width: 680px; padding-bottom: 100px; }
-    .post-content p { font-size: 16px; line-height: 1.85; color: #ccc5c5; margin-bottom: 1.5em; }
-    .post-content h1, .post-content h2, .post-content h3 { font-weight: 400; margin: 2em 0 0.8em; letter-spacing: -0.5px; }
-    .post-content h2 { font-size: 1.4rem; }
-    .post-content h3 { font-size: 1.1rem; color: var(--accent); }
-    .post-content img { width: 100%; border-radius: 8px; margin: 2em 0; border: 1px solid var(--border); }
-    .post-content a { color: var(--accent); text-decoration: underline; }
-    .post-content blockquote { border-left: 2px solid var(--border); padding-left: 20px; margin: 2em 0; color: var(--muted); font-style: italic; }
-    .post-content ul, .post-content ol { padding-left: 24px; margin-bottom: 1.5em; color: #ccc5c5; }
-    .post-content li { margin-bottom: 0.4em; line-height: 1.7; font-size: 16px; }
-    .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); text-decoration: none; margin-bottom: 40px; transition: color 0.2s; }
-    .back-link:hover { color: var(--text); }
+    .post-header { padding: 80px 0 48px; border-bottom: 1px solid var(--border); margin-bottom: 56px; }
+    .post-date { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+    .post-header h1 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 300; letter-spacing: -1px; line-height: 1.2; color: var(--text); }
+    .post-content { max-width: 660px; padding-bottom: 120px; }
+    .post-content p { font-size: 16.5px; line-height: 1.9; color: var(--prose); margin-bottom: 1.6em; }
+    .post-content p:empty { display: none; }
+    .post-content h2, .post-content h3 { font-weight: 400; margin: 2.4em 0 0.8em; letter-spacing: -0.3px; color: var(--text); }
+    .post-content h2 { font-size: 1.35rem; }
+    .post-content h3 { font-size: 1.05rem; color: var(--accent); }
+    .post-content img { width: 100%; border-radius: 10px; margin: 2.4em 0; border: 1px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+    .post-content a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+    .post-content blockquote { border-left: 2px solid var(--border); padding-left: 24px; margin: 2.4em 0; color: var(--muted); font-style: italic; }
+    .post-content ul, .post-content ol { padding-left: 24px; margin-bottom: 1.6em; color: var(--prose); }
+    .post-content li { margin-bottom: 0.5em; line-height: 1.85; font-size: 16.5px; }
+    .post-content strong { color: var(--text); font-weight: 500; }
+    .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); text-decoration: none; margin-bottom: 48px; letter-spacing: 0.3px; transition: color 0.2s; }
+    .back-link:hover { color: var(--accent); }
   </style>
 </head>
 <body>
@@ -59,53 +61,31 @@
     </div>
     <div class="post-content">
       <a class="back-link" href="../index.html">← Home</a>
-      <!-- wp:columns -->
-<div class="wp-block-columns"><!-- wp:column {"width":"100%"} -->
+      <div class="wp-block-columns">
 <div class="wp-block-column" style="flex-basis:100%"></div>
-<!-- /wp:column --></div>
-<!-- /wp:columns -->
+</div>
 
-<!-- wp:gallery {"ids":[405,393,395,396,398,399,401,403,404],"linkTo":"none"} -->
-<figure class="wp-block-gallery has-nested-images columns-default is-cropped"><!-- wp:image {"lightbox":{"enabled":false},"id":405,"sizeSlug":"large","linkDestination":"custom"} -->
-<figure class="wp-block-image size-large"><a href="https://www.xiaoyuzhoufm.com/podcast/652570afb292e77709a3cefe"><img src="../images/screenshot-2023-10-10-at-11.39.33-pm.png" alt="" class="wp-image-405" /></a><figcaption class="wp-element-caption">好地方 第一季</figcaption></figure>
-<!-- /wp:image -->
+<figure class="wp-block-gallery has-nested-images columns-default is-cropped">
+<figure class="wp-block-image size-large"><a href="https://www.xiaoyuzhoufm.com/podcast/652570afb292e77709a3cefe"><img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/05/screenshot-2023-10-10-at-11.39.33-pm.png?w=1024" alt="" class="wp-image-405" /></a><figcaption class="wp-element-caption">好地方 第一季</figcaption></figure>
 
-<!-- wp:image {"lightbox":{"enabled":false},"id":393,"sizeSlug":"large","linkDestination":"custom"} -->
-<figure class="wp-block-image size-large"><a href="https://www.xiaoyuzhoufm.com/episodes/652576f550cf691d245dcf2c"><img src="../images/screenshot-2023-10-10-at-11.31.04-pm.png" alt="" class="wp-image-393" /></a><figcaption class="wp-element-caption">S1E1 有些事现在不做以后就再也不会做了</figcaption></figure>
-<!-- /wp:image -->
+<figure class="wp-block-image size-large"><a href="https://www.xiaoyuzhoufm.com/episodes/652576f550cf691d245dcf2c"><img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/05/screenshot-2023-10-10-at-11.31.04-pm.png?w=1024" alt="" class="wp-image-393" /></a><figcaption class="wp-element-caption">S1E1 有些事现在不做以后就再也不会做了</figcaption></figure>
 
-<!-- wp:image {"lightbox":{"enabled":false},"id":395,"sizeSlug":"large","linkDestination":"custom"} -->
-<figure class="wp-block-image size-large"><a href="https://www.xiaoyuzhoufm.com/episodes/66c2260333591c27be00ae8b"><img src="../images/screenshot-2024-08-19-at-12.38.15e280afam.png" alt="" class="wp-image-395" /></a><figcaption class="wp-element-caption">S1E2 经济独立之后，我们如何看待东亚父母有条件的爱</figcaption></figure>
-<!-- /wp:image -->
+<figure class="wp-block-image size-large"><a href="https://www.xiaoyuzhoufm.com/episodes/66c2260333591c27be00ae8b"><img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/05/screenshot-2024-08-19-at-12.38.15e280afam.png?w=1024" alt="" class="wp-image-395" /></a><figcaption class="wp-element-caption">S1E2 经济独立之后，我们如何看待东亚父母有条件的爱</figcaption></figure>
 
-<!-- wp:image {"lightbox":{"enabled":false},"id":396,"sizeSlug":"large","linkDestination":"custom"} -->
-<figure class="wp-block-image size-large"><a href="https://www.xiaoyuzhoufm.com/episodes/6700d7c981cdab3a93dd5490"><img src="../images/screenshot-2024-10-05-at-12.52.36e280afpm.png" alt="" class="wp-image-396" /></a><figcaption class="wp-element-caption">S1E3 那些年，我们对香港的爱与恨</figcaption></figure>
-<!-- /wp:image -->
+<figure class="wp-block-image size-large"><a href="https://www.xiaoyuzhoufm.com/episodes/6700d7c981cdab3a93dd5490"><img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/05/screenshot-2024-10-05-at-12.52.36e280afpm.png?w=1024" alt="" class="wp-image-396" /></a><figcaption class="wp-element-caption">S1E3 那些年，我们对香港的爱与恨</figcaption></figure>
 
-<!-- wp:image {"lightbox":{"enabled":false},"id":398,"sizeSlug":"large","linkDestination":"custom"} -->
-<figure class="wp-block-image size-large"><a href="https://www.xiaoyuzhoufm.com/episodes/67166adc0d2f24f289c88643"><img src="../images/screenshot-2024-10-21-at-10.52.24e280afpm.png" alt="" class="wp-image-398" /></a><figcaption class="wp-element-caption">S1E4 十八岁的夏天，我真的来到了巴黎</figcaption></figure>
-<!-- /wp:image -->
+<figure class="wp-block-image size-large"><a href="https://www.xiaoyuzhoufm.com/episodes/67166adc0d2f24f289c88643"><img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/05/screenshot-2024-10-21-at-10.52.24e280afpm.png?w=1024" alt="" class="wp-image-398" /></a><figcaption class="wp-element-caption">S1E4 十八岁的夏天，我真的来到了巴黎</figcaption></figure>
 
-<!-- wp:image {"lightbox":{"enabled":false},"id":399,"sizeSlug":"large","linkDestination":"custom"} -->
-<figure class="wp-block-image size-large"><a href="https://www.xiaoyuzhoufm.com/episodes/6737675a43dc3a4387f44921"><img src="../images/5-1.png" alt="" class="wp-image-399" /></a><figcaption class="wp-element-caption">S1E5 中日美：我的新时代三国演义</figcaption></figure>
-<!-- /wp:image -->
+<figure class="wp-block-image size-large"><a href="https://www.xiaoyuzhoufm.com/episodes/6737675a43dc3a4387f44921"><img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/05/5-1.png?w=1024" alt="" class="wp-image-399" /></a><figcaption class="wp-element-caption">S1E5 中日美：我的新时代三国演义</figcaption></figure>
 
-<!-- wp:image {"lightbox":{"enabled":false},"id":401,"sizeSlug":"large","linkDestination":"custom"} -->
-<figure class="wp-block-image size-large"><a href="https://www.xiaoyuzhoufm.com/episodes/67586208bdb9877a97df97a9"><img src="../images/6-1.png" alt="" class="wp-image-401" /></a><figcaption class="wp-element-caption">S1E6 香港大学毕业牲和牠们的牲活</figcaption></figure>
-<!-- /wp:image -->
+<figure class="wp-block-image size-large"><a href="https://www.xiaoyuzhoufm.com/episodes/67586208bdb9877a97df97a9"><img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/05/6-1.png?w=1024" alt="" class="wp-image-401" /></a><figcaption class="wp-element-caption">S1E6 香港大学毕业牲和牠们的牲活</figcaption></figure>
 
-<!-- wp:image {"lightbox":{"enabled":false},"id":403,"sizeSlug":"large","linkDestination":"custom"} -->
-<figure class="wp-block-image size-large"><a href="https://www.xiaoyuzhoufm.com/episodes/67697c871e823e72d3285957"><img src="../images/7-1-2.png" alt="" class="wp-image-403" /></a><figcaption class="wp-element-caption">S1E7 离开优绩主义的图书馆，谈论家和香港，谈论死亡与人生在世的终极理想</figcaption></figure>
-<!-- /wp:image -->
+<figure class="wp-block-image size-large"><a href="https://www.xiaoyuzhoufm.com/episodes/67697c871e823e72d3285957"><img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/05/7-1-2.png?w=1024" alt="" class="wp-image-403" /></a><figcaption class="wp-element-caption">S1E7 离开优绩主义的图书馆，谈论家和香港，谈论死亡与人生在世的终极理想</figcaption></figure>
 
-<!-- wp:image {"lightbox":{"enabled":false},"id":404,"sizeSlug":"large","linkDestination":"custom"} -->
-<figure class="wp-block-image size-large"><a href="https://www.xiaoyuzhoufm.com/episodes/678d25fc9420ede9d131ae3e"><img src="../images/8-1.png" alt="" class="wp-image-404" /></a><figcaption class="wp-element-caption">S1E8 我不再敷衍自己了</figcaption></figure>
-<!-- /wp:image --></figure>
-<!-- /wp:gallery -->
+<figure class="wp-block-image size-large"><a href="https://www.xiaoyuzhoufm.com/episodes/678d25fc9420ede9d131ae3e"><img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/05/8-1.png?w=1024" alt="" class="wp-image-404" /></a><figcaption class="wp-element-caption">S1E8 我不再敷衍自己了</figcaption></figure>
+</figure>
 
-<!-- wp:paragraph -->
 <p></p>
-<!-- /wp:paragraph -->
     </div>
   </main>
   <footer>
