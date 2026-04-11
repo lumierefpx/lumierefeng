@@ -1,0 +1,25 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: images
+public_folder: /images
+
+locale: zh_Hans
+
+collections:
+  - name: posts
+    label: 博客文章
+    folder: _posts
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: 标题, name: title, widget: string }
+      - { label: 日期, name: date, widget: datetime, format: YYYY-MM-DD, date_format: YYYY-MM-DD, time_format: false }
+      - label: 分类
+        name: category
+        widget: select
+        options: [Travel, Writing, Reflection, Life, Diary, Photography]
+        default: Writing
+      - { label: 摘要, name: excerpt, widget: string, required: false, hint: "留空则自动取正文第一段" }
+      - { label: 正文, name: body, widget: markdown }
