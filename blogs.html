@@ -302,7 +302,7 @@
 
 
     // ── Delete ────────────────────────────────────────────
-    async function doDelete(href, btn) {
+    window.doDelete = async function doDelete(href, btn) {
       if (!confirm('确定要删除这篇文章吗？\n' + href)) return;
       btn.disabled = true;
       btn.textContent = '删除中…';
