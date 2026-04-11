@@ -1,12 +1,581 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Admin — Lumiere FENG</title>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <meta name="robots" content="noindex, nofollow">
+  <title>Write — Lumiere FENG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f3f6fb; --surface: #fff; --border: #c4d0e6;
+      --text: #18203a; --muted: #6b7a99; --accent: #2c5fa3;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* ── Setup ── */
+    .setup { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 24px; }
+    .setup-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 40px; width: 100%; max-width: 420px; }
+    .setup-card h1 { font-size: 1.3rem; font-weight: 400; margin-bottom: 8px; }
+    .setup-card .sub { font-size: 13px; color: var(--muted); margin-bottom: 28px; line-height: 1.6; }
+    .setup-card a { color: var(--accent); }
+    .field-group { margin-bottom: 20px; }
+    .field-label { display: block; font-size: 11px; font-weight: 500; letter-spacing: 0.6px; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
+    .setup-error { font-size: 13px; color: #c0392b; margin-bottom: 14px; display: none; }
+
+    /* ── Write screen ── */
+    .writer { display: none; flex-direction: column; min-height: 100vh; }
+    .writer.on { display: flex; }
+
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 13px 24px; border-bottom: 1px solid var(--border);
+      background: rgba(243,246,251,0.96); backdrop-filter: blur(8px);
+      position: sticky; top: 0; z-index: 10;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 14px; }
+    .brand { font-size: 13px; font-weight: 500; color: var(--accent); text-decoration: none; }
+    .pipe { color: var(--border); }
+    .topbar-label { font-size: 13px; color: var(--muted); }
+    .topbar-right { display: flex; gap: 8px; }
+
+    .body { max-width: 740px; margin: 0 auto; width: 100%; padding: 36px 24px 100px; }
+
+    .title-input {
+      width: 100%; font-family: inherit; font-size: clamp(1.5rem, 3.5vw, 2rem);
+      font-weight: 300; color: var(--text); border: none; outline: none;
+      background: transparent; padding: 0; margin-bottom: 24px;
+      letter-spacing: -0.4px; line-height: 1.3;
+    }
+    .title-input::placeholder { color: #b8c5d8; }
+
+    .meta-row { display: flex; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+    .meta-field { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 130px; }
+    .excerpt-wrap { margin-bottom: 24px; }
+
+    input[type="text"], input[type="password"], input[type="date"], textarea, select {
+      width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 7px;
+      font-family: inherit; font-size: 13px; color: var(--text);
+      background: var(--bg); outline: none; transition: border-color 0.15s;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+
+    .toolbar { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+    .toolbar-hint { margin-left: auto; font-size: 11px; color: var(--muted); }
+
+    .body-textarea {
+      width: 100%; min-height: 420px; font-family: inherit; font-size: 16px;
+      line-height: 1.9; color: var(--text); border: none; outline: none;
+      background: transparent; resize: none; padding: 0;
+    }
+
+    .preview {
+      display: none; font-size: 16px; line-height: 1.9; color: #2a3550; min-height: 420px;
+    }
+    .preview.on { display: block; }
+    .preview p { margin-bottom: 1.5em; }
+    .preview h2 { font-size: 1.3rem; font-weight: 400; margin: 2em 0 0.6em; color: var(--text); }
+    .preview h3 { font-size: 1.05rem; font-weight: 400; margin: 1.6em 0 0.5em; color: var(--accent); }
+    .preview blockquote { border-left: 2px solid var(--border); padding-left: 20px; color: var(--muted); font-style: italic; margin: 1.5em 0; }
+    .preview strong { color: var(--text); font-weight: 500; }
+    .preview ul { padding-left: 20px; margin-bottom: 1.5em; }
+    .preview li { margin-bottom: 0.4em; }
+    .preview img { max-width: 100%; border-radius: 8px; margin: 1.5em 0; }
+
+    /* ── Bottom bar ── */
+    .bottom-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      padding: 13px 24px; background: rgba(243,246,251,0.97);
+      border-top: 1px solid var(--border); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .status { font-size: 13px; color: var(--muted); }
+    .status.err { color: #c0392b; }
+    .status.ok  { color: #219150; }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 9px 18px; border-radius: 7px; font-family: inherit;
+      font-size: 13px; font-weight: 500; cursor: pointer; border: none;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+    .btn-ghost.active { color: var(--accent); border-color: var(--accent); background: rgba(44,95,163,0.06); }
+
+    /* ── Token modal ── */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(24,32,58,0.3); z-index: 50; align-items: center; justify-content: center; padding: 24px; }
+    .overlay.on { display: flex; }
+    .modal { background: #fff; border-radius: 10px; padding: 28px; width: 100%; max-width: 380px; }
+    .modal h2 { font-size: 1rem; font-weight: 500; margin-bottom: 16px; }
+    .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 18px; }
+  </style>
 </head>
 <body>
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
+<!-- Setup screen -->
+<div class="setup" id="setup">
+  <div class="setup-card">
+    <h1>Lumiere FENG — Admin</h1>
+    <p class="sub">输入 GitHub Personal Access Token 开始写文章。Token 只保存在你本地的浏览器里，不会上传到任何地方。</p>
+    <div class="field-group">
+      <label class="field-label" for="tokenIn">GitHub Token</label>
+      <input type="password" id="tokenIn" placeholder="ghp_xxxxxxxxxxxxxxxx" autocomplete="off">
+    </div>
+    <div class="setup-error" id="setupErr"></div>
+    <button class="btn btn-primary" onclick="doSetup()" style="width:100%">进入 →</button>
+    <p style="margin-top:14px; font-size:12px; color:var(--muted)">
+      还没有 Token？去 GitHub → Settings → Developer settings → Personal access tokens → 勾选 <strong>repo</strong> 权限创建一个
+    </p>
+  </div>
+</div>
+
+<!-- Write screen -->
+<div class="writer" id="writer">
+  <header class="topbar">
+    <div class="topbar-left">
+      <a class="brand" href="/">Lumiere FENG</a>
+      <span class="pipe">|</span>
+      <span class="topbar-label">New Post</span>
+    </div>
+    <div class="topbar-right">
+      <button class="btn btn-ghost" onclick="openModal()">Token</button>
+    </div>
+  </header>
+
+  <div class="body">
+    <input class="title-input" id="titleIn" type="text" placeholder="标题" autocomplete="off">
+
+    <div class="meta-row">
+      <div class="meta-field">
+        <label class="field-label" for="dateIn">日期</label>
+        <input type="date" id="dateIn">
+      </div>
+      <div class="meta-field">
+        <label class="field-label" for="catIn">分类</label>
+        <select id="catIn">
+          <option>Writing</option>
+          <option>Travel</option>
+          <option>Reflection</option>
+          <option>Life</option>
+          <option>Diary</option>
+          <option>Photography</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="excerpt-wrap">
+      <label class="field-label" for="excerptIn">摘要 <span style="font-weight:400;text-transform:none;letter-spacing:0">(留空自动取第一段)</span></label>
+      <input type="text" id="excerptIn" placeholder="一句话描述这篇文章…">
+    </div>
+
+    <div class="toolbar">
+      <button class="btn btn-ghost active" id="btnW" onclick="tab('write')">Write</button>
+      <button class="btn btn-ghost" id="btnP" onclick="tab('preview')">Preview</button>
+      <span class="toolbar-hint">## 标题 &nbsp;·&nbsp; **粗体** &nbsp;·&nbsp; > 引用 &nbsp;·&nbsp; - 列表</span>
+    </div>
+
+    <textarea class="body-textarea" id="bodyIn" placeholder="开始写作…"></textarea>
+    <div class="preview" id="previewPane"></div>
+  </div>
+</div>
+
+<!-- Bottom publish bar -->
+<div class="bottom-bar" id="bottomBar" style="display:none">
+  <span class="status" id="statusEl"></span>
+  <button class="btn btn-primary" id="pubBtn" onclick="publish()">发布文章 →</button>
+</div>
+
+<!-- Token modal -->
+<div class="overlay" id="overlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <h2>更新 GitHub Token</h2>
+    <label class="field-label" for="modalTok">新 Token</label>
+    <input type="password" id="modalTok" placeholder="ghp_xxxxxxxxxxxxxxxx" style="margin-top:6px">
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">取消</button>
+      <button class="btn btn-primary" onclick="saveModalToken()">保存</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const OWNER = 'lumierefpx', REPO = 'lumierefeng', BRANCH = 'main';
+const API = `https://api.github.com/repos/${OWNER}/${REPO}/contents`;
+
+// ── Token ────────────────────────────────────────────────
+const getToken = () => localStorage.getItem('lf_token') || '';
+const setToken = t  => localStorage.setItem('lf_token', t.trim());
+
+function doSetup() {
+  const t = document.getElementById('tokenIn').value.trim();
+  if (!t) { showSetupErr('请输入 Token'); return; }
+  setToken(t); boot();
+}
+function showSetupErr(m) {
+  const e = document.getElementById('setupErr');
+  e.textContent = m; e.style.display = 'block';
+}
+function openModal()  { document.getElementById('overlay').classList.add('on'); }
+function closeModal() { document.getElementById('overlay').classList.remove('on'); }
+function closeModalOutside(e) { if (e.target === e.currentTarget) closeModal(); }
+function saveModalToken() {
+  const t = document.getElementById('modalTok').value.trim();
+  if (t) setToken(t);
+  closeModal();
+}
+
+// ── Boot ─────────────────────────────────────────────────
+function boot() {
+  if (!getToken()) return;
+  document.getElementById('setup').style.display = 'none';
+  document.getElementById('writer').classList.add('on');
+  document.getElementById('bottomBar').style.display = 'flex';
+  document.getElementById('dateIn').value = new Date().toISOString().slice(0,10);
+}
+
+// ── Tabs ─────────────────────────────────────────────────
+function tab(t) {
+  const ta = document.getElementById('bodyIn');
+  const pv = document.getElementById('previewPane');
+  if (t === 'write') {
+    ta.style.display = ''; pv.classList.remove('on');
+    document.getElementById('btnW').classList.add('active');
+    document.getElementById('btnP').classList.remove('active');
+  } else {
+    ta.style.display = 'none'; pv.classList.add('on');
+    pv.innerHTML = mdHtml(ta.value);
+    document.getElementById('btnW').classList.remove('active');
+    document.getElementById('btnP').classList.add('active');
+  }
+}
+
+// ── Markdown → HTML ──────────────────────────────────────
+function mdHtml(text) {
+  const lines = text.split('\n');
+  const blocks = []; let buf = [];
+  const flush = () => { if (buf.length) { blocks.push({t:'p', v:buf.join(' ')}); buf = []; }};
+  let i = 0;
+  while (i < lines.length) {
+    const l = lines[i];
+    if      (l.startsWith('### ')) { flush(); blocks.push({t:'h3', v:l.slice(4)}); }
+    else if (l.startsWith('## '))  { flush(); blocks.push({t:'h2', v:l.slice(3)}); }
+    else if (l.startsWith('# '))   { flush(); blocks.push({t:'h1', v:l.slice(2)}); }
+    else if (l.startsWith('> '))   { flush(); blocks.push({t:'bq', v:l.slice(2)}); }
+    else if (l.startsWith('- ') || l.startsWith('* ')) {
+      flush();
+      const items = [];
+      while (i < lines.length && (lines[i].startsWith('- ') || lines[i].startsWith('* ')))
+        items.push(lines[i++].slice(2));
+      blocks.push({t:'ul', v:items}); continue;
+    }
+    else if (!l.trim()) { flush(); }
+    else buf.push(l);
+    i++;
+  }
+  flush();
+
+  const inl = s => s
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g,'<img src="$2" alt="$1">')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2">$1</a>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>');
+
+  return blocks.map(b => {
+    if (b.t==='h1') return `<h1>${inl(b.v)}</h1>`;
+    if (b.t==='h2') return `<h2>${inl(b.v)}</h2>`;
+    if (b.t==='h3') return `<h3>${inl(b.v)}</h3>`;
+    if (b.t==='bq') return `<blockquote><p>${inl(b.v)}</p></blockquote>`;
+    if (b.t==='ul') return `<ul>${b.v.map(x=>`<li>${inl(x)}</li>`).join('')}</ul>`;
+    if (b.t==='p' && b.v.trim()) return `<p>${inl(b.v)}</p>`;
+    return '';
+  }).join('\n');
+}
+
+function firstLine(text, max=90) {
+  for (const l of text.split('\n')) {
+    const t = l.trim();
+    if (t && !t.startsWith('#') && !t.startsWith('>') && !t.startsWith('!') && !t.startsWith('-')) {
+      const c = t.replace(/\*\*(.+?)\*\*/g,'$1').replace(/\[([^\]]+)\]\([^)]+\)/g,'$1');
+      return c.length > max ? c.slice(0,max).trimEnd()+'…' : c;
+    }
+  }
+  return '';
+}
+
+// ── Slug + dates ─────────────────────────────────────────
+function slug(s) {
+  return s.trim().replace(/[^\w\u4e00-\u9fff-]/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'').slice(0,60)||'untitled';
+}
+const ML = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const MS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const fmtL = d => { const[y,m,day]=d.split('-'); return `${ML[+m-1]} ${+day}, ${y}`; };
+const fmtS = d => { const[y,m,day]=d.split('-'); return `${MS[+m-1]} ${+day}, ${y}`; };
+
+// ── Base64 UTF-8 ─────────────────────────────────────────
+function b64enc(s) {
+  const b = new TextEncoder().encode(s); let r='';
+  b.forEach(x=>r+=String.fromCharCode(x)); return btoa(r);
+}
+function b64dec(s) {
+  const bin = atob(s.replace(/\n/g,'')), b = new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++) b[i]=bin.charCodeAt(i);
+  return new TextDecoder().decode(b);
+}
+
+// ── GitHub API ───────────────────────────────────────────
+async function ghGet(path) {
+  const r = await fetch(`${API}/${path}`, {
+    headers:{ Authorization:`token ${getToken()}`, Accept:'application/vnd.github.v3+json' }
+  });
+  if (!r.ok) throw new Error(`GET ${path}: ${r.status}`);
+  const d = await r.json();
+  return { content: b64dec(d.content), sha: d.sha };
+}
+async function ghPut(path, content, sha, msg) {
+  const body = { message:msg, content:b64enc(content), branch:BRANCH };
+  if (sha) body.sha = sha;
+  const r = await fetch(`${API}/${path}`, {
+    method:'PUT',
+    headers:{ Authorization:`token ${getToken()}`, 'Content-Type':'application/json', Accept:'application/vnd.github.v3+json' },
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) { const e=await r.json().catch(()=>({})); throw new Error(`PUT ${path}: ${r.status} ${e.message||''}`); }
+}
+
+// ── Generate post HTML ───────────────────────────────────
+function makePostHtml(title, date, bodyHtml) {
+  const e = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return `<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${e(title)} — Lumiere FENG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .post-header{padding:80px 0 48px;border-bottom:1px solid var(--border);margin-bottom:56px}
+    .post-date{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:20px}
+    .post-header h1{font-size:clamp(1.8rem,4vw,3rem);font-weight:300;letter-spacing:-1px;line-height:1.2;color:var(--text)}
+    .post-content{max-width:660px;padding-bottom:120px}
+    .post-content p{font-size:16.5px;line-height:1.9;color:var(--prose);margin-bottom:1.6em}
+    .post-content p:empty{display:none}
+    .post-content h2,.post-content h3{font-weight:400;margin:2.4em 0 0.8em;letter-spacing:-0.3px;color:var(--text)}
+    .post-content h2{font-size:1.35rem}
+    .post-content h3{font-size:1.05rem;color:var(--accent)}
+    .post-content img{width:100%;border-radius:10px;margin:2.4em 0;border:1px solid var(--border);box-shadow:0 2px 12px rgba(0,0,0,.07)}
+    .post-content a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+    .post-content blockquote{border-left:2px solid var(--border);padding-left:24px;margin:2.4em 0;color:var(--muted);font-style:italic}
+    .post-content ul,.post-content ol{padding-left:24px;margin-bottom:1.6em;color:var(--prose)}
+    .post-content li{margin-bottom:.5em;line-height:1.85;font-size:16.5px}
+    .post-content strong{color:var(--text);font-weight:500}
+    .back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:48px;letter-spacing:.3px;transition:color .2s}
+    .back-link:hover{color:var(--accent)}
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a class="nav-brand" href="../index.html">Lumiere FENG</a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../photography.html">Photography</a></li>
+        <li><a href="../videography.html">Videography</a></li>
+        <li><a href="../blogs.html" class="active">Blogs</a></li>
+        <li class="nav-dropdown">
+          <button>Podcast <span class="dropdown-arrow">&#9662;</span></button>
+          <ul class="dropdown-menu">
+            <li><a href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">Apple Podcast</a></li>
+            <li><a href="https://www.instagram.com/the.good.place_podcast" target="_blank">Instagram</a></li>
+            <li><a href="https://www.xiaoyuzhoufm.com/podcast/652570afb292e77709a3cefe" target="_blank">&#23567;&#23431;&#23449;</a></li>
+          </ul>
+        </li>
+        <li><a href="../resources.html">Resources</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main class="page">
+    <div class="post-header">
+      <p class="post-date">${e(date)}</p>
+      <h1>${e(title)}</h1>
+    </div>
+    <div class="post-content">
+      <a class="back-link" href="../blogs.html">← Blogs</a>
+      ${bodyHtml}
+    </div>
+  </main>
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <a class="footer-brand" href="../index.html">Lumiere FENG</a>
+        <p class="footer-quote">"What future, would you create?"</p>
+      </div>
+      <div>
+        <p class="footer-col-label">Email</p>
+        <a class="footer-email" href="mailto:lumiere.feng@gmail.com">lumiere.feng@gmail.com</a>
+      </div>
+      <div>
+        <p class="footer-col-label">Get in Touch</p>
+        <ul class="social-list">
+          <li><a href="https://www.instagram.com/px_feng/" target="_blank"><span class="social-dot"></span>Instagram</a></li>
+          <li><a href="https://wa.me/85252275687" target="_blank"><span class="social-dot"></span>WhatsApp</a></li>
+          <li><a href="https://www.linkedin.com/in/lumiere-feng" target="_blank"><span class="social-dot"></span>LinkedIn</a></li>
+          <li><a href="https://space.bilibili.com/388675553" target="_blank"><span class="social-dot"></span>Bilibili</a></li>
+          <li><a href="https://www.youtube.com/channel/UCz-1_ILExU74ZL1DgAXui5g" target="_blank"><span class="social-dot"></span>YouTube</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">&#169; Lumiere FENG</span>
+      <span class="footer-copy">lumierefeng.com</span>
+    </div>
+  </footer>
+  <script src="../js/main.js"><\/script>
+</body>
+</html>`;
+}
+
+// ── Update blogs.html ────────────────────────────────────
+function patchBlogs(html, {title, date, category, excerpt, href}) {
+  const e = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const year = date.slice(0,4);
+
+  const item =
+    `            <a class="feed-item" href="${href}">\n` +
+    `              <div class="feed-item-inner">\n` +
+    `                <div class="feed-body">\n` +
+    `                  <span class="feed-title">${e(title)}</span>\n` +
+    `                  <p class="feed-excerpt">${e(excerpt)}</p>\n` +
+    `                  <div class="feed-meta"><span>${fmtL(date)}</span>` +
+    `<span class="feed-meta-dot"></span><span>${category}</span></div>\n` +
+    `                </div>\n` +
+    `                <span class="feed-arrow">→</span>\n` +
+    `              </div>\n` +
+    `            </a>`;
+
+  const yr = new RegExp(`(<div class="year-divider">${year}<\\/div>\\s*)`);
+  if (yr.test(html)) {
+    html = html.replace(yr, `$1\n${item}\n`);
+  } else {
+    const grp =
+      `          <div class="year-group" data-year="${year}">\n` +
+      `            <div class="year-divider">${year}</div>\n\n` +
+      `${item}\n\n          </div>`;
+    html = html.replace('<!-- FEED_START -->', `<!-- FEED_START -->\n${grp}`);
+  }
+
+  html = html.replace(/(\d+) posts/, (_,n) => `${+n+1} posts`);
+
+  const featured =
+    `        <a id="featured-post" class="feed-featured"\n` +
+    `           href="${href}"\n` +
+    `           data-search-title="${e(title)}"\n` +
+    `           data-search-excerpt="${e(excerpt)}">\n` +
+    `          <div class="feed-featured-header">\n` +
+    `            <span class="feed-featured-tag">Latest</span>\n` +
+    `            <span class="feed-featured-date">${fmtL(date)}</span>\n` +
+    `          </div>\n` +
+    `          <span class="feed-featured-title">${e(title)}</span>\n` +
+    `          <p class="feed-featured-excerpt">${e(excerpt)}</p>\n` +
+    `          <div class="feed-featured-footer">\n` +
+    `            <div class="feed-featured-meta"><span>${category}</span></div>\n` +
+    `            <span class="feed-featured-cta">Read post →</span>\n` +
+    `          </div>\n` +
+    `        </a>`;
+  html = html.replace(/<a id="featured-post"[\s\S]*?<\/a>/, featured);
+  return html;
+}
+
+// ── Update index.html ────────────────────────────────────
+function patchIndex(html, {title, date, excerpt, href}) {
+  const e = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const card =
+    `        <!-- Latest blog — text card -->\n` +
+    `        <a class="home-card home-card-sm" href="${href}">\n` +
+    `          <div>\n` +
+    `            <div class="home-card-badge">Latest Blog</div>\n` +
+    `            <h3 class="home-card-title">${e(title)}</h3>\n` +
+    `            <p class="home-card-excerpt">${e(excerpt)}</p>\n` +
+    `          </div>\n` +
+    `          <div class="home-card-footer">\n` +
+    `            <span class="home-card-date">${fmtS(date)}</span>\n` +
+    `            <span class="home-card-arrow">→</span>\n` +
+    `          </div>\n` +
+    `        </a>`;
+  return html.replace(
+    /<!-- LATEST_BLOG_START -->[\s\S]*?<!-- LATEST_BLOG_END -->/,
+    `<!-- LATEST_BLOG_START -->\n${card}\n        <!-- LATEST_BLOG_END -->`
+  );
+}
+
+// ── Publish ──────────────────────────────────────────────
+async function publish() {
+  const title   = document.getElementById('titleIn').value.trim();
+  const date    = document.getElementById('dateIn').value;
+  const cat     = document.getElementById('catIn').value;
+  const bodyMd  = document.getElementById('bodyIn').value.trim();
+  let   excerpt = document.getElementById('excerptIn').value.trim();
+
+  if (!title)  return setStatus('请填写标题', 'err');
+  if (!date)   return setStatus('请选择日期', 'err');
+  if (!bodyMd) return setStatus('正文不能为空', 'err');
+  if (!excerpt) excerpt = firstLine(bodyMd);
+
+  const s   = slug(title);
+  const href = `posts/${s}.html`;
+  const btn  = document.getElementById('pubBtn');
+  btn.disabled = true;
+
+  try {
+    setStatus('检查文章是否已存在…');
+    let sha = null;
+    try { sha = (await ghGet(href)).sha; } catch(e) {}
+
+    setStatus('创建文章文件…');
+    await ghPut(href, makePostHtml(title, date, mdHtml(bodyMd)), sha, `Add post: ${title}`);
+
+    setStatus('更新 blogs.html…');
+    const { content: bc, sha: bs } = await ghGet('blogs.html');
+    await ghPut('blogs.html', patchBlogs(bc, {title,date,category:cat,excerpt,href}), bs, `blogs: add "${title}"`);
+
+    setStatus('更新首页…');
+    const { content: ic, sha: is } = await ghGet('index.html');
+    await ghPut('index.html', patchIndex(ic, {title,date,excerpt,href}), is, `index: latest "${title}"`);
+
+    setStatus(`发布成功 ✓ &nbsp;约 1-2 分钟后生效 &nbsp;<a href="https://lumierefeng.com/${href}" target="_blank" style="color:var(--accent)">查看文章 →</a>`, 'ok');
+
+    document.getElementById('titleIn').value = '';
+    document.getElementById('bodyIn').value  = '';
+    document.getElementById('excerptIn').value = '';
+    document.getElementById('dateIn').value  = new Date().toISOString().slice(0,10);
+
+  } catch(err) {
+    console.error(err);
+    setStatus('发布失败: ' + err.message, 'err');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function setStatus(msg, cls='') {
+  const el = document.getElementById('statusEl');
+  el.innerHTML = msg;
+  el.className = 'status' + (cls ? ' '+cls : '');
+}
+
+boot();
+</script>
 </body>
 </html>
