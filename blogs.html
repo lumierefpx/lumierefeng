@@ -35,25 +35,216 @@
       </ul>
     </nav>
   </header>
+
   <main class="page">
-    <div class="hero">
-      <p class="hero-tag">Writing</p>
-      <h1>Blogs</h1>
-    </div>
-    <div class="section">
-      <div class="post-list">
-        <a class="post-item" href="posts/进厂之后南极之前.html"><span class="post-item-title">进厂之后，南极之前</span><span class="post-item-meta">2025-11-20</span></a>
-        <a class="post-item" href="posts/也许是她也许是拉美也许是阿根廷也许是我们.html"><span class="post-item-title">也许是她；也许是拉美；也许是阿根廷；也许是我们：）</span><span class="post-item-meta">2025-10-30</span></a>
-        <a class="post-item" href="posts/气球.html"><span class="post-item-title">气球</span><span class="post-item-meta">2025-04-27</span></a>
-        <a class="post-item" href="posts/万水千山坐遍.html"><span class="post-item-title">万水千山“坐”遍</span><span class="post-item-meta">2025-03-27</span></a>
-        <a class="post-item" href="posts/别再错过花和音符.html"><span class="post-item-title">别再错过花和音符</span><span class="post-item-meta">2025-03-14</span></a>
-        <a class="post-item" href="posts/好好的港大招生主任为什么不做了.html"><span class="post-item-title">好好的港大招生主任为什么不做了</span><span class="post-item-meta">2025-02-16</span></a>
-        <a class="post-item" href="posts/新加坡河畔的乌龟.html"><span class="post-item-title">新加坡河畔的乌龟</span><span class="post-item-meta">2025-02-07</span></a>
-        <a class="post-item" href="posts/202525-写在杭州飞新加坡的飞机上.html"><span class="post-item-title">2025.2.5 写在杭州飞新加坡的飞机上</span><span class="post-item-meta">2025-02-05</span></a>
-        <a class="post-item" href="posts/yoga-practice-reflections.html"><span class="post-item-title">Yoga Practice Reflections</span><span class="post-item-meta">2022-11-20</span></a>
-      </div>
-    </div>
+    <div class="blogs-layout">
+
+      <!-- Sidebar -->
+      <aside class="blogs-sidebar">
+        <div class="sidebar-avatar">L</div>
+        <p class="sidebar-name">Lumiere FENG</p>
+        <p class="sidebar-bio">In a relatively good place — writing about travel, photography, and things worth remembering.</p>
+
+        <div class="sidebar-section">
+          <p class="sidebar-label">Follow</p>
+          <ul class="follow-list">
+            <li><a href="https://www.instagram.com/px_feng/" target="_blank">Instagram</a></li>
+            <li><a href="https://wa.me/85252275687" target="_blank">WhatsApp</a></li>
+            <li><a href="https://www.linkedin.com/in/lumiere-feng" target="_blank">LinkedIn</a></li>
+            <li><a href="https://space.bilibili.com/388675553" target="_blank">Bilibili</a></li>
+            <li><a href="https://www.youtube.com/channel/UCz-1_ILExU74ZL1DgAXui5g" target="_blank">YouTube</a></li>
+          </ul>
+        </div>
+
+        <div class="sidebar-section">
+          <p class="sidebar-label">Also</p>
+          <ul class="follow-list">
+            <li><a href="podcast/season1.html">Podcast Season 1</a></li>
+            <li><a href="podcast/season2.html">Podcast Season 2</a></li>
+            <li><a href="photography.html">Photography</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <!-- Main content -->
+      <div class="blogs-main">
+
+        <!-- Header -->
+        <div class="blogs-header">
+          <h1>Blogs</h1>
+          <span class="blogs-count">9 posts</span>
+        </div>
+
+        <!-- Search -->
+        <div class="blog-search-wrap" style="margin: 24px 0 32px;">
+          <label for="blog-search" aria-label="Search posts">
+            <svg width="17" height="17" viewBox="0 0 23 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9.55995 19.5599C11.6693 19.5613 13.7169 18.847 15.3664 17.5335L21.0364 23.2035L22.5622 21.6777L16.8936 16.0063C18.6598 13.7746 19.3138 10.8594 18.6697 8.08631C18.027 5.31319 16.1567 2.98295 13.589 1.75535C11.0198 0.527673 8.03279 0.534729 5.47067 1.77644C2.90848 3.01815 1.05095 5.35815 0.42347 8.13404C-0.205126 10.9114 0.464251 13.8224 2.24176 16.0458C4.02066 18.269 6.71379 19.5627 9.55995 19.5599ZM9.55995 2.99994C11.4696 2.99994 13.3007 3.75792 14.6507 5.10932C16.0021 6.45932 16.7601 8.29025 16.7601 10.2001C16.7601 12.1099 16.0021 13.9408 14.6507 15.2908C13.3007 16.6422 11.4698 17.4002 9.55995 17.4002C7.65011 17.4002 5.81919 16.6422 4.46919 15.2908C3.11778 13.9408 2.3598 12.1099 2.3598 10.2001C2.3598 8.29025 3.11778 6.45932 4.46919 5.10932C5.81919 3.75792 7.65011 2.99994 9.55995 2.99994Z" fill="currentColor"/>
+            </svg>
+          </label>
+          <input id="blog-search" type="search" placeholder="Search posts..." autocomplete="off">
+        </div>
+
+        <!-- Featured post -->
+        <a id="featured-post" class="feed-featured"
+           href="posts/进厂之后南极之前.html"
+           data-search-title="进厂之后，南极之前"
+           data-search-excerpt="Somewhere Between the Near and the Far — 一段关于出发前夕的碎碎念，关于工厂、关于南极、关于那段等待的时光">
+          <div class="feed-featured-header">
+            <span class="feed-featured-tag">Latest</span>
+            <span class="feed-featured-date">November 20, 2025</span>
+          </div>
+          <span class="feed-featured-title">进厂之后，南极之前</span>
+          <p class="feed-featured-excerpt">Somewhere Between the Near and the Far — 一段关于出发前夕的碎碎念，关于工厂、关于南极、关于那段等待的时光。</p>
+          <div class="feed-featured-footer">
+            <div class="feed-featured-meta">
+              <span>Writing</span>
+            </div>
+            <span class="feed-featured-cta">Read post →</span>
+          </div>
+        </a>
+
+        <!-- No results -->
+        <div id="search-no-results">No posts found.</div>
+
+        <!-- Post feed with year groups -->
+        <div class="post-feed">
+
+          <!-- 2025 -->
+          <div class="year-group" data-year="2025">
+            <div class="year-divider">2025</div>
+
+            <a class="feed-item" href="posts/也许是她也许是拉美也许是阿根廷也许是我们.html">
+              <div class="feed-item-inner">
+                <div class="feed-body">
+                  <span class="feed-title">也许是她；也许是拉美；也许是阿根廷；也许是我们：）</span>
+                  <p class="feed-excerpt">恭喜我的yuer宝宝开始了她的第一个播客初尝试big moment！</p>
+                  <div class="feed-meta">
+                    <span>October 30, 2025</span>
+                    <span class="feed-meta-dot"></span>
+                    <span>Travel</span>
+                  </div>
+                </div>
+                <span class="feed-arrow">→</span>
+              </div>
+            </a>
+
+            <a class="feed-item" href="posts/气球.html">
+              <div class="feed-item-inner">
+                <div class="feed-body">
+                  <span class="feed-title">气球</span>
+                  <p class="feed-excerpt">上个秋天在宁波的时候曾经和K讨论，我说下辈子我不想当人了。那个时候我正在开车，看到高架路边花坛里的花……</p>
+                  <div class="feed-meta">
+                    <span>April 27, 2025</span>
+                    <span class="feed-meta-dot"></span>
+                    <span>Reflection</span>
+                  </div>
+                </div>
+                <span class="feed-arrow">→</span>
+              </div>
+            </a>
+
+            <a class="feed-item" href="posts/万水千山坐遍.html">
+              <div class="feed-item-inner">
+                <div class="feed-body">
+                  <span class="feed-title">万水千山"坐"遍</span>
+                  <p class="feed-excerpt">这篇文之所以叫"万水千山坐遍"，是因为我在去马丘比丘的路上，终于一下子明白了为什么三毛的拉美纪行要叫《万水千山走遍》。</p>
+                  <div class="feed-meta">
+                    <span>March 27, 2025</span>
+                    <span class="feed-meta-dot"></span>
+                    <span>Travel</span>
+                  </div>
+                </div>
+                <span class="feed-arrow">→</span>
+              </div>
+            </a>
+
+            <a class="feed-item" href="posts/别再错过花和音符.html">
+              <div class="feed-item-inner">
+                <div class="feed-body">
+                  <span class="feed-title">别再错过花和音符</span>
+                  <p class="feed-excerpt">飞机起飞，舷窗外是过去四天三夜游览的墨西哥城，渐渐随着飞机的爬升变成星罗棋布的灯火，好大、好美。</p>
+                  <div class="feed-meta">
+                    <span>March 14, 2025</span>
+                    <span class="feed-meta-dot"></span>
+                    <span>Travel</span>
+                  </div>
+                </div>
+                <span class="feed-arrow">→</span>
+              </div>
+            </a>
+
+            <a class="feed-item" href="posts/好好的港大招生主任为什么不做了.html">
+              <div class="feed-item-inner">
+                <div class="feed-body">
+                  <span class="feed-title">好好的港大招生主任为什么不做了</span>
+                  <p class="feed-excerpt">写于2024年6月17日，刚辞职。今天是2025年2月16日，再整理回看，觉得一切好像早有clue。</p>
+                  <div class="feed-meta">
+                    <span>February 16, 2025</span>
+                    <span class="feed-meta-dot"></span>
+                    <span>Life</span>
+                  </div>
+                </div>
+                <span class="feed-arrow">→</span>
+              </div>
+            </a>
+
+            <a class="feed-item" href="posts/新加坡河畔的乌龟.html">
+              <div class="feed-item-inner">
+                <div class="feed-body">
+                  <span class="feed-title">新加坡河畔的乌龟</span>
+                  <p class="feed-excerpt">今天其实已经是离家出走的第三天，现在是下午两点二十二分，我刚吃过午饭，散步坐在新加坡河畔打字。</p>
+                  <div class="feed-meta">
+                    <span>February 7, 2025</span>
+                    <span class="feed-meta-dot"></span>
+                    <span>Travel</span>
+                  </div>
+                </div>
+                <span class="feed-arrow">→</span>
+              </div>
+            </a>
+
+            <a class="feed-item" href="posts/202525-写在杭州飞新加坡的飞机上.html">
+              <div class="feed-item-inner">
+                <div class="feed-body">
+                  <span class="feed-title">2025.2.5 写在杭州飞新加坡的飞机上</span>
+                  <p class="feed-excerpt">这篇是日记，写的时候并没有当作会有观众，单纯想留个想法的记录。且当时已经24h没睡了，加上连夜离家出走……</p>
+                  <div class="feed-meta">
+                    <span>February 5, 2025</span>
+                    <span class="feed-meta-dot"></span>
+                    <span>Diary</span>
+                  </div>
+                </div>
+                <span class="feed-arrow">→</span>
+              </div>
+            </a>
+          </div>
+
+          <!-- 2022 -->
+          <div class="year-group" data-year="2022">
+            <div class="year-divider">2022</div>
+
+            <a class="feed-item" href="posts/yoga-practice-reflections.html">
+              <div class="feed-item-inner">
+                <div class="feed-body">
+                  <span class="feed-title">Yoga Practice Reflections</span>
+                  <p class="feed-excerpt">The most direct thing I learnt from the yoga practice is to scan the body and see if there are any parts that could be further relaxed.</p>
+                  <div class="feed-meta">
+                    <span>November 20, 2022</span>
+                    <span class="feed-meta-dot"></span>
+                    <span>Reflection</span>
+                  </div>
+                </div>
+                <span class="feed-arrow">→</span>
+              </div>
+            </a>
+          </div>
+
+        </div><!-- end post-feed -->
+      </div><!-- end blogs-main -->
+    </div><!-- end blogs-layout -->
   </main>
+
   <footer>
     <div class="footer-inner">
       <div>

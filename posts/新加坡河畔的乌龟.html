@@ -9,21 +9,23 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
   <style>
-    .post-header { padding: 80px 0 48px; border-bottom: 1px solid var(--border); margin-bottom: 48px; }
-    .post-date { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
-    .post-header h1 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 300; letter-spacing: -1px; line-height: 1.2; }
-    .post-content { max-width: 680px; padding-bottom: 100px; }
-    .post-content p { font-size: 16px; line-height: 1.85; color: #ccc5c5; margin-bottom: 1.5em; }
-    .post-content h1, .post-content h2, .post-content h3 { font-weight: 400; margin: 2em 0 0.8em; letter-spacing: -0.5px; }
-    .post-content h2 { font-size: 1.4rem; }
-    .post-content h3 { font-size: 1.1rem; color: var(--accent); }
-    .post-content img { width: 100%; border-radius: 8px; margin: 2em 0; border: 1px solid var(--border); }
-    .post-content a { color: var(--accent); text-decoration: underline; }
-    .post-content blockquote { border-left: 2px solid var(--border); padding-left: 20px; margin: 2em 0; color: var(--muted); font-style: italic; }
-    .post-content ul, .post-content ol { padding-left: 24px; margin-bottom: 1.5em; color: #ccc5c5; }
-    .post-content li { margin-bottom: 0.4em; line-height: 1.7; font-size: 16px; }
-    .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); text-decoration: none; margin-bottom: 40px; transition: color 0.2s; }
-    .back-link:hover { color: var(--text); }
+    .post-header { padding: 80px 0 48px; border-bottom: 1px solid var(--border); margin-bottom: 56px; }
+    .post-date { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+    .post-header h1 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 300; letter-spacing: -1px; line-height: 1.2; color: var(--text); }
+    .post-content { max-width: 660px; padding-bottom: 120px; }
+    .post-content p { font-size: 16.5px; line-height: 1.9; color: var(--prose); margin-bottom: 1.6em; }
+    .post-content p:empty { display: none; }
+    .post-content h2, .post-content h3 { font-weight: 400; margin: 2.4em 0 0.8em; letter-spacing: -0.3px; color: var(--text); }
+    .post-content h2 { font-size: 1.35rem; }
+    .post-content h3 { font-size: 1.05rem; color: var(--accent); }
+    .post-content img { width: 100%; border-radius: 10px; margin: 2.4em 0; border: 1px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+    .post-content a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+    .post-content blockquote { border-left: 2px solid var(--border); padding-left: 24px; margin: 2.4em 0; color: var(--muted); font-style: italic; }
+    .post-content ul, .post-content ol { padding-left: 24px; margin-bottom: 1.6em; color: var(--prose); }
+    .post-content li { margin-bottom: 0.5em; line-height: 1.85; font-size: 16.5px; }
+    .post-content strong { color: var(--text); font-weight: 500; }
+    .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); text-decoration: none; margin-bottom: 48px; letter-spacing: 0.3px; transition: color 0.2s; }
+    .back-link:hover { color: var(--accent); }
   </style>
 </head>
 <body>
@@ -59,533 +61,269 @@
     </div>
     <div class="post-content">
       <a class="back-link" href="../blogs.html">← Blogs</a>
-      <!-- wp:paragraph -->
-<p>*</p>
-<!-- /wp:paragraph -->
+      <p>*</p>
 
-<!-- wp:paragraph -->
 <p>今天其实已经是离家出走的第三天，现在是下午两点二十二分，我刚吃过午饭，散步坐在新加坡河畔打字。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我从没想过有一天，我会收到不止一位朋友告诉我“你真的很会写”的评价——我从小一直觉得自己没有耐心、不爱读书。更重要的是，我一直以为写作是有标准答案的。就像高考生从小到大习惯的思维模式，我一直都误以为“优秀的文章”也有一种范式。直到上个月心血来潮看完很多人推荐的电视剧《我的阿勒泰》，第一集里那位作家就告诉李文秀，写作就是先“试着从自己的生活写起，去爱、去生活、去受伤”。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>后半句“去爱、去生活、去受伤”我记得很深，因为在我去年过生日的时候，一位好朋友的好朋友（我们曾在这位共同的好朋友家见过一面），她在微信上送给我，她祝我新的一年拥有更旺盛的生命力。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我带着这样的祝福和好奇看完了短短八集的《我的阿勒泰》，突然明白了——原来每个人都可以写作。就算我不像剧中的李文秀一样从小就想当个作家——其实我从小都是觉得自己和写作无缘的。小学放假所有的日记周记，都是我在开学前一晚连夜翻着日历、编着天气写的；语文作文，在我的印象里，一直是需要我绞尽脑汁才能熬出来的。在那时候，我作文本上写过的绝大多数记叙文，都是我通过猜测什么样的文章可以拿高分，然后凭借自己的想象编撰出来的故事。我知道这听上去很离谱，其实我也不知道为什么会这样。我从来没想过，我们需要写的，正是生活中发生过的真实的事情，哪怕是屁大点的小事；正是我们内心真实的想法和感受，哪怕它不是完美的，哪怕它有时候总得得罪一部分人。但正是这些，才叫写作（除非想写的是科幻和小说除外）。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p></p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>关于写作该写什么，这么简单的道理，我竟然现在才懂。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p></p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>Gap之后我其实突然像这样地顿悟了很多本来就该明白的东西。我渐渐发现过往人生我们所接受的课本化填鸭式教育的后遗症渐渐显现出来了。例如我们从小在好词好句里就学到，写星星要写“天上的星星一闪一闪地眨眼睛”，写日出要写“东方天际露出了一抹鱼肚白”，可我其实到现在也说不出星星为什么会“眨眼睛”，我相信绝大多数人也并没有在现实中见过所谓的“鱼肚白”……我们，也可能只有我自己，从小在课本上纸上谈兵地学会了很多优美的词句，然后在若干年后才发现，书里读过的东西竟然猛然出现在了自己的眼前。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我惊讶，我惶恐。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>**</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>六十个小时前的这个时候，我背上书包，“离家出走”了。背包旅行的计划大约是一个月前突然出现在我脑海里的，那是二零二五年的第三天，我觉得春暖花开之时是时候实现我裸辞前的愿望。当时的我被一头半黑半金的及腰长发弄得不耐烦了，我飞速地开始计划，三月一号出发，出发前夕去剪个寸头，我要只带极简的白色衣服，我要去美国、南美、英国，去看看在世界各地的朋友们，去看看世界。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我开始网购一个40升容量的背包，设计我的路线，一路向东绕地球一圈。我开始搜索背包旅行的必备物品，我开始和各地的朋友约时间，我开始看机票、做攻略。同时，我也是心虚的，因为这一切我的家人并不知晓。但我的内心已经暗下决心了，这趟背包旅行我是非去不可的。然后就是农历新年前了，在我心情足够好的时候，我会渐渐地在和家人相处的时候找到时机“走漏一点风声”，我说我过完年可能要出去“一两个月”、去“找朋友”（这点倒是没错）、去“考察市场”（哈哈）。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我妈听完后用她一贯的语气表示”你想去就去吧，反正我们也管不了你”，但最终这个消息还是渐渐传到了我爸的耳朵里。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我早就知道他大概率是不会同意的。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我原本设想的是，在出发的前一天，我会悄悄离开，然后等他们反应过来的时候，我已经在另一个国家了。虽然听上去令人有点脸皮发薄，但也算是一种可以达成目的的方式。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>但暴风雨随着农历新年后的初八复工，提前到来了。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>初七的晚上我准备从父母家回到自己住的家（是我们家以前的旧房子，我辞职回宁波后就一个人住在那里）。我爸突然把我叫住，让我“坐下聊聊”。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>“听说你过完年要出去旅游？” “是的。”</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>“去哪里啊？多久啊？“ ”美国、英国，一两个月吧。”</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>“一两个月？这么久？你要出去都不跟我们说吗？” “嗯。”</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>“你接下来的计划是什么？方向是什么？年过完了，你已经回来半年了，现在过年结束大家都是要开工了，准备新的一年的工作了，你倒好，要去旅游？”</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我不语。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>“哪有人像你这样的？旅游谁不想去旅游？我告诉你，你不准去！”</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我不语。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我不想继续写下去了。简而言之，这是一场一小时左右的对话。期间父亲愤怒过、平和过、拿着杯子差点要往我头上砸过。点烟过、灭烟过、咆哮过、拍案过、合上嘴笑过。皱眉过、怒目圆睁过。用手指我过。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>“我跟你说，反正你不准出去旅游！“ “你有本事出去就再也别回来！” “我给你的钱都还给我！” “从小到大培养你的钱，都还给我！两年内还清！”这些话他都说过。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>他一会儿说，“你要定方向！”</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我说，我有方向啊，我的方向就是先出去玩几个月，收了心回来找个工作。我一直都有方向，只不过我的方向不是你想要的我的方向。现在，我的心收不回来。硬要我把心收回来找个班上也可以，我就会回到一年前的状态，晚上睡不着，还没到办公室就开始头痛，胖到140斤，天天找大洋彼岸的朋友当情绪垃圾桶，学了佛也没用，还是偶尔想想跳楼。我的核心观点就是没必要没苦硬吃，还要奋斗几十年，难道真就差我玩这几个月么？我现在真不知道我要拿什么创业，在这个大环境下盲目开始才是对钱财最大的挥霍。等我出去转一圈，收心了，自然会创业或是找个班上的。再说，我只是没有在上班，不代表我没有在工作，没有在赚钱呀！</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>反正这些话我都反复地说了。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>他一会儿又说，“好找个班上了！或者创业也可以！你要创业我给你投钱！你不能什么也不干！要行动起来！”</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>一会儿又说，“你可以什么也不做，但就是不！能！出！去！旅！游！”</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>至此，我已彻底明白，说再多也没有用。其实早在我试图解释了十分钟我的想法，发现他们并听不进去的时候，我已经在思考一个更重要的问题——离开的最好时间是否就是现在。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>于是我开始彻底放弃寄希望于今晚能够沟通成功。我的嘴重复地反驳，我的脑飞速地运转着，今晚该去哪里。我有这个想法的直接契机是他说出“要把你的护照没收”这句话开始。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我的护照上有美签、英签、日签、加拿大签、很多个国家的印章、还有不到十页的空白页。对我来说它的重要程度应该就比我的命轻一点点。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我的脑海中开始飞快地过了一遍这个地球上我可以背着书包去投靠的城市和人，然后我开始把希望寄托于几个小时之内能有一张别太贵的直飞机票。就这样差不多过了一个小时，我觉得是时候回家收拾我的背包了。那个时候他们正在我对面一米开外，重复着今晚第26遍“你应该去找个工作”。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我觉得是时候了。我说，好，我现在就去找工作。宁波还没复工，我去国外找工作了。我不开你们花钱买的车，不住你们买的房子。我今晚就走。再见。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>然后我站起来，离开。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我没有重重地甩门，没有哭，甚至没有脸红脖子粗。我没有咆哮，没有流泪，甚至心也（应该）没有痛一下。我走出小区，夜晚的宁波大概只有零上几度。哦对了，我选择这个时间离开的还有一个重要原因是，再不走我的手机就要没电了。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>背后突然开始放起了烟花，我驻足观赏了半分钟，姑且认为这是个好彩头。烟花结束了，我继续往前走，我联系了外婆和几个要好的朋友。外婆劝我“等两天，等我们回来”（他们还在无锡老家），我说我“等不及了”，她说“好吧，我也不知道该怎么劝你，不劝了，你自己要保重。”</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>朋友们有的静静听我讲完这些，有的跟我分享经验，有的叮嘱我一定要注意安全。没人劝我留下。真的没人劝我留下。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>两年前同样经历过这一戏码的姐姐坦言，“我知道我出于各种原因都应该劝你冷静冷静，我不能直接劝你走，但我知道你心里有了答案。总之，你再稍微思考一下吧，要是买了机票了也和我说一下。”</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>那位和我在老挝有过摩托车生死之交的朋友听了之后也原话说，”虽然我想劝你，但是感觉也没什么可劝的“。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>这就是那个晚上。那是晚上十点。我走了半个小时到家的时候，手机刚好没电关机了。我去洗了个热水澡，在十二点多买下八小时后杭州飞新加坡的机票。我预约了一个凌晨四点出发去杭州机场的顺风车。我拿出提前准备好的白色背包和衣物行李。就那样，在客厅、洗手间、书房、各个房间里，一直穿梭到凌晨三点半，评估值得我带上路的生活必需品。我收到司机已经出发的短信。我加速，我一顿乱塞，把我几个月所需要的家当塞在了一个背包和三个布袋子里，带走最后一包垃圾，关上灯、热水器和家的大门。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我离开了。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>***</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我离开得很仓促，很多计划读的纸质书还没读完。我最后带了四本：《纳瓦尔宝典》、庞颖的《思辨力35讲》、三毛的《万水千山走遍》、以及乔卡巴金的《正念：此刻是一枝花》。我想着这几本书我可以在路上读读，读完留给我在新加坡的朋友。最后一本估计得带着，因为这是我的初高中同学在今年年初三见面的时候带给我的，扉页上还有他给我的祝福留言。我得带着。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>到了新加坡之后我先缓了缓。我一直告诉自己，慢慢来，别冲动，不要在身体有不适、过度疲劳的时候仓促做决定。第二天早上我醒来，和之前约好的工作伙伴开完会，我出发去了金沙底下林俊杰的咖啡店。我应该是有一点强迫症，出门之前因为纠结今天要看什么书磨蹭了半天。最后我决定带上那本《万水千山走遍》。不为别的，就因为我在网上下载的电子书只有这本纸质书的前半部分，所以我打算花一个下午把后半部分读完，这样我就可以心安理得地把它留在新加坡的朋友家，以减少我的旅行负重。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我从《高原的百合花》一章开始看，讲的是南美玻利维亚见闻。紧接着是《智利五日》和《情人》。这一篇我很喜欢，尤其是结尾，许是因为相似的经历我曾经历过，而且是在对三毛来说非常著名且重要的一个地方——撒哈拉沙漠。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>在《闹学记》四篇里，我读到三毛决定提前回家了。看到“爸爸、妈妈”四个字，我愣了一下，一下子把我拉回了现实。读到这里我突然觉得有些东西是相通的，也是读到这里，我决定用书签标记下来，晚上写篇文章记录一下我这出逃的第二日。因此也就有了现在这篇文章。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>这本书应该出版于九十年代早期，没过几年她就死了，所以这本书也是她最后一本比较大型的作品。起初买它是因为听朋友说这本书是三毛的拉美纪行，想着买来看看，我之前从没读过三毛。那个时代没有发达的即时通讯，她在沿路认识的人都只能用字条留下地址，分别很可能是人生的最后一次相见，最后一次知道对方的消息。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>而现在，即使我坐在几千公里外的另一个国度，人和人之间，只要想，都可以随时保持联系。同样地，我的家人也可以随时给我打一个电话。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我妈给我打了一个电话，我没接。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我爸也给我打了一个电话，我也没接。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我就静静地看着被电话霸占的手机屏幕闪动着，然后一分钟之后它会自动熄灭。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我不想接了，因为接了肯定免不了一顿骂。但我不会回去的，至少是现在，也可能是好几个月，不知道会不会有一年。我什么都不知道。不知道也没关系。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>朋友们都问我，你家人找你了吗。我起初第一天的答案是没有，到了今天的答案是有。我也不知道他们知不知道我已经出国了，因为他们打的还是我在国内的短号。他们没给我发微信。和很多离家出走的孩子不同，其实我并不期待他们找我，我反而期待他们永远不要找我，至少暂时是这样想的。我好像已经不再需要通过赌气和离开寻找存在感了，我需要的已经不是道歉和劝我回去，因为我知道他们大概率是不会道歉的，我也大概率是不会回去的。我不再寄期望于”等他们想通”了，我真的不想再“等”，不想再“等你结婚了/当妈妈了你的想法就会转变了”，不想再“等以后有人陪你一起出去旅游。一个人出去有什么意思呢？”，我也不在乎“等再过几年”我是否就真的“错过了黄金年龄，就难找了”……</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我知道<em>“等”是女性困境的一种显现，是对自我的客体化，对个人意志的否定和不信任</em>（cr. 小红书@芙渠净烧氢）。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>所以这次的离开真的代表离开。好的坏的，我都要努力去过自己的生活了。我不等了。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>到新加坡的第二天早上，半梦半醒的时候，其实我的脑海里闪过了宁波的街道，宁波的建筑，还有宁波，我有那么一瞬间觉得我是不是太冲动了，有一个“我有点想宁波”的念头划过了我的脑子。等我起床清醒的时候，我想到继续待在宁波大概率意味着后续无法继续过我有主体性的人生，那些自责的念头就荡然无存了。我一直都觉得我玩几个月玩够了就会开始找工作，这次我一定要找个自己喜欢的、能做的久的工作。我总会有办法负担起我自己想要的生活。以及就算某天负担不起，那就死掉。人总是要死的。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>吃晚饭的时候，我说到这些，我和朋友发现了这个计划的唯一一个可能遇到的阻碍，就是人该如何平静地离开。我们发现安乐死其实很贵，真走到负担不起生活的那一步，估计也是必然负担不起安乐死的。然后我们简单地研究了一下，也许只能想想有什么最不痛苦的办法自杀。想到这里就觉得差不多了，应该还挺久远，不必去想了。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>****</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>《万水千山走遍》这本书还有令我惊喜的一部分是，三毛后来竟然来到了江浙沪，上海、苏州、南京、甚至宁波（因为她祖籍舟山定海，离我家开车只要一个多小时）。坐在金沙楼下，晒着新加坡的阳光，读着一本台湾作家写南美旅行的书，在快结尾的地方却读到“<em>车子进入宁波城”</em>一句，实在是恍惚地让我有些想笑。后面的几篇就是讲兵马俑、敦煌、月牙泉，这些地方我全都去过，三毛甚至还写自己犹豫了一下要不要带上《金刚经》——我离家前站在书柜上，也纠结了一下要不要带上那本读了一半的《南怀瑾讲金刚经》。一口气读到最后，最后一篇的结尾，三毛说，<em>“玉莲，你就是我所得不到的梦”</em>，因为月牙泉里的牵骆驼女人玉莲，说她一家和和气气，十四个人住在一起从来不吵架。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>这大抵也是我所得不到的梦吧。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我合上书，看到书的腰封上写的那句话叫做，<em>我喜欢做的第一件事情，是“出发”。</em></p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>吃晚饭的时候，我问了朋友，你觉得我像不像三毛？我本来还觉得要是朋友的回答是“是”，估计还能让我暗爽一把。结果我朋友没这么说，然后给我讲了三毛其实被荷西家暴，以及她最后上吊自杀的故事。我也就瞬间不再追问了。我们讨论人生的意义和死亡，我们说，像她这样，活着的时候就有很多读者，死了之后几十年还能继续用文字影响某些想要出去看看的人，给她们勇气，让她们实现了自己想做的事情，就已经很有意义了。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>但最后都是没有意义的。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我们还聊了很多，聊到爱，聊到自己发现自己在复制父母的某些说话模式和行为模式（大多数是我们自己所不喜欢的），聊到所以我们选择离开。还聊到我发现生活在中国内地必须活得很有攻击性，才能让别人攻击不到你。我之所以有这样的感慨，起因是我在新加坡的路上向一个被我挡道的路人说了对不起。我才发现我已经很久没有说过“对不起”。生活在中国内地，你必须浑身是刺，你必须显露出一部分恶，你才能保证你的边界不被侵略。当然这有可能只是我的个人经历和感触，肯定不代表所有人。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>过去的几个月肯定或多或少地改变了我，导致我落地新加坡之后，浑身的皮肤有一种冬春交际之时的那种开裂的感觉。我开始重新说英语了，我的刺和盔甲在那一句“对不起”里突然全都掉落了，我回到了那个善良版本的我。写到这里我突然鼻酸想哭。我在来的路上登机的时候就告诉自己，下一次再听到宁波话（或慈溪话）应该会是很久以后了。我承认我在过去的十天春节里已经被高浓度的慈溪话腌入味了，加上慈溪话语境里出现最多的就是催婚、催上班、八卦打听、或是命令的话语。慈溪遍地都是土老板，老一辈有很多都是有钱的初中生或小学生，在上世纪八九十年代下海发家致富，然后在本世纪二十年代高调地瞧不起本科生、硕士生、博士生，最痛恨那些留洋回来并且拒绝做乖乖女的海归女儿。我在<a href="https://lumierefeng.com/2025/02/05/day1/">上一篇日记</a>里提到，但凡受过一点高等教育的人是没办法和他们对话的，因为他们很多时候讲话并没有逻辑，而高等教育往往入学门槛就是对批判性思辨和逻辑能力的考察。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>这一点尤其在女性身上尤其无解，也许结局只有屈服或逃离。用姐姐的话来说，<em>留过学的男生或许能在这里呆得下去，因为家庭和社会的资源都是往男性身上倾斜的，他们最多也就成一个“喝过可乐的皇帝”</em>。所以，催婚、催育、催上班、催方向、催everything——所有这些话题其实都是老登们展现和确认自己的高位的固定短语，对我来说只意味着无形的压迫和强制性地服从。你沉默就对了，第二天早上起来他们会像无事发生过一样问你中午吃什么，留下你一个人百思不得其解。然后，你会瞬间觉得昨夜摔的门、流的眼泪、擦完的一包餐巾纸残骸、擦红擦破了的鼻头，都像个笑话。最后，如果稍不留神，你又会回到那个恶性循环里，你误以为你们之间没事了，和解了，可以张开双臂拥抱和表达爱了。如果到了这一步，那就真的完了，这一切的一切，吵架、甩门、大哭，又会在若干个月后的某一刻再来一遍，轮回循环往复。直到某一天你突然想通了，你永远不可能改变他们。每个人都要经历这样的过程的。人一旦放下了“改变”、“救赎”的妄想，就离跳脱不远了。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>所以这一次，我没哭，没摔门，没有抽一张餐巾纸。我只是背起书包走了。我也暂时不想再听到慈溪话了。我承认我有点PTSD了。痛吗，还是有一些痛的，也有一些担惊受怕。但先走了，再说吧。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>在英文语境里，我是自信、有能力、乐观、善良、被认可的。我不叫“欣欣”，我叫“Lumiere”或者“Lumi”。绝大部分东西都是带有正反馈的。所以我喜欢讲英语。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>*****</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我们在去吃晚饭的路上经过了新加坡的一栋大楼，那栋楼从某些角度看上去就像一张纸片，很有意思。新加坡的天七点多才黑，我发现我已经很久（其实也就最多一个月）没有看到晚霞，没有看到蓝色的大海。我知道我的这些需求是奢侈的、是充满了privilege的。可我的需求似乎也是免费的。我说不清楚。我只发现，欲望也分有害和无害的。最近的我基本都按照【觉察自己的欲望，然后follow自己的欲望】这样的顺序去行事。我不再严格饮食了，我决定想吃什么就吃什么，但我也不会把自己吃撑，因为饱了之后还想吃的欲望是有害的，会让我半夜撑得睡不着觉，没有必要；饿的时候吃点自己喜欢的东西，这样的欲望是基本无害的，甚至有利的，所以就满足、遵循它罢。说实话，吃得很饱的时候，我对继续吃也没有什么太强烈的欲望了。我现在想去哪里就去哪里，想上厕所就赶紧上厕所，我觉得只要把自己的欲望和自己的能力寻找到一个平衡，就可以了。比如我对买爱马仕的包似乎没什么欲望，因为那太贵了，我更想用这份钱去好几个国家看看风景。可能有一天，我玩腻了，我想要爱马仕的包了，那就再说吧。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>讲到衣服包包，出了中国海关之后另一个很大的感受是，我不再被凝视了。这是一种很强烈的感觉，和前面提到的那种冬春之际褪去旧皮的感觉是很相像的。你知道一些糟粕，一些皮屑，那些无形的眼睛和评判，正在离开你。我可以随心所欲地穿我自己想穿的衣服了。我检视了一下我这次从家里带出来的衣服，大多都是三位数价格人民币的衣服，还有从朋友那里“继承”来的二手衣服，以及一些前两年自己买的lululemon。一方面是这些衣服真的舒服，也好洗，就像我心血来潮剪的齐耳短发，它们都不会给我带来额外的担忧和烦恼；另一方面也是因为这次旅行路途遥远，甚至要去很多条件艰苦的地方，没必要带上动辄几千上万的金贵衣服，我没那个条件打理，也懒得打理。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>在宁波的冬天里，大家最喜欢穿的就是moncler的羽绒服，几乎（在我身边的圈子里）人人标配。我也从我妈那里“继承”了一件（因为他们始终觉得我自己的衣服都太上不了台面）。离家的那天晚上很冷，但我还是把它留在了家里。我带的还是自己的这些破衣服。也许我已经定型了。也许是因为我知道，现在我的赚钱能力是几多，与之相对应的，我应该消费的水平是几多。我爸之前给我的那些钱，虽然到了我的口袋里，但不完全代表是我的，因为并不是我用自己可持续的赚钱能力去赚来的。所以我不会轻易用。我出门在外，还是喜欢蹭朋友家的沙发（真的很感谢所有和我说“你可以随时来住”的朋友们），或是住保证安全和舒适的情况下尽量性价比合理的酒店。我卡里的那些钱，是父母让我用来紧急情况下备用以换取生命安全的。其他我想出去玩，我想吃的好点或者差点，还是应该由我自己把握。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>******</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p><strong>失而复得 又失 又复得 的鸡饭</strong></p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>晚餐我和朋友去了津津茶餐厅，是林俊杰在上个月的vlog里推荐的。视频里，他去的时候海南鸡饭已经卖完了，他推荐了排骨王和麦片虾。听上去这个海南鸡饭很紧俏热门，所以我到店之前已经加快了步伐，到店的第一件事就是问老板，鸡饭还有没有？</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>得到老板肯定的回答，我便安心坐下了。点完菜，正沉浸在自己能吃上“林俊杰套餐”的喜悦之中，谁料老板突然走过来跟我说，鸡饭刚刚卖完了！我反复确认了三遍，只能认栽，在老板的推荐下点了“虾酱鸡”，一边自嘲说，林俊杰没吃上的鸡饭，我们也没吃上，这下才是正宗的林俊杰套餐了。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>当菜已经上完，猛然发现后面那桌比我们来得晚的情侣竟然获得了一盆鸡饭，我高声叫着，并灵机一动问他们，能不能和你们分一半？</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>情侣也是有趣的主，竟然一秒同意了，但正在这个时候，老板发现这盆鸡饭应该属于12号桌，于是又将鸡饭撤回了。情侣恼怒，而老板又跟他们说他们的鸡饭在后头，并看我如此地渴望一份鸡饭，用戏谑的语气问我，还有最后一份鸡饭，要不要，十块？</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我说我只要六块的鸡饭，她说不行，只有十块的了，要的话就卖给你；</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我说那行吧，但是吃不下到时候只能打包了，你把三毛钱的打包费帮我免了吧！</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>她说没问题，我帮你打包！</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>就这样愉快地决定了。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>过了十分钟，眼看着已经吃不下，鸡饭还没来，我和朋友商量要不要还是把那份鸡饭给退了，结果鸡饭就在这个关键时刻降临到了我们的桌子。至此，刘备为了诸葛亮三顾茅庐，而这鸡饭三进三出，终于落到了我的嘴里。听说是老板以为卖完了，结果发现底下还藏着最后一只鸡，所以多了几桌人瓜分了这最后一只鸡带来的鸡饭。我为鸡感到抱歉。老板今晚已经肉眼可见地上错了好几次菜，但她显然并不为我们感到抱歉。隔壁桌的情侣说要给老板差评，我却觉得蛮可爱的。也许我在她身上看到了很久违的松弛感。上错了就上错了，再拿给对的人吃就好了。这份鸡饭，有得吃就吃了，没得吃就算了，多吃一口也不会胖三斤，少吃一口也饿不死，中间的进进出出和波折才是最有意思的，只要最后老板别给我算错饭钱，就可以了。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>带着我的打包盒回家的时候，我还在思考那老板帮我免掉的打包盒的三毛钱。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>三毛。刚好是三毛欸！</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我内心想着。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>*******</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p><strong>后记</strong></p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我原本以为我喜欢拍摄，我喜欢摄影，我喜欢拍视频，拍电影。但这些年来好像更多会以文字的形式来记录，来输出。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p>我不一定会成为作家，我也从来没想过这个。但也许我会在今年、明年，自己整理一本书。不一定幸运到能够出版，但至少留给自己，留给一些会感兴趣的人。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p></p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p><strong>一些图片：</strong></p>
-<!-- /wp:paragraph -->
 
-<!-- wp:image {"id":154,"width":"auto","height":"500px","sizeSlug":"large","linkDestination":"none"} -->
 <figure class="wp-block-image size-large is-resized"><img src="../images/fdb9604b-0efb-4722-a7b6-8a7d4cf17171_1_105_c.jpeg" alt="" class="wp-image-154" style="width:auto;height:500px" /></figure>
-<!-- /wp:image -->
 
-<!-- wp:paragraph -->
 <p>跑路时背后放的烟花</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:image {"id":156,"width":"auto","height":"500px","sizeSlug":"large","linkDestination":"none"} -->
 <figure class="wp-block-image size-large is-resized"><img src="../images/da924c2a-dbff-4490-ab82-64d5a192c938_1_105_c.jpeg" alt="" class="wp-image-156" style="width:auto;height:500px" /></figure>
-<!-- /wp:image -->
 
-<!-- wp:paragraph -->
 <p>这辈子没见过手表app给我显示112ms的好心情，那个时候的我大抵是在想，“离开最好的时候就是现在！”</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:image {"id":158,"width":"auto","height":"500px","sizeSlug":"large","linkDestination":"none"} -->
 <figure class="wp-block-image size-large is-resized"><img src="../images/a725be40-e99e-40b6-a73e-9667a958bdbf_1_105_c.jpeg" alt="" class="wp-image-158" style="width:auto;height:500px" /></figure>
-<!-- /wp:image -->
 
-<!-- wp:paragraph -->
 <p>带上我的全部家当，就这样跑路了</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:image {"id":160,"width":"auto","height":"500px","sizeSlug":"large","linkDestination":"none"} -->
 <figure class="wp-block-image size-large is-resized"><img src="../images/c5352e08-bd0e-4727-9c31-b5441a6fd230_1_105_c.jpeg" alt="" class="wp-image-160" style="width:auto;height:500px" /></figure>
-<!-- /wp:image -->
 
-<!-- wp:paragraph -->
 <p>凌晨四点，夜高速，连夜去了杭州机场</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:image {"id":171,"width":"auto","height":"500px","sizeSlug":"large","linkDestination":"none"} -->
 <figure class="wp-block-image size-large is-resized"><img src="../images/img_2e9fce6eb0d1-1.jpg" alt="" class="wp-image-171" style="width:auto;height:500px" /></figure>
-<!-- /wp:image -->
 
-<!-- wp:paragraph -->
 <p>下午三点，下了机场过来的计程车，在朋友公司楼下等待拿门卡。好人一生平安！</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:image {"id":161,"width":"auto","height":"500px","sizeSlug":"large","linkDestination":"none"} -->
 <figure class="wp-block-image size-large is-resized"><img src="../images/4474109f-3066-4007-9acb-c0ea8edc3a22_1_105_c.jpeg" alt="" class="wp-image-161" style="width:auto;height:500px" /></figure>
-<!-- /wp:image -->
 
-<!-- wp:paragraph -->
 <p>直觉告诉我，这波经历又可以更新我的播客了哈哈哈哈</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:image {"id":162,"width":"auto","height":"500px","sizeSlug":"large","linkDestination":"none"} -->
 <figure class="wp-block-image size-large is-resized"><img src="../images/02313c7f-e5e0-4ab4-9944-51f9e6858419_1_102_o.jpeg" alt="" class="wp-image-162" style="width:auto;height:500px" /></figure>
-<!-- /wp:image -->
 
-<!-- wp:paragraph -->
 <p>c'est la vie!! 终于暖和了</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:image {"id":165,"width":"auto","height":"500px","sizeSlug":"large","linkDestination":"none"} -->
 <figure class="wp-block-image size-large is-resized"><img src="../images/98c6b0f6-ea09-4d13-8d2b-669cf65ee190_1_105_c.jpeg" alt="" class="wp-image-165" style="width:auto;height:500px" /></figure>
-<!-- /wp:image -->
 
-<!-- wp:image {"id":166,"width":"auto","height":"500px","sizeSlug":"large","linkDestination":"none"} -->
 <figure class="wp-block-image size-large is-resized"><img src="../images/d65515b2-5f01-4f37-85bf-ee49dee8c848_1_105_c.jpeg" alt="" class="wp-image-166" style="width:auto;height:500px" /></figure>
-<!-- /wp:image -->
 
-<!-- wp:paragraph -->
 <p>三毛《万水千山走遍》中的《情人》一章</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:image {"id":173,"width":"auto","height":"500px","sizeSlug":"large","linkDestination":"none"} -->
 <figure class="wp-block-image size-large is-resized"><img src="../images/img_2057.jpg" alt="" class="wp-image-173" style="width:auto;height:500px" /></figure>
-<!-- /wp:image -->
 
-<!-- wp:paragraph -->
 <p>林俊杰的蓝饮料喝上了！我现在具有能把所有难吃难喝东西品尝出美味的能力</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:image {"id":174,"width":"auto","height":"500px","sizeSlug":"large","linkDestination":"none"} -->
 <figure class="wp-block-image size-large is-resized"><img src="../images/img_2110.jpg" alt="" class="wp-image-174" style="width:auto;height:500px" /></figure>
-<!-- /wp:image -->
 
-<!-- wp:paragraph -->
 <p>亚坤咖啡豆浆喝上了！</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:image {"id":167,"width":"auto","height":"500px","sizeSlug":"large","linkDestination":"none"} -->
 <figure class="wp-block-image size-large is-resized"><img src="../images/bd162223-2e6f-4086-9e1e-ee8b015fd7c9_1_105_c.jpeg" alt="" class="wp-image-167" style="width:auto;height:500px" /></figure>
-<!-- /wp:image -->
 
-<!-- wp:paragraph -->
 <p>这栋楼真的很像纸片</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:image {"id":169,"width":"auto","height":"500px","sizeSlug":"large","linkDestination":"none"} -->
 <figure class="wp-block-image size-large is-resized"><img src="../images/b98ec95c-ac81-415d-b8cf-27d53ae28d0c_1_102_o.jpeg" alt="" class="wp-image-169" style="width:auto;height:500px" /></figure>
-<!-- /wp:image -->
 
-<!-- wp:paragraph -->
 <p>最后那只鸡</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:image {"id":176,"width":"auto","height":"500px","sizeSlug":"large","linkDestination":"none"} -->
 <figure class="wp-block-image size-large is-resized"><img src="../images/img_2115.jpg" alt="" class="wp-image-176" style="width:auto;height:500px" /></figure>
-<!-- /wp:image -->
 
-<!-- wp:paragraph -->
 <p>新加坡河畔的乌龟</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:image {"id":177,"width":"500px","sizeSlug":"large","linkDestination":"none"} -->
 <figure class="wp-block-image size-large is-resized"><img src="../images/img_2123.jpg" alt="" class="wp-image-177" style="width:500px" /></figure>
-<!-- /wp:image -->
 
-<!-- wp:paragraph -->
 <p>好哦！</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:image {"id":178,"width":"auto","height":"500px","sizeSlug":"large","linkDestination":"none"} -->
 <figure class="wp-block-image size-large is-resized"><img src="../images/img_2127.jpg" alt="" class="wp-image-178" style="width:auto;height:500px" /></figure>
-<!-- /wp:image -->
 
-<!-- wp:paragraph -->
 <p>这篇伟大文章诞生的地方。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:image {"id":179,"width":"auto","height":"500px","sizeSlug":"large","linkDestination":"none"} -->
 <figure class="wp-block-image size-large is-resized"><img src="../images/img_2133.jpg" alt="" class="wp-image-179" style="width:auto;height:500px" /></figure>
-<!-- /wp:image -->
 
-<!-- wp:paragraph -->
 <p>吃了印度菜。宁波没有人会愿意吃印度菜。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:image {"id":181,"width":"auto","height":"500px","sizeSlug":"large","linkDestination":"none"} -->
 <figure class="wp-block-image size-large is-resized"><img src="../images/image.png" alt="" class="wp-image-181" style="width:auto;height:500px" /></figure>
-<!-- /wp:image -->
 
-<!-- wp:paragraph -->
 <p>在这里坐了一下午看完了《万水千山走遍》。蛮好的，就是腰有点酸。</p>
-<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
 <p></p>
-<!-- /wp:paragraph -->
     </div>
   </main>
   <footer>
