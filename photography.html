@@ -68,12 +68,9 @@
     }
 
     /* ── Masonry grid ── */
-    .masonry {
-      columns: 3;
-      column-gap: 12px;
-    }
-    @media (max-width: 900px)  { .masonry { columns: 2; } }
-    @media (max-width: 560px)  { .masonry { columns: 1; } }
+    .masonry { columns: 3; column-gap: 12px; }
+    @media (max-width: 900px) { .masonry { columns: 2; } }
+    @media (max-width: 560px) { .masonry { columns: 1; } }
 
     .masonry-item {
       break-inside: avoid;
@@ -82,81 +79,158 @@
       border-radius: 6px;
       cursor: zoom-in;
       position: relative;
+      transition: opacity 0.3s;
     }
+    .masonry-item.hidden { display: none; }
     .masonry-item img {
       width: 100%;
       display: block;
-      transition: transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.3s;
+      transition: transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94);
     }
     .masonry-item:hover img { transform: scale(1.03); }
 
-    /* filter transition */
-    .masonry-item {
-      transition: opacity 0.3s, transform 0.3s;
-    }
-    .masonry-item.hidden {
-      display: none;
-    }
-
-    /* ── Lightbox ── */
-    #lightbox {
+    /* ── Photo Panel (full-screen, left image + right info) ── */
+    #photo-panel {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.94);
       z-index: 1000;
       display: flex;
-      align-items: center;
-      justify-content: center;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.25s;
+      transition: opacity 0.3s;
     }
-    #lightbox.open {
+    #photo-panel.open {
       opacity: 1;
       pointer-events: all;
     }
-    #lightbox img {
-      max-width: min(92vw, 1200px);
-      max-height: 90vh;
+
+    /* Left: image area */
+    #pp-img-wrap {
+      flex: 1;
+      background: #0d0d0d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    #pp-img {
+      max-width: 100%;
+      max-height: 100vh;
       object-fit: contain;
-      border-radius: 4px;
-      box-shadow: 0 32px 80px rgba(0,0,0,0.6);
       transition: opacity 0.2s;
     }
-    #lb-close {
-      position: fixed;
-      top: 24px; right: 28px;
-      font-size: 28px;
-      color: rgba(255,255,255,0.7);
-      cursor: pointer;
-      line-height: 1;
+
+    /* Right: info panel */
+    #pp-info {
+      width: 320px;
+      flex-shrink: 0;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      padding: 48px 36px 36px;
+      overflow-y: auto;
+      position: relative;
+    }
+    @media (max-width: 760px) {
+      #photo-panel { flex-direction: column; }
+      #pp-img-wrap { min-height: 55vh; }
+      #pp-info { width: 100%; padding: 24px 24px 32px; }
+    }
+
+    #pp-close {
+      position: absolute;
+      top: 20px; right: 20px;
+      font-size: 18px;
+      color: var(--muted);
       background: none;
       border: none;
+      cursor: pointer;
+      line-height: 1;
       padding: 4px;
       transition: color 0.15s;
     }
-    #lb-close:hover { color: #fff; }
-    #lb-prev, #lb-next {
-      position: fixed;
-      top: 50%; transform: translateY(-50%);
-      font-size: 22px;
-      color: rgba(255,255,255,0.5);
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 16px 20px;
-      transition: color 0.15s;
+    #pp-close:hover { color: var(--text); }
+
+    #pp-cat {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 20px;
     }
-    #lb-prev:hover, #lb-next:hover { color: #fff; }
-    #lb-prev { left: 16px; }
-    #lb-next { right: 16px; }
-    #lb-counter {
-      position: fixed;
-      bottom: 28px; left: 50%;
-      transform: translateX(-50%);
+    #pp-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 300;
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    #pp-meta {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      margin-bottom: 28px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    #pp-meta span + span::before {
+      content: '·';
+      margin-right: 8px;
+    }
+    #pp-divider {
+      width: 32px;
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 24px;
+    }
+    #pp-desc {
+      font-size: 14px;
+      line-height: 1.85;
+      color: var(--prose);
+      flex: 1;
+    }
+
+    /* Navigation */
+    #pp-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+    #pp-counter {
       font-size: 11px;
       letter-spacing: 2px;
-      color: rgba(255,255,255,0.4);
+      color: var(--muted);
+    }
+    .pp-arrow {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 16px;
+      transition: all 0.15s;
+    }
+    .pp-arrow:hover {
+      border-color: var(--text);
+      color: var(--text);
+    }
+
+    /* Keyboard hint */
+    #pp-hint {
+      font-size: 10px;
+      color: var(--border);
+      letter-spacing: 0.5px;
+      margin-top: 12px;
+      text-align: center;
     }
   </style>
 </head>
@@ -208,80 +282,176 @@
     <div class="masonry" id="gallery">
 
       <!-- Travel -->
-      <div class="masonry-item" data-cat="travel">
+      <div class="masonry-item" data-cat="travel"
+           data-title="Somewhere in Argentina"
+           data-location="Buenos Aires, Argentina"
+           data-date="Oct 2025"
+           data-desc="这里是你对这张照片的介绍。你当时在哪里、看到了什么、心里有什么感受，都可以写在这里。">
         <img src="images/00572b7e-e46b-41f1-8dfd-5fe048f09577_1_102_o.jpeg" alt="Travel" loading="lazy">
       </div>
-      <div class="masonry-item" data-cat="travel">
+      <div class="masonry-item" data-cat="travel"
+           data-title="The Road to Machu Picchu"
+           data-location="Cusco, Peru"
+           data-date="Mar 2025"
+           data-desc="这里是你对这张照片的介绍。">
         <img src="images/01997562-bb5b-4480-8e37-6dfbdc0f59a1_1_102_o.jpeg" alt="Travel" loading="lazy">
       </div>
-      <div class="masonry-item" data-cat="travel">
+      <div class="masonry-item" data-cat="travel"
+           data-title="Morning Light"
+           data-location="Mexico City, Mexico"
+           data-date="Mar 2025"
+           data-desc="这里是你对这张照片的介绍。">
         <img src="images/07c4b1de-d814-4bcf-824b-f4d89983031a_1_102_o.jpeg" alt="Travel" loading="lazy">
       </div>
-      <div class="masonry-item" data-cat="travel">
+      <div class="masonry-item" data-cat="travel"
+           data-title="Riverside"
+           data-location="Singapore"
+           data-date="Feb 2025"
+           data-desc="这里是你对这张照片的介绍。">
         <img src="images/0ecf9b84-5f31-4d8b-9883-4b6723299f64_1_102_o.jpeg" alt="Travel" loading="lazy">
       </div>
-      <div class="masonry-item" data-cat="travel">
+      <div class="masonry-item" data-cat="travel"
+           data-title="Golden Hour"
+           data-location="Patagonia, Chile"
+           data-date="Nov 2025"
+           data-desc="这里是你对这张照片的介绍。">
         <img src="images/1316a3b4-6fea-4205-a8b2-9149478fa95a_1_102_o.jpeg" alt="Travel" loading="lazy">
       </div>
-      <div class="masonry-item" data-cat="travel">
+      <div class="masonry-item" data-cat="travel"
+           data-title="End of the World"
+           data-location="Ushuaia, Argentina"
+           data-date="Nov 2025"
+           data-desc="这里是你对这张照片的介绍。">
         <img src="images/17b06ed8-40d7-4244-b630-d80f430eb6b1_1_102_o.jpeg" alt="Travel" loading="lazy">
       </div>
-      <div class="masonry-item" data-cat="travel">
+      <div class="masonry-item" data-cat="travel"
+           data-title="Quiet Afternoon"
+           data-location="Hangzhou, China"
+           data-date="Feb 2025"
+           data-desc="这里是你对这张照片的介绍。">
         <img src="images/17d40f9b-1804-4df7-b3f3-3b371da083f4_1_102_o.jpeg" alt="Travel" loading="lazy">
       </div>
-      <div class="masonry-item" data-cat="travel">
+      <div class="masonry-item" data-cat="travel"
+           data-title="Salt Flats"
+           data-location="Uyuni, Bolivia"
+           data-date="Oct 2025"
+           data-desc="这里是你对这张照片的介绍。">
         <img src="images/19a9dc7e-f2cb-440e-ab4f-047010fdf34d_1_102_o.jpeg" alt="Travel" loading="lazy">
       </div>
 
       <!-- Portraits -->
-      <div class="masonry-item" data-cat="portraits">
+      <div class="masonry-item" data-cat="portraits"
+           data-title="Portrait I"
+           data-location="Hong Kong"
+           data-date="2024"
+           data-desc="这里是你对这张照片的介绍。">
         <img src="images/036e5322-4053-4a79-bdf3-42b48e0c8113_1_105_c.jpeg" alt="Portrait" loading="lazy">
       </div>
-      <div class="masonry-item" data-cat="portraits">
+      <div class="masonry-item" data-cat="portraits"
+           data-title="Portrait II"
+           data-location="Hong Kong"
+           data-date="2024"
+           data-desc="这里是你对这张照片的介绍。">
         <img src="images/07be1c21-5cba-45dc-95c8-1a5c2c57b73e_1_105_c.jpeg" alt="Portrait" loading="lazy">
       </div>
-      <div class="masonry-item" data-cat="portraits">
+      <div class="masonry-item" data-cat="portraits"
+           data-title="Portrait III"
+           data-location="Hong Kong"
+           data-date="2024"
+           data-desc="这里是你对这张照片的介绍。">
         <img src="images/0d30d52c-2c16-4d6e-800f-d0433a55d016_1_105_c.jpeg" alt="Portrait" loading="lazy">
       </div>
-      <div class="masonry-item" data-cat="portraits">
+      <div class="masonry-item" data-cat="portraits"
+           data-title="Portrait IV"
+           data-location="Singapore"
+           data-date="2025"
+           data-desc="这里是你对这张照片的介绍。">
         <img src="images/0f705005-f061-44e7-9109-710edf531b45_1_105_c.jpeg" alt="Portrait" loading="lazy">
       </div>
-      <div class="masonry-item" data-cat="portraits">
+      <div class="masonry-item" data-cat="portraits"
+           data-title="Portrait V"
+           data-location="Singapore"
+           data-date="2025"
+           data-desc="这里是你对这张照片的介绍。">
         <img src="images/100f633b-f91d-40f5-a2cc-ffe55168023b_1_105_c.jpeg" alt="Portrait" loading="lazy">
       </div>
-      <div class="masonry-item" data-cat="portraits">
+      <div class="masonry-item" data-cat="portraits"
+           data-title="Portrait VI"
+           data-location="Hong Kong"
+           data-date="2024"
+           data-desc="这里是你对这张照片的介绍。">
         <img src="images/1385d21c-cd49-4fc2-b492-3b62fd7e2e7a_1_105_c.jpeg" alt="Portrait" loading="lazy">
       </div>
-      <div class="masonry-item" data-cat="portraits">
+      <div class="masonry-item" data-cat="portraits"
+           data-title="Portrait VII"
+           data-location="Hong Kong"
+           data-date="2023"
+           data-desc="这里是你对这张照片的介绍。">
         <img src="images/141bde9a-d550-42b0-b6b9-e0177e09a745_1_105_c.jpeg" alt="Portrait" loading="lazy">
       </div>
-      <div class="masonry-item" data-cat="portraits">
+      <div class="masonry-item" data-cat="portraits"
+           data-title="Portrait VIII"
+           data-location="Hong Kong"
+           data-date="2023"
+           data-desc="这里是你对这张照片的介绍。">
         <img src="images/14dffa88-5445-4176-ad8c-054dd114e017_1_105_c.jpeg" alt="Portrait" loading="lazy">
       </div>
 
       <!-- Street -->
-      <div class="masonry-item" data-cat="street">
+      <div class="masonry-item" data-cat="street"
+           data-title="Night Market"
+           data-location="Hong Kong"
+           data-date="2024"
+           data-desc="这里是你对这张照片的介绍。">
         <img src="images/00b2d047-8296-44f6-b27a-4258091b558a_1_102_o.jpeg" alt="Street" loading="lazy">
       </div>
-      <div class="masonry-item" data-cat="street">
+      <div class="masonry-item" data-cat="street"
+           data-title="Rush Hour"
+           data-location="Hong Kong"
+           data-date="2024"
+           data-desc="这里是你对这张照片的介绍。">
         <img src="images/02313c7f-e5e0-4ab4-9944-51f9e6858419_1_102_o.jpeg" alt="Street" loading="lazy">
       </div>
-      <div class="masonry-item" data-cat="street">
+      <div class="masonry-item" data-cat="street"
+           data-title="Ordinary Day"
+           data-location="Ningbo, China"
+           data-date="2024"
+           data-desc="这里是你对这张照片的介绍。">
         <img src="images/173c5310-9708-439e-913a-906374b9add7_1_105_c.jpeg" alt="Street" loading="lazy">
       </div>
-      <div class="masonry-item" data-cat="street">
+      <div class="masonry-item" data-cat="street"
+           data-title="Afternoon Walk"
+           data-location="Singapore"
+           data-date="Feb 2025"
+           data-desc="这里是你对这张照片的介绍。">
         <img src="images/1ac6110f-26b8-4e6a-87ed-5b27c5734da0_1_102_o.jpeg" alt="Street" loading="lazy">
       </div>
-      <div class="masonry-item" data-cat="street">
+      <div class="masonry-item" data-cat="street"
+           data-title="Between Moments"
+           data-location="Mexico City, Mexico"
+           data-date="Mar 2025"
+           data-desc="这里是你对这张照片的介绍。">
         <img src="images/1ad8a068-d5d4-476e-9ff6-e7d8f66d2402_1_105_c.jpeg" alt="Street" loading="lazy">
       </div>
-      <div class="masonry-item" data-cat="street">
+      <div class="masonry-item" data-cat="street"
+           data-title="The Corner"
+           data-location="Buenos Aires, Argentina"
+           data-date="Oct 2025"
+           data-desc="这里是你对这张照片的介绍。">
         <img src="images/1cb6ddf2-18b8-4a71-863d-a8aaa515fa12_1_105_c.jpeg" alt="Street" loading="lazy">
       </div>
-      <div class="masonry-item" data-cat="street">
+      <div class="masonry-item" data-cat="street"
+           data-title="Strangers"
+           data-location="Hong Kong"
+           data-date="2023"
+           data-desc="这里是你对这张照片的介绍。">
         <img src="images/1cb879b7-52b5-4512-a869-8a40fa8a7336_1_102_o.jpeg" alt="Street" loading="lazy">
       </div>
-      <div class="masonry-item" data-cat="street">
+      <div class="masonry-item" data-cat="street"
+           data-title="Shadow Play"
+           data-location="Hong Kong"
+           data-date="2023"
+           data-desc="这里是你对这张照片的介绍。">
         <img src="images/1cc61470-a5d6-4cc9-956b-0e0ee8dec9d1_1_105_c.jpeg" alt="Street" loading="lazy">
       </div>
 
@@ -289,13 +459,28 @@
 
   </main>
 
-  <!-- Lightbox -->
-  <div id="lightbox">
-    <button id="lb-close">✕</button>
-    <button id="lb-prev">‹</button>
-    <img id="lb-img" src="" alt="">
-    <button id="lb-next">›</button>
-    <div id="lb-counter"></div>
+  <!-- Photo Panel -->
+  <div id="photo-panel">
+    <div id="pp-img-wrap">
+      <img id="pp-img" src="" alt="">
+    </div>
+    <div id="pp-info">
+      <button id="pp-close">✕</button>
+      <p id="pp-cat"></p>
+      <h2 id="pp-title"></h2>
+      <div id="pp-meta">
+        <span id="pp-location"></span>
+        <span id="pp-date"></span>
+      </div>
+      <div id="pp-divider"></div>
+      <p id="pp-desc"></p>
+      <div id="pp-nav">
+        <button class="pp-arrow" id="pp-prev">‹</button>
+        <span id="pp-counter"></span>
+        <button class="pp-arrow" id="pp-next">›</button>
+      </div>
+      <p id="pp-hint">← → to navigate · ESC to close</p>
+    </div>
   </div>
 
   <footer>
@@ -334,66 +519,72 @@
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         const f = btn.dataset.filter;
-        items.forEach(el => {
-          el.classList.toggle('hidden', f !== 'all' && el.dataset.cat !== f);
-        });
+        items.forEach(el => el.classList.toggle('hidden', f !== 'all' && el.dataset.cat !== f));
         buildVisible();
       });
     });
 
-    // ── Lightbox ─────────────────────────────────────────────
-    const lb     = document.getElementById('lightbox');
-    const lbImg  = document.getElementById('lb-img');
-    const lbCnt  = document.getElementById('lb-counter');
-    let visible  = [];
-    let current  = 0;
+    // ── Panel ────────────────────────────────────────────────
+    const panel   = document.getElementById('photo-panel');
+    const ppImg   = document.getElementById('pp-img');
+    const ppCat   = document.getElementById('pp-cat');
+    const ppTitle = document.getElementById('pp-title');
+    const ppLoc   = document.getElementById('pp-location');
+    const ppDate  = document.getElementById('pp-date');
+    const ppDesc  = document.getElementById('pp-desc');
+    const ppCnt   = document.getElementById('pp-counter');
+    let visible = [], current = 0;
 
     function buildVisible() {
       visible = items.filter(el => !el.classList.contains('hidden'));
     }
     buildVisible();
 
-    function openLb(idx) {
+    function openPanel(idx) {
       current = idx;
-      lbImg.style.opacity = '0';
-      lb.classList.add('open');
-      lbImg.src = visible[current].querySelector('img').src;
-      lbImg.onload = () => { lbImg.style.opacity = '1'; };
-      lbCnt.textContent = `${current + 1} / ${visible.length}`;
+      render();
+      panel.classList.add('open');
       document.body.style.overflow = 'hidden';
     }
-    function closeLb() {
-      lb.classList.remove('open');
+    function closePanel() {
+      panel.classList.remove('open');
       document.body.style.overflow = '';
     }
-    function moveLb(dir) {
+    function move(dir) {
       current = (current + dir + visible.length) % visible.length;
-      lbImg.style.opacity = '0';
-      setTimeout(() => {
-        lbImg.src = visible[current].querySelector('img').src;
-        lbImg.onload = () => { lbImg.style.opacity = '1'; };
-        lbCnt.textContent = `${current + 1} / ${visible.length}`;
-      }, 120);
+      ppImg.style.opacity = '0';
+      setTimeout(() => { render(); ppImg.style.opacity = '1'; }, 150);
+    }
+    function render() {
+      const el = visible[current];
+      const d  = el.dataset;
+      ppImg.src      = el.querySelector('img').src;
+      ppImg.style.opacity = '1';
+      ppCat.textContent  = d.cat.toUpperCase();
+      ppTitle.textContent = d.title || '';
+      ppLoc.textContent  = d.location || '';
+      ppDate.textContent = d.date || '';
+      ppDesc.textContent = d.desc || '';
+      ppCnt.textContent  = `${current + 1} / ${visible.length}`;
     }
 
-    items.forEach((el, i) => {
+    items.forEach(el => {
       el.addEventListener('click', () => {
         buildVisible();
-        const idx = visible.indexOf(el);
-        if (idx !== -1) openLb(idx);
+        openPanel(visible.indexOf(el));
       });
     });
 
-    document.getElementById('lb-close').addEventListener('click', closeLb);
-    document.getElementById('lb-prev').addEventListener('click', () => moveLb(-1));
-    document.getElementById('lb-next').addEventListener('click', () => moveLb(1));
-    lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+    document.getElementById('pp-close').addEventListener('click', closePanel);
+    document.getElementById('pp-prev').addEventListener('click', () => move(-1));
+    document.getElementById('pp-next').addEventListener('click', () => move(1));
+    panel.addEventListener('click', e => { if (e.target === panel || e.target.id === 'pp-img-wrap') closePanel(); });
 
     document.addEventListener('keydown', e => {
-      if (!lb.classList.contains('open')) return;
-      if (e.key === 'Escape') closeLb();
-      if (e.key === 'ArrowLeft')  moveLb(-1);
-      if (e.key === 'ArrowRight') moveLb(1);
+      if (!panel.classList.contains('open')) return;
+      if (e.key === 'Escape')      closePanel();
+      if (e.key === 'ArrowLeft')   move(-1);
+      if (e.key === 'ArrowRight')  move(1);
     });
   </script>
 </body>
