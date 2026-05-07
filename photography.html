@@ -3,236 +3,541 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Photography — Lumiere Feng</title>
-  <meta name="description" content="Photography by Lumiere Feng — Travel, Portraits, Street.">
+  <title>Album — Lumiere Feng</title>
+  <meta name="description" content="Travel album by destination — Lumiere Feng.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <style>
-    /* ── Page hero ── */
-    .photo-hero {
-      padding: 20px 0 24px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 32px;
-    }
-    .photo-hero-eyebrow {
-      font-size: 11px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-    .photo-hero h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2rem, 4vw, 3.2rem);
-      font-weight: 300;
-      letter-spacing: -1px;
-      line-height: 1;
-      color: var(--text);
-      margin-bottom: 10px;
-    }
-    .photo-hero-sub {
-      font-size: 11px;
-      color: var(--muted);
-      letter-spacing: 3px;
-      text-transform: uppercase;
-    }
+:root {
+  color-scheme: light;
+  --ink: #26313c;
+  --muted: #6b7680;
+  --line: #d7d9d6;
+  --paper: #f6f2ec;
+  --panel: #fffdf9;
+  --sea: #d7e8eb;
+  --land: #d9d6be;
+  --land-deep: #bfc5a0;
+  --pin: #c94b3f;
+  --focus: #1c6e7d;
+}
 
-    /* ── Filter tabs ── */
-    .filter-bar {
-      display: flex;
-      gap: 4px;
-      margin-bottom: 48px;
-      flex-wrap: wrap;
-    }
-    .filter-btn {
-      font-family: inherit;
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      padding: 7px 18px;
-      border: 1px solid var(--border);
-      border-radius: 40px;
-      background: transparent;
-      color: var(--muted);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .filter-btn:hover { color: var(--text); border-color: var(--text); }
-    .filter-btn.active {
-      background: var(--text);
-      color: var(--bg);
-      border-color: var(--text);
-    }
+* {
+  box-sizing: border-box;
+}
 
-    /* ── Masonry grid ── */
-    .masonry { columns: 3; column-gap: 12px; }
-    @media (max-width: 900px) { .masonry { columns: 2; } }
-    @media (max-width: 560px) { .masonry { columns: 1; } }
+html {
+  scroll-behavior: smooth;
+}
 
-    .masonry-item {
-      break-inside: avoid;
-      margin-bottom: 12px;
-      overflow: hidden;
-      border-radius: 6px;
-      cursor: zoom-in;
-      position: relative;
-      transition: opacity 0.3s;
-    }
-    .masonry-item.hidden { display: none; }
-    .masonry-item img {
-      width: 100%;
-      display: block;
-      transition: transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94);
-    }
-    .masonry-item:hover img { transform: scale(1.03); }
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family:
+    "Avenir Next", Avenir, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
 
-    /* ── Photo Panel (full-screen, left image + right info) ── */
-    #photo-panel {
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-      display: flex;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s;
-    }
-    #photo-panel.open {
-      opacity: 1;
-      pointer-events: all;
-    }
+button {
+  font: inherit;
+}
 
-    /* Left: image area */
-    #pp-img-wrap {
-      flex: 1;
-      background: #0d0d0d;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-    }
-    #pp-img {
-      max-width: 100%;
-      max-height: 100vh;
-      object-fit: contain;
-      transition: opacity 0.2s;
-    }
+.album-shell {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 18px 0 56px;
+}
 
-    /* Right: info panel */
-    #pp-info {
-      width: 320px;
-      flex-shrink: 0;
-      background: var(--bg);
-      display: flex;
-      flex-direction: column;
-      padding: 48px 36px 36px;
-      overflow-y: auto;
-      position: relative;
-    }
-    @media (max-width: 760px) {
-      #photo-panel { flex-direction: column; }
-      #pp-img-wrap { min-height: 55vh; }
-      #pp-info { width: 100%; padding: 24px 24px 32px; }
-    }
+.map-panel {
+  min-height: min(770px, calc(100vh - 36px));
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 14px;
+}
 
-    #pp-close {
-      position: absolute;
-      top: 20px; right: 20px;
-      font-size: 18px;
-      color: var(--muted);
-      background: none;
-      border: none;
-      cursor: pointer;
-      line-height: 1;
-      padding: 4px;
-      transition: color 0.15s;
-    }
-    #pp-close:hover { color: var(--text); }
+.draft-note {
+  width: fit-content;
+  color: #8b5b45;
+  font-family: "Iowan Old Style", Palatino, Georgia, serif;
+  font-size: 0.95rem;
+  font-style: italic;
+}
 
-    #pp-cat {
-      font-size: 10px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 20px;
-    }
-    #pp-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 2rem;
-      font-weight: 300;
-      letter-spacing: -0.5px;
-      line-height: 1.1;
-      color: var(--text);
-      margin-bottom: 6px;
-    }
-    #pp-meta {
-      font-size: 11px;
-      color: var(--muted);
-      letter-spacing: 0.5px;
-      margin-bottom: 28px;
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-    #pp-meta span + span::before {
-      content: '·';
-      margin-right: 8px;
-    }
-    #pp-divider {
-      width: 32px;
-      height: 1px;
-      background: var(--border);
-      margin-bottom: 24px;
-    }
-    #pp-desc {
-      font-size: 14px;
-      line-height: 1.85;
-      color: var(--prose);
-      flex: 1;
-    }
+.map-header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+}
 
-    /* Navigation */
-    #pp-nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 40px;
-      padding-top: 24px;
-      border-top: 1px solid var(--border);
-    }
-    #pp-counter {
-      font-size: 11px;
-      letter-spacing: 2px;
-      color: var(--muted);
-    }
-    .pp-arrow {
-      background: none;
-      border: 1px solid var(--border);
-      border-radius: 50%;
-      width: 36px; height: 36px;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      color: var(--muted);
-      font-size: 16px;
-      transition: all 0.15s;
-    }
-    .pp-arrow:hover {
-      border-color: var(--text);
-      color: var(--text);
-    }
+.eyebrow {
+  margin: 0 0 4px;
+  color: #8a4f37;
+  font-size: 0.73rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
 
-    /* Keyboard hint */
-    #pp-hint {
-      font-size: 10px;
-      color: var(--border);
-      letter-spacing: 0.5px;
-      margin-top: 12px;
-      text-align: center;
-    }
-  </style>
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1,
+h2 {
+  font-family: "Iowan Old Style", Palatino, Georgia, serif;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+h1 {
+  margin-bottom: 0;
+  font-size: clamp(2.4rem, 4.4vw, 4.35rem);
+  line-height: 0.98;
+}
+
+.trip-count {
+  min-width: 84px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  background: rgba(255, 253, 249, 0.74);
+  text-align: right;
+}
+
+.trip-count strong {
+  display: block;
+  font-family: "Iowan Old Style", Palatino, Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.trip-count span {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.world-map {
+  position: relative;
+  overflow: hidden;
+  min-height: 440px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255, 253, 249, 0.58), rgba(255, 253, 249, 0.08)),
+    var(--sea);
+  box-shadow: 0 24px 60px rgba(31, 41, 51, 0.08);
+}
+
+.world-map::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(38, 49, 60, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(38, 49, 60, 0.055) 1px, transparent 1px);
+  background-size: 8.333% 16.666%;
+  pointer-events: none;
+}
+
+.map-art {
+  position: absolute;
+  inset: 3% 2%;
+  width: 96%;
+  height: 94%;
+}
+
+.land {
+  fill: var(--land);
+  stroke: rgba(86, 95, 67, 0.34);
+  stroke-width: 3;
+}
+
+.south-america,
+.asia {
+  fill: var(--land-deep);
+}
+
+.antarctica-shape {
+  fill: #e3e6dd;
+  opacity: 0.88;
+}
+
+.pin {
+  --x: 50%;
+  --y: 50%;
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  transform: translate(-50%, -100%);
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  width: max-content;
+  max-width: 118px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.pin::before {
+  content: "";
+  width: 18px;
+  height: 18px;
+  border: 4px solid #fffdf9;
+  border-radius: 50% 50% 50% 0;
+  background: var(--pin);
+  box-shadow: 0 7px 18px rgba(90, 35, 28, 0.3);
+  transform: rotate(-45deg);
+}
+
+.pin::after {
+  content: "";
+  width: 20px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(38, 49, 60, 0.2);
+  transform: translateY(-5px);
+}
+
+.pin span {
+  order: -1;
+  padding: 4px 7px;
+  border: 1px solid rgba(255, 253, 249, 0.82);
+  border-radius: 999px;
+  background: rgba(255, 253, 249, 0.88);
+  box-shadow: 0 8px 18px rgba(31, 41, 51, 0.1);
+  font-size: 0.74rem;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.pin:hover::before,
+.pin:focus-visible::before,
+.pin.is-active::before {
+  background: var(--focus);
+}
+
+.pin:focus-visible {
+  outline: 3px solid rgba(28, 110, 125, 0.32);
+  outline-offset: 6px;
+}
+
+.united-states {
+  --x: 24.5%;
+  --y: 31.5%;
+}
+
+.canada {
+  --x: 25.2%;
+  --y: 22%;
+}
+
+.mexico {
+  --x: 22.8%;
+  --y: 40%;
+}
+
+.cuba {
+  --x: 28%;
+  --y: 43.5%;
+}
+
+.panama {
+  --x: 30.2%;
+  --y: 49%;
+}
+
+.colombia {
+  --x: 31.2%;
+  --y: 53.4%;
+}
+
+.peru {
+  --x: 31.4%;
+  --y: 61%;
+}
+
+.brazil {
+  --x: 40.7%;
+  --y: 63.5%;
+}
+
+.paraguay {
+  --x: 38.2%;
+  --y: 70.2%;
+}
+
+.chile {
+  --x: 34.2%;
+  --y: 77.2%;
+}
+
+.argentina {
+  --x: 36.8%;
+  --y: 79.5%;
+}
+
+.uruguay {
+  --x: 39.4%;
+  --y: 74.8%;
+}
+
+.singapore {
+  --x: 78.2%;
+  --y: 58%;
+}
+
+.laos {
+  --x: 78.8%;
+  --y: 47.5%;
+}
+
+.kenya {
+  --x: 61.2%;
+  --y: 61%;
+}
+
+.morocco {
+  --x: 51.6%;
+  --y: 39.5%;
+}
+
+.united-kingdom {
+  --x: 50.4%;
+  --y: 26.5%;
+}
+
+.antarctica {
+  --x: 57%;
+  --y: 94%;
+}
+
+.destination-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.destination-card {
+  overflow: hidden;
+  min-height: 398px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  scroll-margin-top: 18px;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.destination-card.is-active {
+  border-color: var(--focus);
+  box-shadow: 0 16px 36px rgba(28, 110, 125, 0.16);
+  transform: translateY(-3px);
+}
+
+.photo,
+.photo-strip {
+  min-height: 186px;
+}
+
+.photo {
+  background-size: cover;
+  background-position: center;
+}
+
+.photo-strip {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr 0.85fr;
+  grid-template-rows: 93px 93px;
+  gap: 2px;
+  background: #e6e1d7;
+}
+
+.photo-strip img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.photo-strip img:first-child {
+  grid-row: span 2;
+}
+
+.photo-strip.two-up {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 186px;
+}
+
+.photo-strip.two-up img:first-child {
+  grid-row: auto;
+}
+
+.placeholder {
+  position: relative;
+}
+
+.placeholder::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 253, 249, 0.08), rgba(38, 49, 60, 0.16));
+}
+
+.argentina-photo {
+  background-image: linear-gradient(24deg, #e5eef2 0 34%, #82a7b7 34% 48%, #556f83 48% 60%, #c7b38f 60% 76%, #3d5f4d 76%);
+}
+
+.uruguay-photo {
+  background-image: linear-gradient(20deg, #d6edf0 0 42%, #f0c884 42% 52%, #b77a55 52% 63%, #5d7d74 63%);
+}
+
+.chile-photo {
+  background-image: linear-gradient(160deg, #d8d2c2 0 31%, #a07d60 31% 45%, #7f8b8a 45% 65%, #d4b46f 65%);
+}
+
+.united-states-photo {
+  background-image: linear-gradient(150deg, #d9dfdf 0 28%, #77828c 28% 48%, #b84b3e 48% 60%, #efe5d4 60% 76%, #364b5e 76%);
+}
+
+.kenya-photo {
+  background-image: linear-gradient(145deg, #dbc994 0 31%, #927450 31% 48%, #617256 48% 66%, #d9d0b8 66%);
+}
+
+.laos-photo {
+  background-image: linear-gradient(140deg, #5d8f83 0 32%, #d7c97b 32% 45%, #9f6d4d 45% 62%, #dce9e2 62%);
+}
+
+.canada-photo {
+  background-image: linear-gradient(150deg, #e8ece9 0 31%, #7e9cac 31% 50%, #b74f45 50% 60%, #f1eee3 60%);
+}
+
+.colombia-photo {
+  background-image: linear-gradient(145deg, #e3bd4d 0 29%, #3b8278 29% 46%, #c75a42 46% 60%, #263f5a 60%);
+}
+
+.brazil-photo {
+  background-image: linear-gradient(145deg, #496f4b 0 34%, #d3b64f 34% 49%, #2e7190 49% 65%, #efe8cf 65%);
+}
+
+.paraguay-photo {
+  background-image: linear-gradient(145deg, #c65d4e 0 29%, #e5e1d6 29% 45%, #426785 45% 62%, #817458 62%);
+}
+
+.morocco-photo {
+  background-image: linear-gradient(145deg, #b65d45 0 31%, #d8a45e 31% 46%, #7c8d7a 46% 62%, #efe2c7 62%);
+}
+
+.united-kingdom-photo {
+  background-image: linear-gradient(145deg, #7c8791 0 31%, #e6dfd4 31% 45%, #8a4f55 45% 58%, #35485b 58%);
+}
+
+.cuba-photo {
+  background-image: linear-gradient(145deg, #56a6b0 0 32%, #eac36f 32% 47%, #c95d4e 47% 62%, #f0eadb 62%);
+}
+
+.panama-photo {
+  background-image: linear-gradient(145deg, #6aa79c 0 31%, #e5d6a7 31% 48%, #c7664f 48% 63%, #5d7183 63%);
+}
+
+.destination-copy {
+  padding: 18px;
+}
+
+.region {
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+h2 {
+  margin-bottom: 8px;
+  font-size: 1.62rem;
+  line-height: 1.05;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.meta span,
+.meta a {
+  padding: 5px 8px;
+  border: 1px solid #e2e3df;
+  border-radius: 999px;
+  color: #52606d;
+  font-size: 0.76rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.meta a {
+  color: var(--focus);
+  background: rgba(28, 110, 125, 0.06);
+}
+
+.meta a:hover,
+.meta a:focus-visible {
+  border-color: rgba(28, 110, 125, 0.55);
+}
+
+@media (max-width: 980px) {
+  .world-map {
+    min-height: 390px;
+  }
+}
+
+@media (max-width: 640px) {
+  .album-shell {
+    width: min(100% - 20px, 1180px);
+    padding-top: 14px;
+  }
+
+  .map-panel {
+    min-height: auto;
+  }
+
+  .map-header {
+    align-items: start;
+  }
+
+  .world-map {
+    min-height: 340px;
+  }
+
+  .pin span {
+    max-width: 82px;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .photo-strip {
+    grid-template-rows: 86px 86px;
+  }
+
+  .photo,
+  .photo-strip {
+    min-height: 172px;
+  }
+}
+
+</style>
 </head>
 <body>
 
@@ -270,226 +575,372 @@
     </nav>
   </header>
 
-  <main class="page">
+  <main class="album-shell">
+      <section class="map-panel" aria-labelledby="album-title">
+        <div class="draft-note">(work in progress)</div>
 
-    <div class="photo-hero">
-      <p class="photo-hero-eyebrow">Work</p>
-      <h1>Photography</h1>
-      <p class="photo-hero-sub">Travel &nbsp;·&nbsp; Portraits &nbsp;·&nbsp; Street</p>
-    </div>
+        <div class="map-header">
+          <div>
+            <p class="eyebrow">Travel Album</p>
+            <h1 id="album-title">Destinations</h1>
+          </div>
+          <div class="trip-count">
+            <strong>18</strong>
+            <span>places</span>
+          </div>
+        </div>
 
-    <!-- Filter -->
-    <div class="filter-bar">
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="travel">Travel</button>
-      <button class="filter-btn" data-filter="portraits">Portraits</button>
-      <button class="filter-btn" data-filter="street">Street</button>
-    </div>
+        <div class="world-map" aria-label="World map with album destination pins">
+          <svg class="map-art" viewBox="0 0 1200 620" role="img" aria-label="Simplified world map">
+            <path class="land americas" d="M188 144c45-43 113-66 174-43 40 15 53 44 44 80-8 30-44 35-58 58-18 30 25 45 15 83-8 31-42 42-68 53-25 10-33 31-31 57 3 38-21 60-57 48-41-14-50-58-57-94-6-34-31-47-57-63-41-25-48-73-25-112 22-38 88-27 120-67Z" />
+            <path class="land south-america" d="M365 346c42 8 79 36 83 79 4 42-23 70-34 108-12 41-9 79-51 105-37-32-44-74-49-119-4-36-30-65-21-103 8-34 37-58 72-70Z" />
+            <path class="land europe-africa" d="M556 154c42-31 109-25 151-4 28 14 45 36 35 64-10 31-53 28-65 56-15 34 25 58 23 92-2 45-36 76-61 111-21 29-18 70-52 91-41-28-41-80-37-124 3-37-14-65-40-91-32-31-64-64-51-113 10-37 64-46 97-82Z" />
+            <path class="land asia" d="M719 143c55-35 143-42 206-20 54 19 89 60 128 100 31 31 80 46 91 91 9 36-9 71-43 85-39 16-73-18-112-8-48 12-79 57-130 58-43 1-75-26-114-38-34-11-75-3-101-29-36-37 5-77 21-113 20-47 6-93 54-126Z" />
+            <path class="land australia" d="M909 458c41-27 100-24 137 8 26 22 28 55 2 77-37 31-110 35-151 7-35-24-24-68 12-92Z" />
+            <path class="land antarctica-shape" d="M262 585c112-29 252-16 377-25 145-10 302-34 423 7 20 7 42 20 39 35H250c-10-7-5-13 12-17Z" />
+          </svg>
 
-    <!-- Masonry grid -->
-    <div class="masonry" id="gallery">
+          <button class="pin united-states" data-target="united-states" aria-label="Open United States destination">
+            <span>United States</span>
+          </button>
+          <button class="pin canada" data-target="canada" aria-label="Open Canada destination">
+            <span>Canada</span>
+          </button>
+          <button class="pin mexico" data-target="mexico" aria-label="Open Mexico destination">
+            <span>Mexico</span>
+          </button>
+          <button class="pin cuba" data-target="cuba" aria-label="Open Cuba destination">
+            <span>Cuba</span>
+          </button>
+          <button class="pin panama" data-target="panama" aria-label="Open Panama destination">
+            <span>Panama</span>
+          </button>
+          <button class="pin colombia" data-target="colombia" aria-label="Open Colombia destination">
+            <span>Colombia</span>
+          </button>
+          <button class="pin peru" data-target="peru" aria-label="Open Peru destination">
+            <span>Peru</span>
+          </button>
+          <button class="pin brazil" data-target="brazil" aria-label="Open Brazil destination">
+            <span>Brazil</span>
+          </button>
+          <button class="pin paraguay" data-target="paraguay" aria-label="Open Paraguay destination">
+            <span>Paraguay</span>
+          </button>
+          <button class="pin chile" data-target="chile" aria-label="Open Chile destination">
+            <span>Chile</span>
+          </button>
+          <button class="pin argentina" data-target="argentina" aria-label="Open Argentina destination">
+            <span>Argentina</span>
+          </button>
+          <button class="pin uruguay" data-target="uruguay" aria-label="Open Uruguay destination">
+            <span>Uruguay</span>
+          </button>
+          <button class="pin singapore" data-target="singapore" aria-label="Open Singapore destination">
+            <span>Singapore</span>
+          </button>
+          <button class="pin laos" data-target="laos" aria-label="Open Laos destination">
+            <span>Laos</span>
+          </button>
+          <button class="pin kenya" data-target="kenya" aria-label="Open Kenya destination">
+            <span>Kenya</span>
+          </button>
+          <button class="pin morocco" data-target="morocco" aria-label="Open Morocco destination">
+            <span>Morocco</span>
+          </button>
+          <button class="pin united-kingdom" data-target="united-kingdom" aria-label="Open United Kingdom destination">
+            <span>UK</span>
+          </button>
+          <button class="pin antarctica" data-target="antarctica" aria-label="Open Antarctica destination">
+            <span>Antarctica</span>
+          </button>
+        </div>
+      </section>
 
-      <!-- Travel -->
-      <div class="masonry-item" data-cat="travel"
-           data-title="Somewhere in Argentina"
-           data-location="Buenos Aires, Argentina"
-           data-date="Oct 2025"
-           data-desc="这里是你对这张照片的介绍。你当时在哪里、看到了什么、心里有什么感受，都可以写在这里。">
-        <img src="images/00572b7e-e46b-41f1-8dfd-5fe048f09577_1_102_o.jpeg" alt="Travel" loading="lazy">
-      </div>
-      <div class="masonry-item" data-cat="travel"
-           data-title="The Road to Machu Picchu"
-           data-location="Cusco, Peru"
-           data-date="Mar 2025"
-           data-desc="这里是你对这张照片的介绍。">
-        <img src="images/01997562-bb5b-4480-8e37-6dfbdc0f59a1_1_102_o.jpeg" alt="Travel" loading="lazy">
-      </div>
-      <div class="masonry-item" data-cat="travel"
-           data-title="Morning Light"
-           data-location="Mexico City, Mexico"
-           data-date="Mar 2025"
-           data-desc="这里是你对这张照片的介绍。">
-        <img src="images/07c4b1de-d814-4bcf-824b-f4d89983031a_1_102_o.jpeg" alt="Travel" loading="lazy">
-      </div>
-      <div class="masonry-item" data-cat="travel"
-           data-title="Riverside"
-           data-location="Singapore"
-           data-date="Feb 2025"
-           data-desc="这里是你对这张照片的介绍。">
-        <img src="images/0ecf9b84-5f31-4d8b-9883-4b6723299f64_1_102_o.jpeg" alt="Travel" loading="lazy">
-      </div>
-      <div class="masonry-item" data-cat="travel"
-           data-title="Golden Hour"
-           data-location="Patagonia, Chile"
-           data-date="Nov 2025"
-           data-desc="这里是你对这张照片的介绍。">
-        <img src="images/1316a3b4-6fea-4205-a8b2-9149478fa95a_1_102_o.jpeg" alt="Travel" loading="lazy">
-      </div>
-      <div class="masonry-item" data-cat="travel"
-           data-title="End of the World"
-           data-location="Ushuaia, Argentina"
-           data-date="Nov 2025"
-           data-desc="这里是你对这张照片的介绍。">
-        <img src="images/17b06ed8-40d7-4244-b630-d80f430eb6b1_1_102_o.jpeg" alt="Travel" loading="lazy">
-      </div>
-      <div class="masonry-item" data-cat="travel"
-           data-title="Quiet Afternoon"
-           data-location="Hangzhou, China"
-           data-date="Feb 2025"
-           data-desc="这里是你对这张照片的介绍。">
-        <img src="images/17d40f9b-1804-4df7-b3f3-3b371da083f4_1_102_o.jpeg" alt="Travel" loading="lazy">
-      </div>
-      <div class="masonry-item" data-cat="travel"
-           data-title="Salt Flats"
-           data-location="Uyuni, Bolivia"
-           data-date="Oct 2025"
-           data-desc="这里是你对这张照片的介绍。">
-        <img src="images/19a9dc7e-f2cb-440e-ab4f-047010fdf34d_1_102_o.jpeg" alt="Travel" loading="lazy">
-      </div>
+      <section class="destination-list" aria-label="Destination details">
 
-      <!-- Portraits -->
-      <div class="masonry-item" data-cat="portraits"
-           data-title="Portrait I"
-           data-location="Hong Kong"
-           data-date="2024"
-           data-desc="这里是你对这张照片的介绍。">
-        <img src="images/036e5322-4053-4a79-bdf3-42b48e0c8113_1_105_c.jpeg" alt="Portrait" loading="lazy">
-      </div>
-      <div class="masonry-item" data-cat="portraits"
-           data-title="Portrait II"
-           data-location="Hong Kong"
-           data-date="2024"
-           data-desc="这里是你对这张照片的介绍。">
-        <img src="images/07be1c21-5cba-45dc-95c8-1a5c2c57b73e_1_105_c.jpeg" alt="Portrait" loading="lazy">
-      </div>
-      <div class="masonry-item" data-cat="portraits"
-           data-title="Portrait III"
-           data-location="Hong Kong"
-           data-date="2024"
-           data-desc="这里是你对这张照片的介绍。">
-        <img src="images/0d30d52c-2c16-4d6e-800f-d0433a55d016_1_105_c.jpeg" alt="Portrait" loading="lazy">
-      </div>
-      <div class="masonry-item" data-cat="portraits"
-           data-title="Portrait IV"
-           data-location="Singapore"
-           data-date="2025"
-           data-desc="这里是你对这张照片的介绍。">
-        <img src="images/0f705005-f061-44e7-9109-710edf531b45_1_105_c.jpeg" alt="Portrait" loading="lazy">
-      </div>
-      <div class="masonry-item" data-cat="portraits"
-           data-title="Portrait V"
-           data-location="Singapore"
-           data-date="2025"
-           data-desc="这里是你对这张照片的介绍。">
-        <img src="images/100f633b-f91d-40f5-a2cc-ffe55168023b_1_105_c.jpeg" alt="Portrait" loading="lazy">
-      </div>
-      <div class="masonry-item" data-cat="portraits"
-           data-title="Portrait VI"
-           data-location="Hong Kong"
-           data-date="2024"
-           data-desc="这里是你对这张照片的介绍。">
-        <img src="images/1385d21c-cd49-4fc2-b492-3b62fd7e2e7a_1_105_c.jpeg" alt="Portrait" loading="lazy">
-      </div>
-      <div class="masonry-item" data-cat="portraits"
-           data-title="Portrait VII"
-           data-location="Hong Kong"
-           data-date="2023"
-           data-desc="这里是你对这张照片的介绍。">
-        <img src="images/141bde9a-d550-42b0-b6b9-e0177e09a745_1_105_c.jpeg" alt="Portrait" loading="lazy">
-      </div>
-      <div class="masonry-item" data-cat="portraits"
-           data-title="Portrait VIII"
-           data-location="Hong Kong"
-           data-date="2023"
-           data-desc="这里是你对这张照片的介绍。">
-        <img src="images/14dffa88-5445-4176-ad8c-054dd114e017_1_105_c.jpeg" alt="Portrait" loading="lazy">
-      </div>
 
-      <!-- Street -->
-      <div class="masonry-item" data-cat="street"
-           data-title="Night Market"
-           data-location="Hong Kong"
-           data-date="2024"
-           data-desc="这里是你对这张照片的介绍。">
-        <img src="images/00b2d047-8296-44f6-b27a-4258091b558a_1_102_o.jpeg" alt="Street" loading="lazy">
-      </div>
-      <div class="masonry-item" data-cat="street"
-           data-title="Rush Hour"
-           data-location="Hong Kong"
-           data-date="2024"
-           data-desc="这里是你对这张照片的介绍。">
-        <img src="images/02313c7f-e5e0-4ab4-9944-51f9e6858419_1_102_o.jpeg" alt="Street" loading="lazy">
-      </div>
-      <div class="masonry-item" data-cat="street"
-           data-title="Ordinary Day"
-           data-location="Ningbo, China"
-           data-date="2024"
-           data-desc="这里是你对这张照片的介绍。">
-        <img src="images/173c5310-9708-439e-913a-906374b9add7_1_105_c.jpeg" alt="Street" loading="lazy">
-      </div>
-      <div class="masonry-item" data-cat="street"
-           data-title="Afternoon Walk"
-           data-location="Singapore"
-           data-date="Feb 2025"
-           data-desc="这里是你对这张照片的介绍。">
-        <img src="images/1ac6110f-26b8-4e6a-87ed-5b27c5734da0_1_102_o.jpeg" alt="Street" loading="lazy">
-      </div>
-      <div class="masonry-item" data-cat="street"
-           data-title="Between Moments"
-           data-location="Mexico City, Mexico"
-           data-date="Mar 2025"
-           data-desc="这里是你对这张照片的介绍。">
-        <img src="images/1ad8a068-d5d4-476e-9ff6-e7d8f66d2402_1_105_c.jpeg" alt="Street" loading="lazy">
-      </div>
-      <div class="masonry-item" data-cat="street"
-           data-title="The Corner"
-           data-location="Buenos Aires, Argentina"
-           data-date="Oct 2025"
-           data-desc="这里是你对这张照片的介绍。">
-        <img src="images/1cb6ddf2-18b8-4a71-863d-a8aaa515fa12_1_105_c.jpeg" alt="Street" loading="lazy">
-      </div>
-      <div class="masonry-item" data-cat="street"
-           data-title="Strangers"
-           data-location="Hong Kong"
-           data-date="2023"
-           data-desc="这里是你对这张照片的介绍。">
-        <img src="images/1cb879b7-52b5-4512-a869-8a40fa8a7336_1_102_o.jpeg" alt="Street" loading="lazy">
-      </div>
-      <div class="masonry-item" data-cat="street"
-           data-title="Shadow Play"
-           data-location="Hong Kong"
-           data-date="2023"
-           data-desc="这里是你对这张照片的介绍。">
-        <img src="images/1cc61470-a5d6-4cc9-956b-0e0ee8dec9d1_1_105_c.jpeg" alt="Street" loading="lazy">
-      </div>
+        <article class="destination-card" id="argentina">
+          <div class="photo-strip" aria-label="Argentina photo preview">
+            <img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/10/57dd9817-ef5f-4417-97b4-706526448837_1_102_o.jpeg?w=768" alt="" />
+            <img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/10/78b53dd8-caa5-49fc-9cd1-f35bc4b0bfbf_1_102_o.jpeg?w=768" alt="" />
+            <img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/10/4d879573-cba8-4580-956b-d4751af75d44_1_102_o.jpeg?w=768" alt="" />
+            <img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/10/8e58e4bf-d253-44e6-a473-9aae29caa55a_1_102_o.jpeg?w=1024" alt="" />
+            <img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/10/1ac6110f-26b8-4e6a-87ed-5b27c5734da0_1_102_o.jpeg?w=768" alt="" />
+            <img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/10/ac75a6e7-f5a7-4876-8080-7ec0ff747131_1_102_o-1.jpeg?w=768" alt="" />
+          </div>
+          <div class="destination-copy">
+            <p class="region">2023, 2025, 2026</p>
+            <h2>Argentina</h2>
+            <div class="meta">
+              <span>6 photos</span>
+              <a href="https://lumierefeng.com/posts/%E4%B9%9F%E8%AE%B8%E6%98%AF%E5%A5%B9%E4%B9%9F%E8%AE%B8%E6%98%AF%E6%8B%89%E7%BE%8E%E4%B9%9F%E8%AE%B8%E6%98%AF%E9%98%BF%E6%A0%B9%E5%BB%B7%E4%B9%9F%E8%AE%B8%E6%98%AF%E6%88%91%E4%BB%AC.html">1 note</a>
+            </div>
+          </div>
+        </article>
 
-    </div>
 
-  </main>
 
-  <!-- Photo Panel -->
-  <div id="photo-panel">
-    <div id="pp-img-wrap">
-      <img id="pp-img" src="" alt="">
-    </div>
-    <div id="pp-info">
-      <button id="pp-close">✕</button>
-      <p id="pp-cat"></p>
-      <h2 id="pp-title"></h2>
-      <div id="pp-meta">
-        <span id="pp-location"></span>
-        <span id="pp-date"></span>
-      </div>
-      <div id="pp-divider"></div>
-      <p id="pp-desc"></p>
-      <div id="pp-nav">
-        <button class="pp-arrow" id="pp-prev">‹</button>
-        <span id="pp-counter"></span>
-        <button class="pp-arrow" id="pp-next">›</button>
-      </div>
-      <p id="pp-hint">← → to navigate · ESC to close</p>
-    </div>
-  </div>
+        <article class="destination-card" id="antarctica">
+          <div class="photo-strip two-up" aria-label="Antarctica photo preview">
+            <img src="https://lumierefeng.com/images/jincang-1.jpg" alt="" />
+            <img src="https://lumierefeng.com/images/jincang-2.jpg" alt="" />
+          </div>
+          <div class="destination-copy">
+            <p class="region">2023, 2025, 2026</p>
+            <h2>Antarctica</h2>
+            <div class="meta">
+              <span>2 photos</span>
+              <a href="https://lumierefeng.com/posts/%E8%BF%9B%E5%8E%82%E4%B9%8B%E5%90%8E%E5%8D%97%E6%9E%81%E4%B9%8B%E5%89%8D.html">1 note</a>
+            </div>
+          </div>
+        </article>
+
+
+
+        <article class="destination-card" id="united-states">
+          <div class="photo placeholder united-states-photo" aria-hidden="true"></div>
+          <div class="destination-copy">
+            <p class="region">2019, 2026</p>
+            <h2>United States</h2>
+            <div class="meta">
+              <span>photos pending</span>
+              <a href="https://lumierefeng.com/posts/%E8%8A%9D%E5%8A%A0%E5%93%A5%E4%B9%8B%E6%AD%BB.html">1 note</a>
+            </div>
+          </div>
+        </article>
+
+
+
+        <article class="destination-card" id="canada">
+          <div class="photo placeholder canada-photo" aria-hidden="true"></div>
+          <div class="destination-copy">
+            <p class="region">2026</p>
+            <h2>Canada</h2>
+            <div class="meta">
+              <span>photos pending</span>
+              <span>notes pending</span>
+            </div>
+          </div>
+        </article>
+
+
+
+        <article class="destination-card" id="colombia">
+          <div class="photo placeholder colombia-photo" aria-hidden="true"></div>
+          <div class="destination-copy">
+            <p class="region">2026</p>
+            <h2>Colombia</h2>
+            <div class="meta">
+              <span>photos pending</span>
+              <span>notes pending</span>
+            </div>
+          </div>
+        </article>
+
+
+
+        <article class="destination-card" id="brazil">
+          <div class="photo placeholder brazil-photo" aria-hidden="true"></div>
+          <div class="destination-copy">
+            <p class="region">2026</p>
+            <h2>Brazil</h2>
+            <div class="meta">
+              <span>photos pending</span>
+              <span>notes pending</span>
+            </div>
+          </div>
+        </article>
+
+
+
+        <article class="destination-card" id="paraguay">
+          <div class="photo placeholder paraguay-photo" aria-hidden="true"></div>
+          <div class="destination-copy">
+            <p class="region">2026</p>
+            <h2>Paraguay</h2>
+            <div class="meta">
+              <span>photos pending</span>
+              <span>notes pending</span>
+            </div>
+          </div>
+        </article>
+
+
+
+        <article class="destination-card" id="mexico">
+          <div class="photo-strip" aria-label="Mexico photo preview">
+            <img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/03/618700e4-bc0a-4a67-998a-e122a459fbbf_1_105_c.jpeg?w=768" alt="" />
+            <img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/03/c0cd6a91-1fe6-4508-ab7d-223a758c0d2f_1_105_c.jpeg?w=768" alt="" />
+            <img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/03/e87899c2-78c2-4dff-b38a-52d4f0f2258d_1_105_c.jpeg?w=768" alt="" />
+            <img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/03/0f705005-f061-44e7-9109-710edf531b45_1_105_c.jpeg?w=768" alt="" />
+            <img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/03/50d7c814-0348-4959-96ae-b707cfe28f46_1_105_c.jpeg?w=1024" alt="" />
+          </div>
+          <div class="destination-copy">
+            <p class="region">2025</p>
+            <h2>Mexico</h2>
+            <div class="meta">
+              <span>5 photos</span>
+              <a href="https://lumierefeng.com/posts/%E5%88%AB%E5%86%8D%E9%94%99%E8%BF%87%E8%8A%B1%E5%92%8C%E9%9F%B3%E7%AC%A6.html">1 note</a>
+            </div>
+          </div>
+        </article>
+
+
+        <article class="destination-card" id="peru">
+          <div class="photo-strip" aria-label="Peru photo preview">
+            <img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/03/1d48bdc3-a2e3-4b9f-a413-da1d028c175b_1_105_c.jpeg?w=768" alt="" />
+            <img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/03/f7bf55ff-1cc7-402d-9524-a069f5aad983_1_105_c.jpeg?w=768" alt="" />
+            <img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/03/1ad8a068-d5d4-476e-9ff6-e7d8f66d2402_1_105_c.jpeg?w=768" alt="" />
+            <img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/03/6a5ae362-5ed8-4739-a94d-365e051a3888_1_105_c.jpeg?w=768" alt="" />
+            <img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/03/557bf17a-c9d5-4c89-bd80-596ae8ab5cd1_1_105_c.jpeg?w=768" alt="" />
+            <img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/03/c2bee26c-6771-491e-a59d-75326958f63f_1_105_c.jpeg?w=768" alt="" />
+          </div>
+          <div class="destination-copy">
+            <p class="region">2025</p>
+            <h2>Peru</h2>
+            <div class="meta">
+              <span>6 photos</span>
+              <a href="https://lumierefeng.com/posts/%E4%B8%87%E6%B0%B4%E5%8D%83%E5%B1%B1%E5%9D%90%E9%81%8D.html">1 note</a>
+            </div>
+          </div>
+        </article>
+
+
+
+        <article class="destination-card" id="chile">
+          <div class="photo placeholder chile-photo" aria-hidden="true"></div>
+          <div class="destination-copy">
+            <p class="region">2025</p>
+            <h2>Chile</h2>
+            <div class="meta">
+              <span>photos pending</span>
+              <a href="https://lumierefeng.com/posts/%E6%B0%94%E7%90%83.html">1 note</a>
+            </div>
+          </div>
+        </article>
+
+
+
+        <article class="destination-card" id="morocco">
+          <div class="photo placeholder morocco-photo" aria-hidden="true"></div>
+          <div class="destination-copy">
+            <p class="region">2025</p>
+            <h2>Morocco</h2>
+            <div class="meta">
+              <span>photos pending</span>
+              <span>notes pending</span>
+            </div>
+          </div>
+        </article>
+
+
+
+        <article class="destination-card" id="united-kingdom">
+          <div class="photo placeholder united-kingdom-photo" aria-hidden="true"></div>
+          <div class="destination-copy">
+            <p class="region">2025</p>
+            <h2>UK</h2>
+            <div class="meta">
+              <span>photos pending</span>
+              <span>notes pending</span>
+            </div>
+          </div>
+        </article>
+
+
+
+        <article class="destination-card" id="cuba">
+          <div class="photo placeholder cuba-photo" aria-hidden="true"></div>
+          <div class="destination-copy">
+            <p class="region">2025</p>
+            <h2>Cuba</h2>
+            <div class="meta">
+              <span>photos pending</span>
+              <span>notes pending</span>
+            </div>
+          </div>
+        </article>
+
+
+
+        <article class="destination-card" id="panama">
+          <div class="photo placeholder panama-photo" aria-hidden="true"></div>
+          <div class="destination-copy">
+            <p class="region">2025</p>
+            <h2>Panama</h2>
+            <div class="meta">
+              <span>photos pending</span>
+              <span>notes pending</span>
+            </div>
+          </div>
+        </article>
+
+
+
+        <article class="destination-card" id="singapore">
+          <div class="photo-strip" aria-label="Singapore photo preview">
+            <img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/02/b98ec95c-ac81-415d-b8cf-27d53ae28d0c_1_102_o.jpeg?w=768" alt="" />
+            <img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/02/img_2115.jpg?w=768" alt="" />
+            <img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/02/img_2123.jpg?w=1024" alt="" />
+            <img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/02/img_2127.jpg?w=766" alt="" />
+            <img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/02/img_2133.jpg?w=768" alt="" />
+            <img src="https://lumierefeng.wordpress.com/wp-content/uploads/2025/02/image.png?w=870" alt="" />
+          </div>
+          <div class="destination-copy">
+            <p class="region">2025</p>
+            <h2>Singapore</h2>
+            <div class="meta">
+              <span>6 photos</span>
+              <a href="https://lumierefeng.com/posts/%E6%96%B0%E5%8A%A0%E5%9D%A1%E6%B2%B3%E7%95%94%E7%9A%84%E4%B9%8C%E9%BE%9F.html">1 note</a>
+            </div>
+          </div>
+        </article>
+
+
+
+        <article class="destination-card" id="laos">
+          <div class="photo placeholder laos-photo" aria-hidden="true"></div>
+          <div class="destination-copy">
+            <p class="region">2024</p>
+            <h2>Laos</h2>
+            <div class="meta">
+              <span>photos pending</span>
+              <span>notes pending</span>
+            </div>
+          </div>
+        </article>
+
+
+
+        <article class="destination-card" id="uruguay">
+          <div class="photo placeholder uruguay-photo" aria-hidden="true"></div>
+          <div class="destination-copy">
+            <p class="region">2023</p>
+            <h2>Uruguay</h2>
+            <div class="meta">
+              <span>photos pending</span>
+              <span>notes pending</span>
+            </div>
+          </div>
+        </article>
+
+
+
+        <article class="destination-card" id="kenya">
+          <div class="photo placeholder kenya-photo" aria-hidden="true"></div>
+          <div class="destination-copy">
+            <p class="region">2022, 2023</p>
+            <h2>Kenya</h2>
+            <div class="meta">
+              <span>photos pending</span>
+              <span>notes pending</span>
+            </div>
+          </div>
+        </article>
+      
+      </section>
+    </main>
 
   <footer>
     <div class="footer-inner">
@@ -510,80 +961,48 @@
 
   <script src="js/main.js"></script>
   <script>
-    // ── Filter ───────────────────────────────────────────────
-    const items = [...document.querySelectorAll('.masonry-item')];
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const f = btn.dataset.filter;
-        items.forEach(el => el.classList.toggle('hidden', f !== 'all' && el.dataset.cat !== f));
-        buildVisible();
-      });
-    });
+const pins = [...document.querySelectorAll(".pin")];
+const cards = [...document.querySelectorAll(".destination-card")];
 
-    // ── Panel ────────────────────────────────────────────────
-    const panel   = document.getElementById('photo-panel');
-    const ppImg   = document.getElementById('pp-img');
-    const ppCat   = document.getElementById('pp-cat');
-    const ppTitle = document.getElementById('pp-title');
-    const ppLoc   = document.getElementById('pp-location');
-    const ppDate  = document.getElementById('pp-date');
-    const ppDesc  = document.getElementById('pp-desc');
-    const ppCnt   = document.getElementById('pp-counter');
-    let visible = [], current = 0;
+function setActive(destinationId) {
+  pins.forEach((pin) => {
+    pin.classList.toggle("is-active", pin.dataset.target === destinationId);
+  });
 
-    function buildVisible() {
-      visible = items.filter(el => !el.classList.contains('hidden'));
+  cards.forEach((card) => {
+    card.classList.toggle("is-active", card.id === destinationId);
+  });
+}
+
+pins.forEach((pin) => {
+  pin.addEventListener("click", () => {
+    const destinationId = pin.dataset.target;
+    const target = document.getElementById(destinationId);
+
+    if (!target) return;
+
+    setActive(destinationId);
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+});
+
+const observer = new IntersectionObserver(
+  (entries) => {
+    const visible = entries
+      .filter((entry) => entry.isIntersecting)
+      .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+    if (visible) {
+      setActive(visible.target.id);
     }
-    buildVisible();
+  },
+  {
+    threshold: [0.35, 0.6],
+  },
+);
 
-    function openPanel(idx) {
-      current = idx;
-      render();
-      panel.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-    function closePanel() {
-      panel.classList.remove('open');
-      document.body.style.overflow = '';
-    }
-    function move(dir) {
-      current = (current + dir + visible.length) % visible.length;
-      ppImg.style.opacity = '0';
-      setTimeout(() => { render(); ppImg.style.opacity = '1'; }, 150);
-    }
-    function render() {
-      const el = visible[current];
-      const d  = el.dataset;
-      ppImg.src      = el.querySelector('img').src;
-      ppImg.style.opacity = '1';
-      ppCat.textContent  = d.cat.toUpperCase();
-      ppTitle.textContent = d.title || '';
-      ppLoc.textContent  = d.location || '';
-      ppDate.textContent = d.date || '';
-      ppDesc.textContent = d.desc || '';
-      ppCnt.textContent  = `${current + 1} / ${visible.length}`;
-    }
+cards.forEach((card) => observer.observe(card));
 
-    items.forEach(el => {
-      el.addEventListener('click', () => {
-        buildVisible();
-        openPanel(visible.indexOf(el));
-      });
-    });
-
-    document.getElementById('pp-close').addEventListener('click', closePanel);
-    document.getElementById('pp-prev').addEventListener('click', () => move(-1));
-    document.getElementById('pp-next').addEventListener('click', () => move(1));
-    panel.addEventListener('click', e => { if (e.target === panel || e.target.id === 'pp-img-wrap') closePanel(); });
-
-    document.addEventListener('keydown', e => {
-      if (!panel.classList.contains('open')) return;
-      if (e.key === 'Escape')      closePanel();
-      if (e.key === 'ArrowLeft')   move(-1);
-      if (e.key === 'ArrowRight')  move(1);
-    });
   </script>
 </body>
 </html>
