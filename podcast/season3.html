@@ -31,6 +31,17 @@
       transition: border-color 0.2s, background 0.2s;
     }
     .listen-btn:hover { border-color: var(--accent); background: var(--surface-2); }
+    .season-nav { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 22px; }
+    .season-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .season-link:hover { color: var(--text); }
     .episode-stack { display: flex; flex-direction: column; gap: 44px; margin-top: 22px; }
     .episode-card {
       display: grid;
@@ -182,6 +193,9 @@
             📸Instagram
           </a>
         </div>
+        <div class="season-nav" aria-label="Podcast seasons">
+          <a class="season-link" href="season2.html">← Season 2</a>
+        </div>
       </div>
     </div>
 
@@ -278,12 +292,6 @@
           </div>
         </article>
       </div>
-    </div>
-
-    <div class="section">
-      <a href="season2.html" style="display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">
-        ← Season 2
-      </a>
     </div>
 
   </main>

@@ -480,7 +480,8 @@ footer {
 
 .follow-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
 
-.follow-list a {
+.follow-list a,
+.follow-list button {
   font-size: 13px;
   color: var(--muted);
   text-decoration: none;
@@ -488,9 +489,15 @@ footer {
   align-items: center;
   gap: 9px;
   transition: color 0.2s;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
 }
 
-.follow-list a::before {
+.follow-list a::before,
+.follow-list button::before {
   content: '';
   width: 4px; height: 4px;
   border-radius: 50%;
@@ -499,8 +506,10 @@ footer {
   transition: background 0.2s;
 }
 
-.follow-list a:hover { color: var(--accent); }
-.follow-list a:hover::before { background: var(--accent); }
+.follow-list a:hover,
+.follow-list button:hover { color: var(--accent); }
+.follow-list a:hover::before,
+.follow-list button:hover::before { background: var(--accent); }
 
 /* ── FEATURED POST CARD ── */
 .feed-featured {
