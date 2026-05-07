@@ -381,7 +381,7 @@ function nodeMd(node) {
 function mdHtml(text) {
   const lines = text.split('\n');
   const blocks = []; let buf = [];
-  const flush = () => { if (buf.length) { blocks.push({t:'p', v:buf.join(' ')}); buf = []; }};
+  const flush = () => { if (buf.length) { blocks.push({t:'p', v:buf.join('\n')}); buf = []; }};
   let i = 0;
   while (i < lines.length) {
     const l = lines[i];
@@ -415,7 +415,7 @@ function mdHtml(text) {
     if (b.t==='h3') return `<h3>${inl(b.v)}</h3>`;
     if (b.t==='bq') return `<blockquote><p>${inl(b.v)}</p></blockquote>`;
     if (b.t==='ul') return `<ul>${b.v.map(x=>`<li>${inl(x)}</li>`).join('')}</ul>`;
-    if (b.t==='p' && b.v.trim()) return `<p>${inl(b.v)}</p>`;
+    if (b.t==='p' && b.v.trim()) return `<p>${inl(b.v).replace(/\n/g,'<br>')}</p>`;
     return '';
   }).join('\n');
 }
