@@ -139,7 +139,7 @@ POST_STYLE = """
 NAV = """\
   <header>
     <nav>
-      <a class="nav-brand" href="../index.html">Lumiere FENG</a>
+      <a class="nav-brand" href="../index.html">Lumiere Feng</a>
       <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
           <path d="M4 7h16M4 12h16M4 17h16"/>
@@ -167,7 +167,7 @@ FOOTER = """\
   <footer>
     <div class="footer-inner">
       <div>
-        <a class="footer-brand" href="../index.html">Lumiere FENG</a>
+        <a class="footer-brand" href="../index.html">Lumiere Feng</a>
         <p class="footer-quote">"What future, would you create?"</p>
       </div>
       <div>
@@ -186,7 +186,7 @@ FOOTER = """\
       </div>
     </div>
     <div class="footer-bottom">
-      <span class="footer-copy">&#169; Lumiere FENG</span>
+      <span class="footer-copy">&#169; Lumiere Feng</span>
       <span class="footer-copy">lumierefeng.com</span>
     </div>
   </footer>"""
@@ -235,7 +235,7 @@ for p in posts:
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{htmllib.escape(p['title'])} — Lumiere FENG</title>
+  <title>{htmllib.escape(p['title'])} — Lumiere Feng</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
