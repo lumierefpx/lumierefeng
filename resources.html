@@ -34,6 +34,39 @@
       font-size: 13px;
       line-height: 1.7;
     }
+    .resource-admin-add,
+    .resource-admin-actions {
+      display: none;
+    }
+    body.resource-admin-on .resource-admin-add {
+      display: inline-flex;
+      margin-bottom: 26px;
+      font-size: 12px;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    body.resource-admin-on .resource-admin-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .resource-admin-actions a,
+    .resource-admin-actions button {
+      border: 0;
+      background: transparent;
+      padding: 0;
+      font: inherit;
+      font-size: 12px;
+      color: var(--muted);
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .resource-admin-actions a:hover,
+    .resource-admin-actions button:hover {
+      color: var(--accent);
+    }
     .resources-footer {
       grid-template-columns: 1.2fr 1fr 1fr;
     }
@@ -68,7 +101,7 @@
             <li><a href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">Apple Podcast</a></li>
             <li><a href="https://www.instagram.com/the.good.place_podcast" target="_blank">Instagram</a></li>
             <li><a href="https://www.xiaoyuzhoufm.com/podcast/652570afb292e77709a3cefe" target="_blank">小宇宙</a></li>
-            <li><a href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg3NDAyNzYxNw==&amp;action=getalbum&amp;album_id=4346635139062349828&amp;from_itemidx=1&amp;from_msgid=2247486667&amp;subscene=189&amp;scenenote=https%3A%2F%2Fmp.weixin.qq.com%2Fs%3F__biz%3DMzg3NDAyNzYxNw%3D%3D%26mid%3D2247486667%26idx%3D1%26sn%3Df322cbcd1cb36be91b5bf60529f0d76f%26chksm%3Dced643c5f9a1cad37e8edf221a08cd0ec6d6a6b48ccac9a3865ce4cde42c984f7a1bfb566417%26cur_album_id%3D4346635139062349828%26scene%3D189%26key%3Ddaf9bdc5abc4e8d0160a6b8d76f1b191d22214d46d2d9719784cdde76fb0904ae99da49706b083bc14e43d716fb9150bf8e1ad1f4856334a41f44d2ca099483013f1d80c3371165e51c93c44e71544b319b54cbaceb3bc7f1b11953f3754eef431ab7903b41bae78527909d2f22bd98dff8bc091354225dc2facd8e48212a765%26ascene%3D0%26uin%3DNTE2NDA3NzM1%26devicetype%3DUnifiedPCMac%26version%3Df26411f1%26lang%3Den%26countrycode%3DKP%26exportkey%3Dn_ChQIAhIQpkoAmZoah2PlDV%252B0mInObhLYAQIE97dBBAEAAAAAAGZ%252BGG1IRPQAAAAOpnltbLcz9gKNyK89dVj01%252Fu%252FdxQiuICFcRWVdf5ylsZl4ny6116MwQcz8xw6BmyyDLIeznwjJVRyB%252FAS0PkmNgTw0x1SWC6PHo83lLI2JTeByhYyNu3%252B1Ch7bThkEm%252BJomyEi3qEhnoOOUOw05%252BPMOVmfqzgEJnZGXe8fZAl23C63smsJ15gGfJLoXri5VYcKfvjMIbS1ocVpIVu%252BJeEBSShzzk55KSVSS2FDViceOp3HKtWHM2wazrkUv2WFhVjTQ%253D%253D%26acctmode%3D0%26pass_ticket%3DJ4TVdcvuy9e5mOxH8wwmDCQ8xmBfoAc76CwLXPpWFZeaLlK%252F7Yx0sV9%252BUO4mdNv1%26wx_header%3D0&amp;nolastread=1&amp;sessionid=#wechat_redirect" target="_blank">微信公众号</a></li>
+            <li><a href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg3NDAyNzYxNw==&amp;action=getalbum&amp;album_id=4346635139062349828#wechat_redirect" target="_blank">微信公众号</a></li>
           </ul>
         </li>
         <li><a href="photography.html">Album</a></li>
@@ -86,21 +119,25 @@
     </div>
 
     <div class="section">
+      <a class="resource-admin-add" href="admin/?resource=new">+ Add Resource</a>
       <div class="resources-list">
-        <div class="resource-item">
+        <!-- RESOURCES_START -->
+        <div class="resource-item" data-resource-id="let-them">
           <a class="resource-title" href="https://www.youtube.com/shorts/gp2eoo_zePw" target="_blank" rel="noopener">"Let Them"</a>
         </div>
-        <div class="resource-item">
-          <p class="resource-title">More books &amp; movies recommendations coming soon</p>
+        <div class="resource-item" data-resource-id="books-movies">
+          <a class="resource-title" href="resources/books-movies.html">Books &amp; movies</a>
+          <p class="resource-note">More recommendations coming soon.</p>
         </div>
-        <div class="resource-item">
+        <div class="resource-item" data-resource-id="second-chance">
           <a class="resource-title" href="https://www.secondchance.global/" target="_blank" rel="noopener">Second Chance</a>
           <p class="resource-note">The non-profit I'm volunteering at.</p>
         </div>
-        <div class="resource-item">
+        <div class="resource-item" data-resource-id="smart-brains-foundation">
           <p class="resource-title">Smart Brains Foundation</p>
           <p class="resource-note">The charity I co-founded that helps orphans in Kibera Community in Nairobi, Kenya. DM / email me for more details. Website coming soon.</p>
         </div>
+        <!-- RESOURCES_END -->
       </div>
     </div>
 
@@ -128,5 +165,93 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script>
+    (() => {
+      const token = localStorage.getItem('lf_token');
+      if (!token) return;
+      document.body.classList.add('resource-admin-on');
+
+      const OWNER = 'lumierefpx', REPO = 'lumierefeng', BRANCH = 'main';
+      const API = `https://api.github.com/repos/${OWNER}/${REPO}/contents`;
+      const enc = s => {
+        const b = new TextEncoder().encode(s); let r = '';
+        b.forEach(x => r += String.fromCharCode(x));
+        return btoa(r);
+      };
+      const dec = s => {
+        const bin = atob(s.replace(/\n/g, ''));
+        const b = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) b[i] = bin.charCodeAt(i);
+        return new TextDecoder().decode(b);
+      };
+      const ghGet = async path => {
+        const r = await fetch(`${API}/${path}`, { headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' } });
+        if (!r.ok) throw new Error(`${path}: ${r.status}`);
+        const d = await r.json();
+        return { content: dec(d.content), sha: d.sha };
+      };
+      const ghPut = async (path, content, sha, message) => {
+        const body = { message, content: enc(content), branch: BRANCH };
+        if (sha) body.sha = sha;
+        const r = await fetch(`${API}/${path}`, {
+          method: 'PUT',
+          headers: { Authorization: `token ${token}`, 'Content-Type': 'application/json', Accept: 'application/vnd.github.v3+json' },
+          body: JSON.stringify(body)
+        });
+        if (!r.ok) throw new Error(`${path}: ${r.status}`);
+      };
+      const ghDelete = async (path, sha, message) => {
+        const r = await fetch(`${API}/${path}`, {
+          method: 'DELETE',
+          headers: { Authorization: `token ${token}`, 'Content-Type': 'application/json', Accept: 'application/vnd.github.v3+json' },
+          body: JSON.stringify({ message, sha, branch: BRANCH })
+        });
+        if (!r.ok) throw new Error(`${path}: ${r.status}`);
+      };
+      const esc = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      const itemHtml = item => {
+        const note = item.subtitle ? `\n          <p class="resource-note">${esc(item.subtitle)}</p>` : '';
+        const title = item.type === 'external'
+          ? `<a class="resource-title" href="${esc(item.url)}" target="_blank" rel="noopener">${esc(item.title)}</a>`
+          : item.type === 'page'
+            ? `<a class="resource-title" href="${esc(item.url)}">${esc(item.title)}</a>`
+            : `<p class="resource-title">${esc(item.title)}</p>`;
+        return `        <div class="resource-item" data-resource-id="${esc(item.id)}">\n          ${title}${note}\n        </div>`;
+      };
+      const patchResourcesHtml = (html, data) => html.replace(
+        /        <!-- RESOURCES_START -->[\s\S]*?        <!-- RESOURCES_END -->/,
+        `        <!-- RESOURCES_START -->\n${data.map(itemHtml).join('\n')}\n        <!-- RESOURCES_END -->`
+      );
+
+      document.querySelectorAll('.resource-item[data-resource-id]').forEach(item => {
+        const id = item.dataset.resourceId;
+        const actions = document.createElement('div');
+        actions.className = 'resource-admin-actions';
+        actions.innerHTML = `<a href="admin/?resource=${encodeURIComponent(id)}">Edit</a><button type="button">Delete</button>`;
+        actions.querySelector('button').addEventListener('click', async () => {
+          if (!confirm('Delete this resource?')) return;
+          try {
+            const dataFile = await ghGet('resources-data.json');
+            const data = JSON.parse(dataFile.content);
+            const target = data.find(x => x.id === id);
+            const next = data.filter(x => x.id !== id);
+            await ghPut('resources-data.json', JSON.stringify(next, null, 2) + '\n', dataFile.sha, `resources: delete ${id}`);
+            const pageFile = await ghGet('resources.html');
+            await ghPut('resources.html', patchResourcesHtml(pageFile.content, next), pageFile.sha, `resources page: delete ${id}`);
+            if (target?.type === 'page' && target.url?.startsWith('resources/')) {
+              try {
+                const page = await ghGet(target.url);
+                await ghDelete(target.url, page.sha, `delete resource page: ${id}`);
+              } catch (e) {}
+            }
+            item.remove();
+          } catch (err) {
+            alert('Delete failed: ' + err.message);
+          }
+        });
+        item.appendChild(actions);
+      });
+    })();
+  </script>
 </body>
 </html>

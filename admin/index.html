@@ -83,6 +83,9 @@
     .preview ul { padding-left: 20px; margin-bottom: 1.5em; }
     .preview li { margin-bottom: 0.4em; }
     .preview img { max-width: 100%; border-radius: 8px; margin: 1.5em 0; }
+    .resource-editor { display: none; }
+    .resource-editor.on { display: block; }
+    .resource-help { font-size: 12px; color: var(--muted); line-height: 1.6; margin-top: -8px; margin-bottom: 20px; }
 
     /* ── Bottom bar ── */
     .bottom-bar {
@@ -151,6 +154,29 @@
   <div class="body">
     <input class="title-input" id="titleIn" type="text" placeholder="标题" autocomplete="off">
 
+    <div class="resource-editor" id="resourceEditor">
+      <div class="meta-row">
+        <div class="meta-field">
+          <label class="field-label" for="resourceSubtitleIn">副标题</label>
+          <input type="text" id="resourceSubtitleIn" placeholder="一句话说明这个 resource…">
+        </div>
+        <div class="meta-field">
+          <label class="field-label" for="resourceTypeIn">类型</label>
+          <select id="resourceTypeIn" onchange="syncResourceFields()">
+            <option value="page">内容页</option>
+            <option value="external">外部链接</option>
+            <option value="note">只显示文字</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-group" id="resourceUrlWrap">
+        <label class="field-label" for="resourceUrlIn">外部链接</label>
+        <input type="text" id="resourceUrlIn" placeholder="https://...">
+      </div>
+      <p class="resource-help" id="resourceHelp">内容页会自动生成一个 Resources 里的详情页；外部链接会直接跳到你填写的网址。</p>
+    </div>
+
+    <div id="postMeta">
     <div class="meta-row">
       <div class="meta-field">
         <label class="field-label" for="dateIn">日期</label>
@@ -172,6 +198,7 @@
     <div class="excerpt-wrap">
       <label class="field-label" for="excerptIn">摘要 <span style="font-weight:400;text-transform:none;letter-spacing:0">(留空自动取第一段)</span></label>
       <input type="text" id="excerptIn" placeholder="一句话描述这篇文章…">
+    </div>
     </div>
 
     <div class="toolbar">
@@ -235,6 +262,8 @@ function saveModalToken() {
 // ── Edit mode state ──────────────────────────────────────
 let editHref = null;
 let editSha  = null;
+let adminMode = 'post';
+let resourceId = null;
 
 // ── Image blob cache (for instant preview) ────────────────
 const imgBlobs = {}; // filename → blob URL
@@ -247,8 +276,14 @@ function boot() {
   document.getElementById('bottomBar').style.display = 'flex';
   document.getElementById('dateIn').value = new Date().toISOString().slice(0,10);
 
-  // Check for ?edit= param
   const params = new URLSearchParams(location.search);
+  const resourceParam = params.get('resource');
+  if (resourceParam) {
+    bootResource(resourceParam);
+    return;
+  }
+
+  // Check for ?edit= param
   const editParam = params.get('edit');
   if (editParam) loadForEdit(editParam);
 }
@@ -435,6 +470,14 @@ async function ghPut(path, content, sha, msg) {
   });
   if (!r.ok) { const e=await r.json().catch(()=>({})); throw new Error(`PUT ${path}: ${r.status} ${e.message||''}`); }
 }
+async function ghDelete(path, sha, msg) {
+  const r = await fetch(`${API}/${path}`, {
+    method:'DELETE',
+    headers:{ Authorization:`token ${getToken()}`, 'Content-Type':'application/json', Accept:'application/vnd.github.v3+json' },
+    body: JSON.stringify({ message:msg, sha, branch:BRANCH })
+  });
+  if (!r.ok) { const e=await r.json().catch(()=>({})); throw new Error(`DELETE ${path}: ${r.status} ${e.message||''}`); }
+}
 
 // ── Generate post HTML ───────────────────────────────────
 function makePostHtml(title, date, bodyHtml) {
@@ -494,7 +537,7 @@ function makePostHtml(title, date, bodyHtml) {
             <li><a href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">Apple Podcast</a></li>
             <li><a href="https://www.instagram.com/the.good.place_podcast" target="_blank">Instagram</a></li>
             <li><a href="https://www.xiaoyuzhoufm.com/podcast/652570afb292e77709a3cefe" target="_blank">小宇宙</a></li>
-            <li><a href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg3NDAyNzYxNw==&amp;action=getalbum&amp;album_id=4346635139062349828&amp;from_itemidx=1&amp;from_msgid=2247486667&amp;subscene=189&amp;scenenote=https%3A%2F%2Fmp.weixin.qq.com%2Fs%3F__biz%3DMzg3NDAyNzYxNw%3D%3D%26mid%3D2247486667%26idx%3D1%26sn%3Df322cbcd1cb36be91b5bf60529f0d76f%26chksm%3Dced643c5f9a1cad37e8edf221a08cd0ec6d6a6b48ccac9a3865ce4cde42c984f7a1bfb566417%26cur_album_id%3D4346635139062349828%26scene%3D189%26key%3Ddaf9bdc5abc4e8d0160a6b8d76f1b191d22214d46d2d9719784cdde76fb0904ae99da49706b083bc14e43d716fb9150bf8e1ad1f4856334a41f44d2ca099483013f1d80c3371165e51c93c44e71544b319b54cbaceb3bc7f1b11953f3754eef431ab7903b41bae78527909d2f22bd98dff8bc091354225dc2facd8e48212a765%26ascene%3D0%26uin%3DNTE2NDA3NzM1%26devicetype%3DUnifiedPCMac%26version%3Df26411f1%26lang%3Den%26countrycode%3DKP%26exportkey%3Dn_ChQIAhIQpkoAmZoah2PlDV%252B0mInObhLYAQIE97dBBAEAAAAAAGZ%252BGG1IRPQAAAAOpnltbLcz9gKNyK89dVj01%252Fu%252FdxQiuICFcRWVdf5ylsZl4ny6116MwQcz8xw6BmyyDLIeznwjJVRyB%252FAS0PkmNgTw0x1SWC6PHo83lLI2JTeByhYyNu3%252B1Ch7bThkEm%252BJomyEi3qEhnoOOUOw05%252BPMOVmfqzgEJnZGXe8fZAl23C63smsJ15gGfJLoXri5VYcKfvjMIbS1ocVpIVu%252BJeEBSShzzk55KSVSS2FDViceOp3HKtWHM2wazrkUv2WFhVjTQ%253D%253D%26acctmode%3D0%26pass_ticket%3DJ4TVdcvuy9e5mOxH8wwmDCQ8xmBfoAc76CwLXPpWFZeaLlK%252F7Yx0sV9%252BUO4mdNv1%26wx_header%3D0&amp;nolastread=1&amp;sessionid=#wechat_redirect" target="_blank">微信公众号</a></li>
+            <li><a href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg3NDAyNzYxNw==&amp;action=getalbum&amp;album_id=4346635139062349828#wechat_redirect" target="_blank">微信公众号</a></li>
           </ul>
         </li>
         <li><a href="../photography.html">Album</a></li>
@@ -607,8 +650,232 @@ function patchIndex(html, {title, date, excerpt, href}) {
   );
 }
 
+// ── Resources editor ─────────────────────────────────────
+function syncResourceFields() {
+  const type = document.getElementById('resourceTypeIn').value;
+  document.getElementById('resourceUrlWrap').style.display = type === 'external' ? '' : 'none';
+  document.getElementById('resourceHelp').textContent =
+    type === 'external'
+      ? '外部链接会直接跳到你填写的网址。'
+      : type === 'page'
+        ? '内容页会自动生成一个 Resources 里的详情页。'
+        : '只显示文字适合“coming soon”或不需要跳转的项目。';
+  document.querySelector('.toolbar').style.display = type === 'external' || type === 'note' ? 'none' : '';
+  document.getElementById('bodyIn').style.display = type === 'external' || type === 'note' ? 'none' : '';
+  document.getElementById('previewPane').classList.remove('on');
+}
+
+async function bootResource(id) {
+  adminMode = 'resource';
+  resourceId = id === 'new' ? null : id;
+  document.querySelector('.topbar-label').textContent = resourceId ? 'Edit Resource' : 'New Resource';
+  document.getElementById('pubBtn').textContent = resourceId ? '保存 Resource →' : '发布 Resource →';
+  document.getElementById('titleIn').placeholder = 'Resource 主标题';
+  document.getElementById('postMeta').style.display = 'none';
+  document.getElementById('resourceEditor').classList.add('on');
+  document.getElementById('bodyIn').placeholder = '内容页正文…';
+  document.getElementById('resourceTypeIn').value = 'page';
+  syncResourceFields();
+
+  if (!resourceId) {
+    setStatus('新建 Resource');
+    return;
+  }
+
+  setStatus('加载 Resource…');
+  try {
+    const { content } = await ghGet('resources-data.json');
+    const item = JSON.parse(content).find(x => x.id === resourceId);
+    if (!item) throw new Error('Resource not found');
+    document.getElementById('titleIn').value = item.title || '';
+    document.getElementById('resourceSubtitleIn').value = item.subtitle || '';
+    document.getElementById('resourceTypeIn').value = item.type || 'page';
+    document.getElementById('resourceUrlIn').value = item.type === 'external' ? (item.url || '') : '';
+    document.getElementById('bodyIn').value = item.content || '';
+    syncResourceFields();
+    setStatus(`正在编辑: ${item.title}`, 'ok');
+  } catch (err) {
+    setStatus('加载失败: ' + err.message, 'err');
+  }
+}
+
+function resourceListItemHtml(item) {
+  const e = s => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const note = item.subtitle ? `\n          <p class="resource-note">${e(item.subtitle)}</p>` : '';
+  const title =
+    item.type === 'external'
+      ? `<a class="resource-title" href="${e(item.url)}" target="_blank" rel="noopener">${e(item.title)}</a>`
+      : item.type === 'page'
+        ? `<a class="resource-title" href="${e(item.url)}">${e(item.title)}</a>`
+        : `<p class="resource-title">${e(item.title)}</p>`;
+  return `        <div class="resource-item" data-resource-id="${e(item.id)}">\n          ${title}${note}\n        </div>`;
+}
+
+function patchResourcesHtml(html, data) {
+  return html.replace(
+    /        <!-- RESOURCES_START -->[\s\S]*?        <!-- RESOURCES_END -->/,
+    `        <!-- RESOURCES_START -->\n${data.map(resourceListItemHtml).join('\n')}\n        <!-- RESOURCES_END -->`
+  );
+}
+
+function makeResourcePageHtml(item) {
+  const e = s => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const subtitle = item.subtitle ? `<p>${e(item.subtitle)}</p>` : '';
+  const bodyHtml = mdHtml(item.content || '');
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${e(item.title)} — Lumiere Feng</title>
+  <meta name="description" content="${e(item.subtitle || item.title)}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .resource-page-header{padding:80px 0 48px;border-bottom:1px solid var(--border);margin-bottom:56px}
+    .resource-page-header p{font-size:13px;color:var(--muted);line-height:1.7;max-width:620px;margin-top:16px}
+    .resource-page-header h1{font-size:clamp(1.8rem,4vw,3rem);font-weight:300;line-height:1.2;color:var(--text)}
+    .resource-content{max-width:660px;padding-bottom:120px}
+    .resource-content p{font-size:16.5px;line-height:1.9;color:var(--prose);margin-bottom:1.6em}
+    .resource-content a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+    .resource-content h2,.resource-content h3{font-weight:400;margin:2.4em 0 .8em;color:var(--text)}
+    .resource-content ul,.resource-content ol{padding-left:24px;margin-bottom:1.6em;color:var(--prose)}
+    .resource-content li{margin-bottom:.5em;line-height:1.85;font-size:16.5px}
+    .resource-content img{width:100%;border-radius:10px;margin:2.4em 0;border:1px solid var(--border);box-shadow:0 2px 12px rgba(0,0,0,.07)}
+    .back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:48px;letter-spacing:.3px;transition:color .2s}
+    .back-link:hover{color:var(--accent)}
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a class="nav-brand" href="../index.html">Lumiere Feng</a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M4 7h16M4 12h16M4 17h16"/>
+        </svg>
+      </button>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li class="nav-dropdown">
+          <button>Writings <span class="dropdown-arrow">&#9662;</span></button>
+          <ul class="dropdown-menu">
+            <li><a href="../blogs.html">Blogs</a></li>
+            <li><button type="button" data-qr-src="../images/writings-wechat.jpg" data-qr-title="微信公众号">微信公众号</button></li>
+            <li><button type="button" data-qr-src="../images/writings-rednote.jpg" data-qr-title="小红书">小红书</button></li>
+          </ul>
+        </li>
+        <li class="nav-dropdown">
+          <button>Podcast <span class="dropdown-arrow">&#9662;</span></button>
+          <ul class="dropdown-menu">
+            <li><a href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">Apple Podcast</a></li>
+            <li><a href="https://www.instagram.com/the.good.place_podcast" target="_blank">Instagram</a></li>
+            <li><a href="https://www.xiaoyuzhoufm.com/podcast/652570afb292e77709a3cefe" target="_blank">小宇宙</a></li>
+            <li><a href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg3NDAyNzYxNw==&amp;action=getalbum&amp;album_id=4346635139062349828#wechat_redirect" target="_blank">微信公众号</a></li>
+          </ul>
+        </li>
+        <li><a href="../photography.html">Album</a></li>
+        <li><a href="../videography.html">Videography</a></li>
+        <li><a href="../resources.html" class="active">Resources</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main class="page">
+    <div class="resource-page-header">
+      <h1>${e(item.title)}</h1>
+      ${subtitle}
+    </div>
+    <div class="resource-content">
+      <a class="back-link" href="../resources.html">← Resources</a>
+      ${bodyHtml}
+    </div>
+  </main>
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <a class="footer-brand" href="../index.html">Lumiere Feng</a>
+        <p class="footer-quote">"In a relatively good place"</p>
+      </div>
+      <div>
+        <p class="footer-col-label">Email</p>
+        <a class="footer-email" href="mailto:lumierefpx@gmail.com">lumierefpx@gmail.com</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">&#169; Lumiere Feng</span>
+      <span class="footer-copy">lumierefeng.com</span>
+    </div>
+  </footer>
+  <script src="../js/main.js"><\/script>
+</body>
+</html>`;
+}
+
+async function publishResource() {
+  const title = document.getElementById('titleIn').value.trim();
+  const subtitle = document.getElementById('resourceSubtitleIn').value.trim();
+  const type = document.getElementById('resourceTypeIn').value;
+  const externalUrl = document.getElementById('resourceUrlIn').value.trim();
+  const content = document.getElementById('bodyIn').value.trim();
+
+  if (!title) return setStatus('请填写主标题', 'err');
+  if (type === 'external' && !externalUrl) return setStatus('请填写外部链接', 'err');
+  if (type === 'page' && !content) return setStatus('内容页正文不能为空', 'err');
+
+  const btn = document.getElementById('pubBtn');
+  btn.disabled = true;
+
+  try {
+    setStatus('读取 Resources 数据…');
+    let dataFile = null;
+    try { dataFile = await ghGet('resources-data.json'); } catch (e) {}
+    const data = dataFile ? JSON.parse(dataFile.content) : [];
+    const id = resourceId || slug(title).toLowerCase();
+    const old = data.find(x => x.id === id);
+    const item = {
+      id,
+      title,
+      subtitle,
+      type,
+      url: type === 'external' ? externalUrl : type === 'page' ? `resources/${id}.html` : '',
+      content: type === 'page' ? content : ''
+    };
+    const next = old ? data.map(x => x.id === id ? item : x) : [...data, item];
+
+    if (type === 'page') {
+      setStatus('保存内容页…');
+      let pageSha = null;
+      try { pageSha = (await ghGet(item.url)).sha; } catch (e) {}
+      await ghPut(item.url, makeResourcePageHtml(item), pageSha, `resource page: ${title}`);
+    } else if (old?.type === 'page' && old.url?.startsWith('resources/')) {
+      try {
+        const oldPage = await ghGet(old.url);
+        await ghDelete(old.url, oldPage.sha, `delete resource page: ${old.id}`);
+      } catch (e) {}
+    }
+
+    setStatus('更新 Resources 数据…');
+    await ghPut('resources-data.json', JSON.stringify(next, null, 2) + '\n', dataFile?.sha, `resources: ${old ? 'edit' : 'add'} "${title}"`);
+
+    setStatus('更新 Resources 页面…');
+    const pageFile = await ghGet('resources.html');
+    await ghPut('resources.html', patchResourcesHtml(pageFile.content, next), pageFile.sha, `resources page: ${old ? 'edit' : 'add'} "${title}"`);
+
+    setStatus(`保存成功 ✓ &nbsp;约 1-2 分钟后生效 &nbsp;<a href="https://lumierefeng.com/resources.html" target="_blank" style="color:var(--accent)">查看 Resources →</a>`, 'ok');
+  } catch (err) {
+    console.error(err);
+    setStatus('保存失败: ' + err.message, 'err');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
 // ── Publish / Save ───────────────────────────────────────
 async function publish() {
+  if (adminMode === 'resource') return publishResource();
+
   const title   = document.getElementById('titleIn').value.trim();
   const date    = document.getElementById('dateIn').value;
   const cat     = document.getElementById('catIn').value;

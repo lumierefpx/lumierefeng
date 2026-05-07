@@ -1,0 +1,34 @@
+[
+  {
+    "id": "let-them",
+    "title": "\"Let Them\"",
+    "subtitle": "",
+    "type": "external",
+    "url": "https://www.youtube.com/shorts/gp2eoo_zePw",
+    "content": ""
+  },
+  {
+    "id": "books-movies",
+    "title": "Books & movies",
+    "subtitle": "More recommendations coming soon.",
+    "type": "page",
+    "url": "resources/books-movies.html",
+    "content": "More books & movies recommendations coming soon."
+  },
+  {
+    "id": "second-chance",
+    "title": "Second Chance",
+    "subtitle": "The non-profit I'm volunteering at.",
+    "type": "external",
+    "url": "https://www.secondchance.global/",
+    "content": ""
+  },
+  {
+    "id": "smart-brains-foundation",
+    "title": "Smart Brains Foundation",
+    "subtitle": "The charity I co-founded that helps orphans in Kibera Community in Nairobi, Kenya. DM / email me for more details. Website coming soon.",
+    "type": "note",
+    "url": "",
+    "content": ""
+  }
+]
