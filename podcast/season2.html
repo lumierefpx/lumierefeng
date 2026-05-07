@@ -21,7 +21,9 @@
     .podcast-meta { padding-top: 8px; }
     .podcast-meta .hero-tag { margin-bottom: 12px; }
     .podcast-meta h1 { font-size: clamp(1.35rem, 3.2vw, 2.4rem); white-space: nowrap; }
-    .podcast-meta p { margin-top: 16px; font-size: 14px; color: var(--muted); max-width: 420px; }
+    .podcast-meta p { margin-top: 16px; font-size: 14px; color: var(--muted); max-width: 520px; }
+    .podcast-intro { display: grid; gap: 8px; margin-top: 16px; }
+    .podcast-intro p { margin: 0; }
     .listen-links { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
     .listen-btn {
       display: inline-flex; align-items: center; gap: 8px;
@@ -42,18 +44,110 @@
       transition: color 0.2s;
     }
     .season-link:hover { color: var(--text); }
-    .episode-item {
-      display: flex; justify-content: space-between; align-items: baseline;
-      gap: 20px; padding: 20px 0; border-bottom: 1px solid var(--border);
-      text-decoration: none; color: var(--text); transition: color 0.2s;
+    .episode-stack { display: flex; flex-direction: column; gap: 44px; margin-top: 22px; }
+    .episode-card {
+      display: grid;
+      grid-template-columns: minmax(180px, 230px) 1fr;
+      gap: 28px;
+      padding: 0 0 44px;
+      border-bottom: 1px solid var(--border);
     }
-    .episode-item:hover { color: var(--accent); }
-    .ep-num { font-size: 12px; color: var(--muted); width: 32px; flex-shrink: 0; }
-    .ep-title { font-size: 15px; flex: 1; }
-    .ep-date { font-size: 12px; color: var(--muted); white-space: nowrap; }
+    .episode-card:last-child { border-bottom: 0; padding-bottom: 0; }
+    .episode-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    .episode-title {
+      margin-top: 12px;
+      color: var(--text);
+      font-size: clamp(1.05rem, 2vw, 1.35rem);
+      line-height: 1.45;
+      font-weight: 500;
+    }
+    .episode-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+    .episode-links a {
+      color: color-mix(in srgb, var(--muted) 82%, var(--text));
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 1px;
+    }
+    .episode-links a:hover { color: var(--accent); }
+    .episode-gallery {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      align-items: start;
+    }
+    .episode-shot {
+      display: block;
+      padding: 0;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      cursor: zoom-in;
+    }
+    .episode-shot.is-featured { grid-row: span 2; grid-column: span 2; }
+    .episode-shot img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      transition: transform 0.24s ease, opacity 0.24s ease;
+    }
+    .episode-shot:hover img { transform: scale(1.02); opacity: 0.92; }
+    .episode-shot:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .image-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(12, 16, 28, 0.82);
+    }
+    .image-lightbox.is-open { display: flex; }
+    .lightbox-img {
+      max-width: min(92vw, 980px);
+      max-height: 88vh;
+      border-radius: 8px;
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      font-size: 24px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .lightbox-close:hover { background: rgba(255, 255, 255, 0.2); }
     @media (max-width: 600px) {
       .podcast-hero { grid-template-columns: 1fr; }
       .podcast-cover { max-width: 200px; }
+      .podcast-meta h1 { white-space: normal; }
+      .episode-card { grid-template-columns: 1fr; gap: 18px; }
+      .episode-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .episode-shot.is-featured { grid-column: 1 / -1; grid-row: auto; }
     }
   </style>
 </head>
@@ -81,9 +175,9 @@
           <button>Podcast <span class="dropdown-arrow">▾</span></button>
           <ul class="dropdown-menu">
             <li><a href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">Apple Podcast</a></li>
-            <li><a href="https://www.instagram.com/the.good.place_podcast" target="_blank">Instagram</a></li>
+            <li><a href="https://www.instagram.com/the.good.place_podcast/" target="_blank">Instagram</a></li>
             <li><a href="https://www.xiaoyuzhoufm.com/podcast/652570afb292e77709a3cefe" target="_blank">小宇宙</a></li>
-            <li><a href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg3NDAyNzYxNw==&amp;action=getalbum&amp;album_id=4346635139062349828&amp;from_itemidx=1&amp;from_msgid=2247486667&amp;subscene=189&amp;scenenote=https%3A%2F%2Fmp.weixin.qq.com%2Fs%3F__biz%3DMzg3NDAyNzYxNw%3D%3D%26mid%3D2247486667%26idx%3D1%26sn%3Df322cbcd1cb36be91b5bf60529f0d76f%26chksm%3Dced643c5f9a1cad37e8edf221a08cd0ec6d6a6b48ccac9a3865ce4cde42c984f7a1bfb566417%26cur_album_id%3D4346635139062349828%26scene%3D189%26key%3Ddaf9bdc5abc4e8d0160a6b8d76f1b191d22214d46d2d9719784cdde76fb0904ae99da49706b083bc14e43d716fb9150bf8e1ad1f4856334a41f44d2ca099483013f1d80c3371165e51c93c44e71544b319b54cbaceb3bc7f1b11953f3754eef431ab7903b41bae78527909d2f22bd98dff8bc091354225dc2facd8e48212a765%26ascene%3D0%26uin%3DNTE2NDA3NzM1%26devicetype%3DUnifiedPCMac%26version%3Df26411f1%26lang%3Den%26countrycode%3DKP%26exportkey%3Dn_ChQIAhIQpkoAmZoah2PlDV%252B0mInObhLYAQIE97dBBAEAAAAAAGZ%252BGG1IRPQAAAAOpnltbLcz9gKNyK89dVj01%252Fu%252FdxQiuICFcRWVdf5ylsZl4ny6116MwQcz8xw6BmyyDLIeznwjJVRyB%252FAS0PkmNgTw0x1SWC6PHo83lLI2JTeByhYyNu3%252B1Ch7bThkEm%252BJomyEi3qEhnoOOUOw05%252BPMOVmfqzgEJnZGXe8fZAl23C63smsJ15gGfJLoXri5VYcKfvjMIbS1ocVpIVu%252BJeEBSShzzk55KSVSS2FDViceOp3HKtWHM2wazrkUv2WFhVjTQ%253D%253D%26acctmode%3D0%26pass_ticket%3DJ4TVdcvuy9e5mOxH8wwmDCQ8xmBfoAc76CwLXPpWFZeaLlK%252F7Yx0sV9%252BUO4mdNv1%26wx_header%3D0&amp;nolastread=1&amp;sessionid=#wechat_redirect" target="_blank">微信公众号</a></li>
+            <li><a href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg3NDAyNzYxNw==&amp;action=getalbum&amp;album_id=4346635139062349828#wechat_redirect" target="_blank">微信公众号</a></li>
           </ul>
         </li>
         <li><a href="../photography.html">Album</a></li>
@@ -102,20 +196,15 @@
       <div class="podcast-meta">
         <p class="hero-tag">Podcast · Season 2</p>
         <h1>The Good Place好地方™第二季</h1>
-        <p>Season 2 episodes — 在这里写一段关于这一季的简介。</p>
+        <div class="podcast-intro">
+          <p>背上包，走过七大洲，才发现世界上并不存在"完美的地方"。而我们在的，就是好地方。</p>
+          <p>The good place was never a destination, but a journey.</p>
+        </div>
         <div class="listen-links">
-          <a class="listen-btn" href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">
-            🍏Apple Podcast
-          </a>
-          <a class="listen-btn" href="https://www.xiaoyuzhoufm.com/podcast/652570afb292e77709a3cefe" target="_blank">
-            🪐小宇宙
-          </a>
-          <a class="listen-btn" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg3NDAyNzYxNw==&amp;action=getalbum&amp;album_id=4346635139062349828&amp;from_itemidx=1&amp;from_msgid=2247486667&amp;subscene=189&amp;scenenote=https%3A%2F%2Fmp.weixin.qq.com%2Fs%3F__biz%3DMzg3NDAyNzYxNw%3D%3D%26mid%3D2247486667%26idx%3D1%26sn%3Df322cbcd1cb36be91b5bf60529f0d76f%26chksm%3Dced643c5f9a1cad37e8edf221a08cd0ec6d6a6b48ccac9a3865ce4cde42c984f7a1bfb566417%26cur_album_id%3D4346635139062349828%26scene%3D189%26key%3Ddaf9bdc5abc4e8d0160a6b8d76f1b191d22214d46d2d9719784cdde76fb0904ae99da49706b083bc14e43d716fb9150bf8e1ad1f4856334a41f44d2ca099483013f1d80c3371165e51c93c44e71544b319b54cbaceb3bc7f1b11953f3754eef431ab7903b41bae78527909d2f22bd98dff8bc091354225dc2facd8e48212a765%26ascene%3D0%26uin%3DNTE2NDA3NzM1%26devicetype%3DUnifiedPCMac%26version%3Df26411f1%26lang%3Den%26countrycode%3DKP%26exportkey%3Dn_ChQIAhIQpkoAmZoah2PlDV%252B0mInObhLYAQIE97dBBAEAAAAAAGZ%252BGG1IRPQAAAAOpnltbLcz9gKNyK89dVj01%252Fu%252FdxQiuICFcRWVdf5ylsZl4ny6116MwQcz8xw6BmyyDLIeznwjJVRyB%252FAS0PkmNgTw0x1SWC6PHo83lLI2JTeByhYyNu3%252B1Ch7bThkEm%252BJomyEi3qEhnoOOUOw05%252BPMOVmfqzgEJnZGXe8fZAl23C63smsJ15gGfJLoXri5VYcKfvjMIbS1ocVpIVu%252BJeEBSShzzk55KSVSS2FDViceOp3HKtWHM2wazrkUv2WFhVjTQ%253D%253D%26acctmode%3D0%26pass_ticket%3DJ4TVdcvuy9e5mOxH8wwmDCQ8xmBfoAc76CwLXPpWFZeaLlK%252F7Yx0sV9%252BUO4mdNv1%26wx_header%3D0&amp;nolastread=1&amp;sessionid=#wechat_redirect" target="_blank">
-            🛰️微信公众号
-          </a>
-          <a class="listen-btn" href="https://www.instagram.com/the.good.place_podcast/" target="_blank">
-            📸Instagram
-          </a>
+          <a class="listen-btn" href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">🍏Apple Podcast</a>
+          <a class="listen-btn" href="https://www.xiaoyuzhoufm.com/podcast/652570afb292e77709a3cefe" target="_blank">🪐小宇宙</a>
+          <a class="listen-btn" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg3NDAyNzYxNw==&amp;action=getalbum&amp;album_id=4346635139062349828#wechat_redirect" target="_blank">🛰️微信公众号</a>
+          <a class="listen-btn" href="https://www.instagram.com/the.good.place_podcast/" target="_blank">📸Instagram</a>
         </div>
         <div class="season-nav" aria-label="Podcast seasons">
           <a class="season-link" href="season1.html">← Season 1</a>
@@ -126,15 +215,163 @@
 
     <div class="section">
       <p class="section-label">Episodes</p>
-      <div class="placeholder">
-        <h3>Add Episodes</h3>
-        <p>把每集的标题和链接填进来。</p>
+      <div class="episode-stack">
+        <article class="episode-card">
+          <div>
+            <p class="episode-kicker">S2E0</p>
+            <h2 class="episode-title">关于2025年的那场远行</h2>
+            <div class="episode-links">
+              <a href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">在 Apple Podcast 收听</a>
+              <span>·</span>
+              <a href="https://www.xiaoyuzhoufm.com/episodes/67c5da89bf52a16cd14c92ee" target="_blank">在小宇宙收听</a>
+            </div>
+          </div>
+          <div class="episode-gallery">
+            <button class="episode-shot is-featured" type="button" data-lightbox-src="../images/podcast-season-2/s2e0.png" aria-label="Open S2E0 cover">
+              <img src="../images/podcast-season-2/s2e0.png" alt="S2E0 cover">
+            </button>
+          </div>
+        </article>
+
+        <article class="episode-card">
+          <div>
+            <p class="episode-kicker">S2E1</p>
+            <h2 class="episode-title">再会新加坡：“预制人”的天堂</h2>
+            <div class="episode-links">
+              <a href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">在 Apple Podcast 收听</a>
+              <span>·</span>
+              <a href="https://www.xiaoyuzhoufm.com/episodes/67c32356bf52a16cd1dabfdf" target="_blank">在小宇宙收听</a>
+            </div>
+          </div>
+          <div class="episode-gallery">
+            <button class="episode-shot is-featured" type="button" data-lightbox-src="../images/podcast-season-2/s2e1-01.png" aria-label="Open S2E1 cover">
+              <img src="../images/podcast-season-2/s2e1-01.png" alt="S2E1 cover">
+            </button>
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-2/s2e1-2.png" aria-label="Open S2E1 image 2">
+              <img src="../images/podcast-season-2/s2e1-2.png" alt="S2E1 image 2">
+            </button>
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-2/s2e1-3.png" aria-label="Open S2E1 image 3">
+              <img src="../images/podcast-season-2/s2e1-3.png" alt="S2E1 image 3">
+            </button>
+          </div>
+        </article>
+
+        <article class="episode-card">
+          <div>
+            <p class="episode-kicker">S2E2</p>
+            <h2 class="episode-title">古巴教会我：在这个复杂的世界，做一个诚实的人</h2>
+            <div class="episode-links">
+              <a href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">在 Apple Podcast 收听</a>
+              <span>·</span>
+              <a href="https://www.xiaoyuzhoufm.com/episodes/687a5854a9dec92500fcc9e6" target="_blank">在小宇宙收听</a>
+            </div>
+          </div>
+          <div class="episode-gallery">
+            <button class="episode-shot is-featured" type="button" data-lightbox-src="../images/podcast-season-2/s2e2-1.png" aria-label="Open S2E2 cover">
+              <img src="../images/podcast-season-2/s2e2-1.png" alt="S2E2 cover">
+            </button>
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-2/s2e2-2.png" aria-label="Open S2E2 image 2">
+              <img src="../images/podcast-season-2/s2e2-2.png" alt="S2E2 image 2">
+            </button>
+          </div>
+        </article>
+
+        <article class="episode-card">
+          <div>
+            <p class="episode-kicker">S2E3</p>
+            <h2 class="episode-title">当出走的二十几岁，偶遇出走的三十几岁</h2>
+            <div class="episode-links">
+              <a href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">在 Apple Podcast 收听</a>
+              <span>·</span>
+              <a href="https://www.xiaoyuzhoufm.com/episodes/6893157e638b0158793ccc22" target="_blank">在小宇宙收听</a>
+            </div>
+          </div>
+          <div class="episode-gallery">
+            <button class="episode-shot is-featured" type="button" data-lightbox-src="../images/podcast-season-2/s2e3-1.png" aria-label="Open S2E3 cover">
+              <img src="../images/podcast-season-2/s2e3-1.png" alt="S2E3 cover">
+            </button>
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-2/s2e3-2.png" aria-label="Open S2E3 image 2">
+              <img src="../images/podcast-season-2/s2e3-2.png" alt="S2E3 image 2">
+            </button>
+          </div>
+        </article>
+
+        <article class="episode-card">
+          <div>
+            <p class="episode-kicker">S2E4</p>
+            <h2 class="episode-title">裸辞 gap 一年后重回职场，难道我们真的“玩够了”？</h2>
+            <div class="episode-links">
+              <a href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">在 Apple Podcast 收听</a>
+              <span>·</span>
+              <a href="https://www.xiaoyuzhoufm.com/episodes/68b943ac97178f08ee3c45b0" target="_blank">在小宇宙收听</a>
+            </div>
+          </div>
+          <div class="episode-gallery">
+            <button class="episode-shot is-featured" type="button" data-lightbox-src="../images/podcast-season-2/s2e4-1.png" aria-label="Open S2E4 cover">
+              <img src="../images/podcast-season-2/s2e4-1.png" alt="S2E4 cover">
+            </button>
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-2/s2e4-2.png" aria-label="Open S2E4 image 2">
+              <img src="../images/podcast-season-2/s2e4-2.png" alt="S2E4 image 2">
+            </button>
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-2/s2e4-3.png" aria-label="Open S2E4 image 3">
+              <img src="../images/podcast-season-2/s2e4-3.png" alt="S2E4 image 3">
+            </button>
+          </div>
+        </article>
+
+        <article class="episode-card">
+          <div>
+            <p class="episode-kicker">S2E5</p>
+            <h2 class="episode-title">苦难是否有价值？</h2>
+            <div class="episode-links">
+              <a href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">在 Apple Podcast 收听</a>
+              <span>·</span>
+              <a href="https://www.xiaoyuzhoufm.com/episodes/696bc97bef1cf272a7f2522b" target="_blank">在小宇宙收听</a>
+            </div>
+          </div>
+          <div class="episode-gallery">
+            <button class="episode-shot is-featured" type="button" data-lightbox-src="../images/podcast-season-2/s2e5-1.png" aria-label="Open S2E5 cover">
+              <img src="../images/podcast-season-2/s2e5-1.png" alt="S2E5 cover">
+            </button>
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-2/s2e5-2.png" aria-label="Open S2E5 image 2">
+              <img src="../images/podcast-season-2/s2e5-2.png" alt="S2E5 image 2">
+            </button>
+          </div>
+        </article>
+
+        <article class="episode-card">
+          <div>
+            <p class="episode-kicker">S2E6</p>
+            <h2 class="episode-title">两个升学教育从业者的诚实对谈：读书是唯一的出路吗？</h2>
+            <div class="episode-links">
+              <a href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">在 Apple Podcast 收听</a>
+              <span>·</span>
+              <a href="https://www.xiaoyuzhoufm.com/episodes/6988c38466e2c303777ec443" target="_blank">在小宇宙收听</a>
+            </div>
+          </div>
+          <div class="episode-gallery">
+            <button class="episode-shot is-featured" type="button" data-lightbox-src="../images/podcast-season-2/s2e6-1.png" aria-label="Open S2E6 cover">
+              <img src="../images/podcast-season-2/s2e6-1.png" alt="S2E6 cover">
+            </button>
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-2/s2e6-2.png" aria-label="Open S2E6 image 2">
+              <img src="../images/podcast-season-2/s2e6-2.png" alt="S2E6 image 2">
+            </button>
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-2/s2e6-3.png" aria-label="Open S2E6 image 3">
+              <img src="../images/podcast-season-2/s2e6-3.png" alt="S2E6 image 3">
+            </button>
+          </div>
+        </article>
       </div>
     </div>
 
   </main>
 
-  <footer>
+  <div class="image-lightbox" id="image-lightbox" aria-hidden="true">
+    <button class="lightbox-close" type="button" aria-label="Close image">×</button>
+    <img class="lightbox-img" src="" alt="">
+  </div>
+
+    <footer>
     <div class="footer-inner">
       <div>
         <a class="footer-brand" href="../index.html">Lumiere Feng</a>
@@ -152,5 +389,37 @@
   </footer>
 
   <script src="../js/main.js"></script>
+  <script>
+    const lightbox = document.getElementById('image-lightbox');
+    const lightboxImg = lightbox.querySelector('.lightbox-img');
+    const closeLightbox = () => {
+      lightbox.classList.remove('is-open');
+      lightbox.setAttribute('aria-hidden', 'true');
+      lightboxImg.src = '';
+      lightboxImg.alt = '';
+    };
+
+    document.querySelectorAll('[data-lightbox-src]').forEach(button => {
+      button.addEventListener('click', () => {
+        const image = button.querySelector('img');
+        lightboxImg.src = button.dataset.lightboxSrc;
+        lightboxImg.alt = image ? image.alt : '';
+        lightbox.classList.add('is-open');
+        lightbox.setAttribute('aria-hidden', 'false');
+      });
+    });
+
+    lightbox.addEventListener('click', event => {
+      if (event.target === lightbox || event.target.classList.contains('lightbox-close')) {
+        closeLightbox();
+      }
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && lightbox.classList.contains('is-open')) {
+        closeLightbox();
+      }
+    });
+  </script>
 </body>
 </html>

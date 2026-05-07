@@ -16,28 +16,20 @@
       align-items: start;
       padding: 80px 0 60px;
     }
-    .podcast-cover {
-      border-radius: 16px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-    }
+    .podcast-cover { border-radius: 16px; overflow: hidden; border: 1px solid var(--border); }
     .podcast-cover img { width: 100%; display: block; }
     .podcast-meta { padding-top: 8px; }
     .podcast-meta .hero-tag { margin-bottom: 12px; }
     .podcast-meta h1 { font-size: clamp(1.35rem, 3.2vw, 2.4rem); white-space: nowrap; }
-    .podcast-meta p { margin-top: 16px; font-size: 14px; color: var(--muted); max-width: 420px; }
+    .podcast-meta p { margin-top: 16px; font-size: 14px; color: var(--muted); max-width: 520px; }
+    .podcast-intro { display: grid; gap: 8px; margin-top: 16px; }
+    .podcast-intro p { margin: 0; }
     .listen-links { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
     .listen-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 18px;
-      border-radius: 8px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--text);
-      text-decoration: none;
-      font-size: 13px;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 18px; border-radius: 8px;
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text); text-decoration: none; font-size: 13px;
       transition: border-color 0.2s, background 0.2s;
     }
     .listen-btn:hover { border-color: var(--accent); background: var(--surface-2); }
@@ -52,25 +44,110 @@
       transition: color 0.2s;
     }
     .season-link:hover { color: var(--text); }
-    .episode-list { display: flex; flex-direction: column; gap: 0; }
-    .episode-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 20px;
-      padding: 20px 0;
+    .episode-stack { display: flex; flex-direction: column; gap: 44px; margin-top: 22px; }
+    .episode-card {
+      display: grid;
+      grid-template-columns: minmax(180px, 230px) 1fr;
+      gap: 28px;
+      padding: 0 0 44px;
       border-bottom: 1px solid var(--border);
-      text-decoration: none;
-      color: var(--text);
-      transition: color 0.2s;
     }
-    .episode-item:hover { color: var(--accent); }
-    .ep-num { font-size: 12px; color: var(--muted); width: 32px; flex-shrink: 0; }
-    .ep-title { font-size: 15px; flex: 1; }
-    .ep-date { font-size: 12px; color: var(--muted); white-space: nowrap; }
+    .episode-card:last-child { border-bottom: 0; padding-bottom: 0; }
+    .episode-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    .episode-title {
+      margin-top: 12px;
+      color: var(--text);
+      font-size: clamp(1.05rem, 2vw, 1.35rem);
+      line-height: 1.45;
+      font-weight: 500;
+    }
+    .episode-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+    .episode-links a {
+      color: color-mix(in srgb, var(--muted) 82%, var(--text));
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 1px;
+    }
+    .episode-links a:hover { color: var(--accent); }
+    .episode-gallery {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      align-items: start;
+    }
+    .episode-shot {
+      display: block;
+      padding: 0;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      cursor: zoom-in;
+    }
+    .episode-shot.is-featured { grid-row: span 2; grid-column: span 2; }
+    .episode-shot img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      transition: transform 0.24s ease, opacity 0.24s ease;
+    }
+    .episode-shot:hover img { transform: scale(1.02); opacity: 0.92; }
+    .episode-shot:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .image-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(12, 16, 28, 0.82);
+    }
+    .image-lightbox.is-open { display: flex; }
+    .lightbox-img {
+      max-width: min(92vw, 980px);
+      max-height: 88vh;
+      border-radius: 8px;
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      font-size: 24px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .lightbox-close:hover { background: rgba(255, 255, 255, 0.2); }
     @media (max-width: 600px) {
       .podcast-hero { grid-template-columns: 1fr; }
       .podcast-cover { max-width: 200px; }
+      .podcast-meta h1 { white-space: normal; }
+      .episode-card { grid-template-columns: 1fr; gap: 18px; }
+      .episode-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .episode-shot.is-featured { grid-column: 1 / -1; grid-row: auto; }
     }
   </style>
 </head>
@@ -98,9 +175,9 @@
           <button>Podcast <span class="dropdown-arrow">▾</span></button>
           <ul class="dropdown-menu">
             <li><a href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">Apple Podcast</a></li>
-            <li><a href="https://www.instagram.com/the.good.place_podcast" target="_blank">Instagram</a></li>
+            <li><a href="https://www.instagram.com/the.good.place_podcast/" target="_blank">Instagram</a></li>
             <li><a href="https://www.xiaoyuzhoufm.com/podcast/652570afb292e77709a3cefe" target="_blank">小宇宙</a></li>
-            <li><a href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg3NDAyNzYxNw==&amp;action=getalbum&amp;album_id=4346635139062349828&amp;from_itemidx=1&amp;from_msgid=2247486667&amp;subscene=189&amp;scenenote=https%3A%2F%2Fmp.weixin.qq.com%2Fs%3F__biz%3DMzg3NDAyNzYxNw%3D%3D%26mid%3D2247486667%26idx%3D1%26sn%3Df322cbcd1cb36be91b5bf60529f0d76f%26chksm%3Dced643c5f9a1cad37e8edf221a08cd0ec6d6a6b48ccac9a3865ce4cde42c984f7a1bfb566417%26cur_album_id%3D4346635139062349828%26scene%3D189%26key%3Ddaf9bdc5abc4e8d0160a6b8d76f1b191d22214d46d2d9719784cdde76fb0904ae99da49706b083bc14e43d716fb9150bf8e1ad1f4856334a41f44d2ca099483013f1d80c3371165e51c93c44e71544b319b54cbaceb3bc7f1b11953f3754eef431ab7903b41bae78527909d2f22bd98dff8bc091354225dc2facd8e48212a765%26ascene%3D0%26uin%3DNTE2NDA3NzM1%26devicetype%3DUnifiedPCMac%26version%3Df26411f1%26lang%3Den%26countrycode%3DKP%26exportkey%3Dn_ChQIAhIQpkoAmZoah2PlDV%252B0mInObhLYAQIE97dBBAEAAAAAAGZ%252BGG1IRPQAAAAOpnltbLcz9gKNyK89dVj01%252Fu%252FdxQiuICFcRWVdf5ylsZl4ny6116MwQcz8xw6BmyyDLIeznwjJVRyB%252FAS0PkmNgTw0x1SWC6PHo83lLI2JTeByhYyNu3%252B1Ch7bThkEm%252BJomyEi3qEhnoOOUOw05%252BPMOVmfqzgEJnZGXe8fZAl23C63smsJ15gGfJLoXri5VYcKfvjMIbS1ocVpIVu%252BJeEBSShzzk55KSVSS2FDViceOp3HKtWHM2wazrkUv2WFhVjTQ%253D%253D%26acctmode%3D0%26pass_ticket%3DJ4TVdcvuy9e5mOxH8wwmDCQ8xmBfoAc76CwLXPpWFZeaLlK%252F7Yx0sV9%252BUO4mdNv1%26wx_header%3D0&amp;nolastread=1&amp;sessionid=#wechat_redirect" target="_blank">微信公众号</a></li>
+            <li><a href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg3NDAyNzYxNw==&amp;action=getalbum&amp;album_id=4346635139062349828#wechat_redirect" target="_blank">微信公众号</a></li>
           </ul>
         </li>
         <li><a href="../photography.html">Album</a></li>
@@ -119,20 +196,15 @@
       <div class="podcast-meta">
         <p class="hero-tag">Podcast · Season 1</p>
         <h1>The Good Place好地方™第一季</h1>
-        <p>Season 1 episodes — 在这里写一段关于这一季的简介。</p>
+        <div class="podcast-intro">
+          <p>五年搬了十四次家，我一直在找一个好地方。</p>
+          <p>Everything starts here.</p>
+        </div>
         <div class="listen-links">
-          <a class="listen-btn" href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">
-            🍏Apple Podcast
-          </a>
-          <a class="listen-btn" href="https://www.xiaoyuzhoufm.com/podcast/652570afb292e77709a3cefe" target="_blank">
-            🪐小宇宙
-          </a>
-          <a class="listen-btn" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg3NDAyNzYxNw==&amp;action=getalbum&amp;album_id=4346635139062349828&amp;from_itemidx=1&amp;from_msgid=2247486667&amp;subscene=189&amp;scenenote=https%3A%2F%2Fmp.weixin.qq.com%2Fs%3F__biz%3DMzg3NDAyNzYxNw%3D%3D%26mid%3D2247486667%26idx%3D1%26sn%3Df322cbcd1cb36be91b5bf60529f0d76f%26chksm%3Dced643c5f9a1cad37e8edf221a08cd0ec6d6a6b48ccac9a3865ce4cde42c984f7a1bfb566417%26cur_album_id%3D4346635139062349828%26scene%3D189%26key%3Ddaf9bdc5abc4e8d0160a6b8d76f1b191d22214d46d2d9719784cdde76fb0904ae99da49706b083bc14e43d716fb9150bf8e1ad1f4856334a41f44d2ca099483013f1d80c3371165e51c93c44e71544b319b54cbaceb3bc7f1b11953f3754eef431ab7903b41bae78527909d2f22bd98dff8bc091354225dc2facd8e48212a765%26ascene%3D0%26uin%3DNTE2NDA3NzM1%26devicetype%3DUnifiedPCMac%26version%3Df26411f1%26lang%3Den%26countrycode%3DKP%26exportkey%3Dn_ChQIAhIQpkoAmZoah2PlDV%252B0mInObhLYAQIE97dBBAEAAAAAAGZ%252BGG1IRPQAAAAOpnltbLcz9gKNyK89dVj01%252Fu%252FdxQiuICFcRWVdf5ylsZl4ny6116MwQcz8xw6BmyyDLIeznwjJVRyB%252FAS0PkmNgTw0x1SWC6PHo83lLI2JTeByhYyNu3%252B1Ch7bThkEm%252BJomyEi3qEhnoOOUOw05%252BPMOVmfqzgEJnZGXe8fZAl23C63smsJ15gGfJLoXri5VYcKfvjMIbS1ocVpIVu%252BJeEBSShzzk55KSVSS2FDViceOp3HKtWHM2wazrkUv2WFhVjTQ%253D%253D%26acctmode%3D0%26pass_ticket%3DJ4TVdcvuy9e5mOxH8wwmDCQ8xmBfoAc76CwLXPpWFZeaLlK%252F7Yx0sV9%252BUO4mdNv1%26wx_header%3D0&amp;nolastread=1&amp;sessionid=#wechat_redirect" target="_blank">
-            🛰️微信公众号
-          </a>
-          <a class="listen-btn" href="https://www.instagram.com/the.good.place_podcast/" target="_blank">
-            📸Instagram
-          </a>
+          <a class="listen-btn" href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">🍏Apple Podcast</a>
+          <a class="listen-btn" href="https://www.xiaoyuzhoufm.com/podcast/652570afb292e77709a3cefe" target="_blank">🪐小宇宙</a>
+          <a class="listen-btn" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg3NDAyNzYxNw==&amp;action=getalbum&amp;album_id=4346635139062349828#wechat_redirect" target="_blank">🛰️微信公众号</a>
+          <a class="listen-btn" href="https://www.instagram.com/the.good.place_podcast/" target="_blank">📸Instagram</a>
         </div>
         <div class="season-nav" aria-label="Podcast seasons">
           <a class="season-link" href="season2.html">Season 2 →</a>
@@ -142,24 +214,198 @@
 
     <div class="section">
       <p class="section-label">Episodes</p>
-      <!-- 在这里添加单集，示例格式：
-      <div class="episode-list">
-        <a class="episode-item" href="https://..." target="_blank">
-          <span class="ep-num">E01</span>
-          <span class="ep-title">集标题</span>
-          <span class="ep-date">2023 · 10</span>
-        </a>
-      </div>
-      -->
-      <div class="placeholder">
-        <h3>Add Episodes</h3>
-        <p>把每集的标题和链接填进来。</p>
+      <div class="episode-stack">
+        <article class="episode-card">
+          <div>
+            <p class="episode-kicker">S1E1</p>
+            <h2 class="episode-title">有些事现在不做以后就再也不会做了</h2>
+            <div class="episode-links">
+              <a href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">在 Apple Podcast 收听</a>
+              <span>·</span>
+              <a href="https://www.xiaoyuzhoufm.com/episodes/652576f550cf691d245dcf2c" target="_blank">在小宇宙收听</a>
+            </div>
+          </div>
+          <div class="episode-gallery">
+            <button class="episode-shot is-featured" type="button" data-lightbox-src="../images/podcast-season-1/s1e1-1.png" aria-label="Open S1E1 cover">
+              <img src="../images/podcast-season-1/s1e1-1.png" alt="S1E1 cover">
+            </button>
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-1/s1e1-2.png" aria-label="Open S1E1 image 2">
+              <img src="../images/podcast-season-1/s1e1-2.png" alt="S1E1 image 2">
+            </button>
+          </div>
+        </article>
+
+        <article class="episode-card">
+          <div>
+            <p class="episode-kicker">S1E2</p>
+            <h2 class="episode-title">经济独立之后，我们如何看待东亚父母有条件的爱</h2>
+            <div class="episode-links">
+              <a href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">在 Apple Podcast 收听</a>
+              <span>·</span>
+              <a href="https://www.xiaoyuzhoufm.com/episodes/66c2260333591c27be00ae8b" target="_blank">在小宇宙收听</a>
+            </div>
+          </div>
+          <div class="episode-gallery">
+            <button class="episode-shot is-featured" type="button" data-lightbox-src="../images/podcast-season-1/s1e2-1.png" aria-label="Open S1E2 cover">
+              <img src="../images/podcast-season-1/s1e2-1.png" alt="S1E2 cover">
+            </button>
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-1/s1e2-2.png" aria-label="Open S1E2 image 2">
+              <img src="../images/podcast-season-1/s1e2-2.png" alt="S1E2 image 2">
+            </button>
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-1/s1e2-3.png" aria-label="Open S1E2 image 3">
+              <img src="../images/podcast-season-1/s1e2-3.png" alt="S1E2 image 3">
+            </button>
+          </div>
+        </article>
+
+        <article class="episode-card">
+          <div>
+            <p class="episode-kicker">S1E3</p>
+            <h2 class="episode-title">那些年，我们对香港的爱与恨</h2>
+            <div class="episode-links">
+              <a href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">在 Apple Podcast 收听</a>
+              <span>·</span>
+              <a href="https://www.xiaoyuzhoufm.com/episodes/6700d7c981cdab3a93dd5490" target="_blank">在小宇宙收听</a>
+            </div>
+          </div>
+          <div class="episode-gallery">
+            <button class="episode-shot is-featured" type="button" data-lightbox-src="../images/podcast-season-1/s1e3-1.png" aria-label="Open S1E3 cover">
+              <img src="../images/podcast-season-1/s1e3-1.png" alt="S1E3 cover">
+            </button>
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-1/s1e3-2.png" aria-label="Open S1E3 image 2">
+              <img src="../images/podcast-season-1/s1e3-2.png" alt="S1E3 image 2">
+            </button>
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-1/s1e3-3.png" aria-label="Open S1E3 image 3">
+              <img src="../images/podcast-season-1/s1e3-3.png" alt="S1E3 image 3">
+            </button>
+          </div>
+        </article>
+
+        <article class="episode-card">
+          <div>
+            <p class="episode-kicker">S1E4</p>
+            <h2 class="episode-title">十八岁的夏天，我真的来到了巴黎</h2>
+            <div class="episode-links">
+              <a href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">在 Apple Podcast 收听</a>
+              <span>·</span>
+              <a href="https://www.xiaoyuzhoufm.com/episodes/67166adc0d2f24f289c88643" target="_blank">在小宇宙收听</a>
+            </div>
+          </div>
+          <div class="episode-gallery">
+            <button class="episode-shot is-featured" type="button" data-lightbox-src="../images/podcast-season-1/s1e4-1.png" aria-label="Open S1E4 cover">
+              <img src="../images/podcast-season-1/s1e4-1.png" alt="S1E4 cover">
+            </button>
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-1/s1e4-2.png" aria-label="Open S1E4 image 2">
+              <img src="../images/podcast-season-1/s1e4-2.png" alt="S1E4 image 2">
+            </button>
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-1/s1e4-3.png" aria-label="Open S1E4 image 3">
+              <img src="../images/podcast-season-1/s1e4-3.png" alt="S1E4 image 3">
+            </button>
+          </div>
+        </article>
+
+        <article class="episode-card">
+          <div>
+            <p class="episode-kicker">S1E5</p>
+            <h2 class="episode-title">中日美：我的新时代三国演义</h2>
+            <div class="episode-links">
+              <a href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">在 Apple Podcast 收听</a>
+              <span>·</span>
+              <a href="https://www.xiaoyuzhoufm.com/episodes/6737675a43dc3a4387f44921" target="_blank">在小宇宙收听</a>
+            </div>
+          </div>
+          <div class="episode-gallery">
+            <button class="episode-shot is-featured" type="button" data-lightbox-src="../images/podcast-season-1/s1e5-1.png" aria-label="Open S1E5 cover">
+              <img src="../images/podcast-season-1/s1e5-1.png" alt="S1E5 cover">
+            </button>
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-1/s1e5-2.png" aria-label="Open S1E5 image 2">
+              <img src="../images/podcast-season-1/s1e5-2.png" alt="S1E5 image 2">
+            </button>
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-1/s1e5-3.png" aria-label="Open S1E5 image 3">
+              <img src="../images/podcast-season-1/s1e5-3.png" alt="S1E5 image 3">
+            </button>
+          </div>
+        </article>
+
+        <article class="episode-card">
+          <div>
+            <p class="episode-kicker">S1E6</p>
+            <h2 class="episode-title">香港大学毕业牲和牠们的牲活</h2>
+            <div class="episode-links">
+              <a href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">在 Apple Podcast 收听</a>
+              <span>·</span>
+              <a href="https://www.xiaoyuzhoufm.com/episodes/67586208bdb9877a97df97a9" target="_blank">在小宇宙收听</a>
+            </div>
+          </div>
+          <div class="episode-gallery">
+            <button class="episode-shot is-featured" type="button" data-lightbox-src="../images/podcast-season-1/s1e6-1.png" aria-label="Open S1E6 cover">
+              <img src="../images/podcast-season-1/s1e6-1.png" alt="S1E6 cover">
+            </button>
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-1/s1e6-2.png" aria-label="Open S1E6 image 2">
+              <img src="../images/podcast-season-1/s1e6-2.png" alt="S1E6 image 2">
+            </button>
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-1/s1e6-3.png" aria-label="Open S1E6 image 3">
+              <img src="../images/podcast-season-1/s1e6-3.png" alt="S1E6 image 3">
+            </button>
+          </div>
+        </article>
+
+        <article class="episode-card">
+          <div>
+            <p class="episode-kicker">S1E7</p>
+            <h2 class="episode-title">离开优绩主义的图书馆，谈论家和香港，谈论死亡与人生在世的终极理想</h2>
+            <div class="episode-links">
+              <a href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">在 Apple Podcast 收听</a>
+              <span>·</span>
+              <a href="https://www.xiaoyuzhoufm.com/episodes/67697c871e823e72d3285957" target="_blank">在小宇宙收听</a>
+            </div>
+          </div>
+          <div class="episode-gallery">
+            <button class="episode-shot is-featured" type="button" data-lightbox-src="../images/podcast-season-1/s1e7-1.png" aria-label="Open S1E7 cover">
+              <img src="../images/podcast-season-1/s1e7-1.png" alt="S1E7 cover">
+            </button>
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-1/s1e7-2.png" aria-label="Open S1E7 image 2">
+              <img src="../images/podcast-season-1/s1e7-2.png" alt="S1E7 image 2">
+            </button>
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-1/s1e7-3.png" aria-label="Open S1E7 image 3">
+              <img src="../images/podcast-season-1/s1e7-3.png" alt="S1E7 image 3">
+            </button>
+          </div>
+        </article>
+
+        <article class="episode-card">
+          <div>
+            <p class="episode-kicker">S1E8</p>
+            <h2 class="episode-title">我不再敷衍自己了</h2>
+            <div class="episode-links">
+              <a href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">在 Apple Podcast 收听</a>
+              <span>·</span>
+              <a href="https://www.xiaoyuzhoufm.com/episodes/678d25fc9420ede9d131ae3e" target="_blank">在小宇宙收听</a>
+            </div>
+          </div>
+          <div class="episode-gallery">
+            <button class="episode-shot is-featured" type="button" data-lightbox-src="../images/podcast-season-1/s1e8-1.png" aria-label="Open S1E8 cover">
+              <img src="../images/podcast-season-1/s1e8-1.png" alt="S1E8 cover">
+            </button>
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-1/s1e8-2.png" aria-label="Open S1E8 image 2">
+              <img src="../images/podcast-season-1/s1e8-2.png" alt="S1E8 image 2">
+            </button>
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-1/s1e8-3.png" aria-label="Open S1E8 image 3">
+              <img src="../images/podcast-season-1/s1e8-3.png" alt="S1E8 image 3">
+            </button>
+          </div>
+        </article>
       </div>
     </div>
 
   </main>
 
-  <footer>
+  <div class="image-lightbox" id="image-lightbox" aria-hidden="true">
+    <button class="lightbox-close" type="button" aria-label="Close image">×</button>
+    <img class="lightbox-img" src="" alt="">
+  </div>
+
+    <footer>
     <div class="footer-inner">
       <div>
         <a class="footer-brand" href="../index.html">Lumiere Feng</a>
@@ -177,5 +423,37 @@
   </footer>
 
   <script src="../js/main.js"></script>
+  <script>
+    const lightbox = document.getElementById('image-lightbox');
+    const lightboxImg = lightbox.querySelector('.lightbox-img');
+    const closeLightbox = () => {
+      lightbox.classList.remove('is-open');
+      lightbox.setAttribute('aria-hidden', 'true');
+      lightboxImg.src = '';
+      lightboxImg.alt = '';
+    };
+
+    document.querySelectorAll('[data-lightbox-src]').forEach(button => {
+      button.addEventListener('click', () => {
+        const image = button.querySelector('img');
+        lightboxImg.src = button.dataset.lightboxSrc;
+        lightboxImg.alt = image ? image.alt : '';
+        lightbox.classList.add('is-open');
+        lightbox.setAttribute('aria-hidden', 'false');
+      });
+    });
+
+    lightbox.addEventListener('click', event => {
+      if (event.target === lightbox || event.target.classList.contains('lightbox-close')) {
+        closeLightbox();
+      }
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && lightbox.classList.contains('is-open')) {
+        closeLightbox();
+      }
+    });
+  </script>
 </body>
 </html>
