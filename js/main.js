@@ -64,3 +64,44 @@ document.querySelectorAll('.nav-links a').forEach(a => {
     a.classList.add('active');
   }
 });
+
+// Writings QR popover
+const qrTriggers = document.querySelectorAll('[data-qr-src]');
+if (qrTriggers.length) {
+  const modal = document.createElement('div');
+  modal.className = 'qr-modal';
+  modal.setAttribute('role', 'dialog');
+  modal.setAttribute('aria-modal', 'true');
+  modal.innerHTML = `
+    <div class="qr-modal-panel">
+      <button class="qr-modal-close" type="button" aria-label="Close">×</button>
+      <img alt="">
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  const img = modal.querySelector('img');
+  const close = modal.querySelector('.qr-modal-close');
+  const closeModal = () => {
+    modal.classList.remove('open');
+    img.removeAttribute('src');
+    document.body.style.overflow = '';
+  };
+
+  qrTriggers.forEach(trigger => {
+    trigger.addEventListener('click', () => {
+      img.src = trigger.dataset.qrSrc;
+      img.alt = trigger.dataset.qrTitle || 'QR code';
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  close.addEventListener('click', closeModal);
+  modal.addEventListener('click', event => {
+    if (event.target === modal) closeModal();
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && modal.classList.contains('open')) closeModal();
+  });
+}

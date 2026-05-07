@@ -106,7 +106,8 @@ nav {
   gap: 4px;
 }
 .nav-dropdown:hover > button,
-.nav-dropdown:focus-within > button { color: var(--text); }
+.nav-dropdown:focus-within > button,
+.nav-dropdown > button.active { color: var(--text); }
 
 .dropdown-arrow { font-size: 10px; transition: transform 0.2s; }
 .nav-dropdown:hover .dropdown-arrow { transform: rotate(180deg); }
@@ -128,18 +129,72 @@ nav {
 .nav-dropdown:hover .dropdown-menu,
 .nav-dropdown:focus-within .dropdown-menu { display: block; }
 
-.dropdown-menu li a {
+.dropdown-menu li a,
+.dropdown-menu li button {
   display: block;
+  width: 100%;
   padding: 9px 18px;
   font-size: 13px;
   color: var(--muted);
   text-decoration: none;
   transition: color 0.2s, background 0.2s;
   white-space: nowrap;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
 }
-.dropdown-menu li a:hover {
+.dropdown-menu li a:hover,
+.dropdown-menu li button:hover {
   color: var(--text);
   background: var(--surface);
+}
+
+/* QR popover */
+.qr-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  background: rgba(24, 32, 58, 0.42);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.qr-modal.open { display: flex; }
+.qr-modal-panel {
+  position: relative;
+  width: min(420px, 100%);
+  max-height: min(82vh, 720px);
+  padding: 14px;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  box-shadow: 0 24px 70px rgba(24, 32, 58, 0.22);
+}
+.qr-modal-panel img {
+  width: 100%;
+  max-height: calc(82vh - 70px);
+  object-fit: contain;
+  border-radius: 6px;
+}
+.qr-modal-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: rgba(243, 246, 251, 0.9);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
 }
 
 /* Mobile nav toggle */
@@ -300,7 +355,7 @@ footer {
   margin: 0 auto;
   padding: 56px 32px;
   display: grid;
-  grid-template-columns: 1.2fr 1fr 1fr;
+  grid-template-columns: 1.2fr 1fr;
   gap: 48px;
 }
 
