@@ -26,9 +26,9 @@
   {
     "id": "smart-brains-foundation",
     "title": "Smart Brains Foundation",
-    "subtitle": "The charity I co-founded that helps orphans in Kibera Community in Nairobi, Kenya. DM / email me for donation or more details. Website coming soon.",
-    "type": "note",
-    "url": "",
+    "subtitle": "The charity I co-founded that helps orphans in Kibera Community in Nairobi, Kenya. DM / email me for donation or more details.",
+    "type": "external",
+    "url": "https://smartbrainsfoundation.org/",
     "content": ""
   }
 ]
