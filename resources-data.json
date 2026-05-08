@@ -30,5 +30,13 @@
     "type": "external",
     "url": "https://smartbrainsfoundation.org/",
     "content": ""
+  },
+  {
+    "id": "gazan-student-support-network",
+    "title": "Gazan Student Support Network",
+    "subtitle": "If you need help, or if you can help by offering mentorships, scholarships, connections etc.",
+    "type": "external",
+    "url": "https://www.gazanstudentsupport.org/",
+    "content": ""
   }
 ]
