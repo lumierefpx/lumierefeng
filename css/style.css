@@ -449,14 +449,10 @@ footer {
   background: var(--surface-2);
   border: 1px solid var(--border);
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  font-weight: 400;
-  color: var(--accent);
+  display: block;
+  object-fit: cover;
+  object-position: 50% 40%;
   margin-bottom: 18px;
-  letter-spacing: 1px;
   flex-shrink: 0;
 }
 
@@ -796,7 +792,7 @@ footer {
 
 .home-profile {
   display: grid;
-  grid-template-columns: minmax(0, 720px) minmax(120px, 150px);
+  grid-template-columns: minmax(0, 720px) minmax(240px, 300px);
   gap: clamp(34px, 5vw, 64px);
   align-items: start;
 }
@@ -823,7 +819,7 @@ footer {
 }
 
 .home-photo {
-  width: 150px;
+  width: 300px;
   justify-self: end;
   overflow: hidden;
   border: 1px solid var(--border);
@@ -1102,7 +1098,7 @@ footer {
   .blogs-sidebar { position: static; }
   .home-grid { grid-template-columns: 1fr; }
   .home-profile { grid-template-columns: 1fr; }
-  .home-photo { width: 150px; justify-self: start; }
+  .home-photo { width: min(260px, 100%); justify-self: start; }
   .home-card { height: 220px; }
   .podcast-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));

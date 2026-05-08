@@ -304,29 +304,7 @@ blogs_html = re.sub(
 total = len(post_records)
 blogs_html = re.sub(r'\d+ posts', f'{total} posts', blogs_html, count=1)
 
-# 更新 featured post（最新一篇）
-latest = post_records[0]
-new_featured = (
-    f'        <a id="featured-post" class="feed-featured"\n'
-    f'           href="{latest["href"]}"\n'
-    f'           data-search-title="{htmllib.escape(latest["title"])}"\n'
-    f'           data-search-excerpt="{htmllib.escape(latest["excerpt"])}">\n'
-    f'          <div class="feed-featured-header">\n'
-    f'            <span class="feed-featured-tag">Latest</span>\n'
-    f'            <span class="feed-featured-date">{fmt_long(latest["date"])}</span>\n'
-    f'          </div>\n'
-    f'          <span class="feed-featured-title">{htmllib.escape(latest["title"])}</span>\n'
-    f'          <p class="feed-featured-excerpt">{htmllib.escape(latest["excerpt"])}</p>\n'
-    f'          <div class="feed-featured-footer">\n'
-    f'            <div class="feed-featured-meta"><span>{latest["category"]}</span></div>\n'
-    f'            <span class="feed-featured-cta">Read post →</span>\n'
-    f'          </div>\n'
-    f'        </a>'
-)
-blogs_html = re.sub(
-    r'<a id="featured-post".*?</a>',
-    new_featured, blogs_html, flags=re.DOTALL
-)
+# Featured post is curated manually/admin-side, so builds preserve it.
 
 blogs_path.write_text(blogs_html, encoding='utf-8')
 print(f'  blogs.html updated ({total} posts)')

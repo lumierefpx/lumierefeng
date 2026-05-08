@@ -147,6 +147,7 @@
       <span class="topbar-label">New Post</span>
     </div>
     <div class="topbar-right">
+      <button class="btn btn-ghost" onclick="pinPost()">置顶</button>
       <button class="btn btn-ghost" onclick="openModal()">Token</button>
     </div>
   </header>
@@ -609,24 +610,53 @@ function patchBlogs(html, {title, date, category, excerpt, href}) {
 
   html = html.replace(/(\d+) posts/, (_,n) => `${+n+1} posts`);
 
-  const featured =
-    `        <a id="featured-post" class="feed-featured"\n` +
-    `           href="${href}"\n` +
-    `           data-search-title="${e(title)}"\n` +
-    `           data-search-excerpt="${e(excerpt)}">\n` +
-    `          <div class="feed-featured-header">\n` +
-    `            <span class="feed-featured-tag">Latest</span>\n` +
-    `            <span class="feed-featured-date">${fmtL(date)}</span>\n` +
-    `          </div>\n` +
-    `          <span class="feed-featured-title">${e(title)}</span>\n` +
-    `          <p class="feed-featured-excerpt">${e(excerpt)}</p>\n` +
-    `          <div class="feed-featured-footer">\n` +
-    `            <div class="feed-featured-meta"><span>${category}</span></div>\n` +
-    `            <span class="feed-featured-cta">Read post →</span>\n` +
-    `          </div>\n` +
-    `        </a>`;
-  html = html.replace(/<a id="featured-post"[\s\S]*?<\/a>/, featured);
   return html;
+}
+
+async function pinPost() {
+  const needle = prompt('输入要置顶的文章标题或 posts/... 链接', '新加坡河畔的乌龟');
+  if (!needle) return;
+  setStatus('正在查找文章…');
+  try {
+    const { content, sha } = await ghGet('blogs.html');
+    const doc = new DOMParser().parseFromString(content, 'text/html');
+    const items = [...doc.querySelectorAll('.feed-item')];
+    const target = items.find(item => {
+      const href = item.getAttribute('href') || '';
+      const title = item.querySelector('.feed-title')?.textContent?.trim() || '';
+      return href.includes(needle.trim()) || title.includes(needle.trim());
+    });
+    if (!target) throw new Error('没有找到这篇文章');
+
+    const e = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    const href = target.getAttribute('href') || '';
+    const title = target.querySelector('.feed-title')?.textContent?.trim() || '';
+    const excerpt = target.querySelector('.feed-excerpt')?.textContent?.trim() || '';
+    const metaSpans = [...target.querySelectorAll('.feed-meta > span:not(.feed-meta-dot)')];
+    const date = metaSpans[0]?.textContent?.trim() || '';
+    const category = metaSpans[1]?.textContent?.trim() || date;
+    const featured =
+      `        <a id="featured-post" class="feed-featured"\n` +
+      `           href="${href}"\n` +
+      `           data-search-title="${e(title)}"\n` +
+      `           data-search-excerpt="${e(excerpt)}">\n` +
+      `          <div class="feed-featured-header">\n` +
+      `            <span class="feed-featured-tag">Maybe you will like...</span>\n` +
+      `            <span class="feed-featured-date">${e(date)}</span>\n` +
+      `          </div>\n` +
+      `          <span class="feed-featured-title">${e(title)}</span>\n` +
+      `          <p class="feed-featured-excerpt">${e(excerpt)}</p>\n` +
+      `          <div class="feed-featured-footer">\n` +
+      `            <div class="feed-featured-meta"><span>${e(category)}</span></div>\n` +
+      `            <span class="feed-featured-cta">Read post →</span>\n` +
+      `          </div>\n` +
+      `        </a>`;
+    const nextHtml = content.replace(/<a id="featured-post"[\s\S]*?<\/a>/, featured);
+    await ghPut('blogs.html', nextHtml, sha, `blogs: pin "${title}"`);
+    setStatus(`已置顶: ${title}`, 'ok');
+  } catch (err) {
+    setStatus('置顶失败: ' + err.message, 'err');
+  }
 }
 
 // ── Update index.html ────────────────────────────────────
