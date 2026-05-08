@@ -67,6 +67,11 @@
     .resource-admin-actions button:hover {
       color: var(--accent);
     }
+    .resource-admin-move[disabled],
+    .resource-admin-move[disabled]:hover {
+      color: var(--border);
+      cursor: default;
+    }
     .resources-footer {
       grid-template-columns: 1.2fr 1fr 1fr;
     }
@@ -230,13 +235,50 @@
         /        <!-- RESOURCES_START -->[\s\S]*?        <!-- RESOURCES_END -->/,
         `        <!-- RESOURCES_START -->\n${data.map(itemHtml).join('\n')}\n        <!-- RESOURCES_END -->`
       );
+      const renderAdminControls = () => {
+        const items = [...document.querySelectorAll('.resource-item[data-resource-id]')];
+        items.forEach((item, index) => {
+          item.querySelector('[data-resource-move="up"]')?.toggleAttribute('disabled', index === 0);
+          item.querySelector('[data-resource-move="down"]')?.toggleAttribute('disabled', index === items.length - 1);
+        });
+      };
+      const moveResource = async (id, dir, clickedButton) => {
+        const item = clickedButton.closest('.resource-item');
+        const oldLabel = clickedButton.textContent;
+        clickedButton.textContent = '保存中...';
+        clickedButton.disabled = true;
+        try {
+          const dataFile = await ghGet('resources-data.json');
+          const data = JSON.parse(dataFile.content);
+          const index = data.findIndex(x => x.id === id);
+          const nextIndex = index + dir;
+          if (index < 0 || nextIndex < 0 || nextIndex >= data.length) return;
+          const next = [...data];
+          [next[index], next[nextIndex]] = [next[nextIndex], next[index]];
+          await ghPut('resources-data.json', JSON.stringify(next, null, 2) + '\n', dataFile.sha, `resources: move ${id} ${dir < 0 ? 'up' : 'down'}`);
+          const pageFile = await ghGet('resources.html');
+          await ghPut('resources.html', patchResourcesHtml(pageFile.content, next), pageFile.sha, `resources page: reorder ${id}`);
+          const sibling = dir < 0 ? item.previousElementSibling : item.nextElementSibling;
+          if (sibling) {
+            dir < 0 ? item.parentNode.insertBefore(item, sibling) : item.parentNode.insertBefore(sibling, item);
+          }
+          renderAdminControls();
+        } catch (err) {
+          alert('移动失败: ' + err.message);
+        } finally {
+          clickedButton.textContent = oldLabel;
+          renderAdminControls();
+        }
+      };
 
       document.querySelectorAll('.resource-item[data-resource-id]').forEach(item => {
         const id = item.dataset.resourceId;
         const actions = document.createElement('div');
         actions.className = 'resource-admin-actions';
-        actions.innerHTML = `<a href="admin/?resource=${encodeURIComponent(id)}">Edit</a><button type="button">Delete</button>`;
-        actions.querySelector('button').addEventListener('click', async () => {
+        actions.innerHTML = `<button class="resource-admin-move" type="button" data-resource-move="up">↑ 上移</button><button class="resource-admin-move" type="button" data-resource-move="down">↓ 下移</button><a href="admin/?resource=${encodeURIComponent(id)}">Edit</a><button type="button" data-resource-delete>Delete</button>`;
+        actions.querySelector('[data-resource-move="up"]').addEventListener('click', e => moveResource(id, -1, e.currentTarget));
+        actions.querySelector('[data-resource-move="down"]').addEventListener('click', e => moveResource(id, 1, e.currentTarget));
+        actions.querySelector('[data-resource-delete]').addEventListener('click', async () => {
           if (!confirm('Delete this resource?')) return;
           try {
             const dataFile = await ghGet('resources-data.json');
@@ -253,12 +295,14 @@
               } catch (e) {}
             }
             item.remove();
+            renderAdminControls();
           } catch (err) {
             alert('Delete failed: ' + err.message);
           }
         });
         item.appendChild(actions);
       });
+      renderAdminControls();
     })();
   </script>
 </body>
