@@ -33,17 +33,36 @@
       transition: border-color 0.2s, background 0.2s;
     }
     .listen-btn:hover { border-color: var(--accent); background: var(--surface-2); }
-    .season-nav { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 22px; }
+    .season-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 28px;
+      flex-wrap: wrap;
+      width: 100%;
+      margin-top: 24px;
+    }
+    .season-nav.is-forward-only { justify-content: flex-end; }
+    .season-nav.is-bottom {
+      width: 100%;
+      max-width: none;
+      margin: 44px 0 0;
+      padding-top: 28px;
+      border-top: 1px solid var(--border);
+    }
     .season-link {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      font-size: 13px;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color 0.2s;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: underline;
+      text-underline-offset: 5px;
+      text-decoration-thickness: 1px;
+      text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
+      transition: color 0.2s, text-decoration-color 0.2s;
     }
-    .season-link:hover { color: var(--text); }
+    .season-link:hover { color: var(--accent); text-decoration-color: var(--accent); }
     .episode-stack { display: flex; flex-direction: column; gap: 44px; margin-top: 22px; }
     .episode-card {
       display: grid;
@@ -206,7 +225,7 @@
           <a class="listen-btn" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg3NDAyNzYxNw==&amp;action=getalbum&amp;album_id=4346635139062349828#wechat_redirect" target="_blank">🛰️微信公众号</a>
           <a class="listen-btn" href="https://www.instagram.com/the.good.place_podcast/" target="_blank">📸Instagram</a>
         </div>
-        <div class="season-nav" aria-label="Podcast seasons">
+        <div class="season-nav is-forward-only" aria-label="Podcast seasons">
           <a class="season-link" href="season2.html">Season 2 →</a>
         </div>
       </div>
@@ -396,6 +415,9 @@
           </div>
         </article>
       </div>
+      <div class="season-nav is-bottom is-forward-only" aria-label="Podcast seasons">
+          <a class="season-link" href="season2.html">Season 2 →</a>
+        </div>
     </div>
 
   </main>
