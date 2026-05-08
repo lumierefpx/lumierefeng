@@ -63,12 +63,13 @@
       transition: color 0.2s, text-decoration-color 0.2s;
     }
     .season-link:hover { color: var(--accent); text-decoration-color: var(--accent); }
-    .episode-stack { display: flex; flex-direction: column; gap: 44px; margin-top: 22px; }
+    .episode-stack { display: flex; flex-direction: column; gap: 56px; margin-top: 22px; }
     .episode-card {
       display: grid;
-      grid-template-columns: minmax(180px, 230px) 1fr;
-      gap: 28px;
-      padding: 0 0 44px;
+      grid-template-columns: minmax(260px, 320px) minmax(360px, 560px);
+      justify-content: space-between;
+      gap: clamp(28px, 5vw, 72px);
+      padding: 0 0 56px;
       border-bottom: 1px solid var(--border);
     }
     .episode-card:last-child { border-bottom: 0; padding-bottom: 0; }
@@ -106,9 +107,11 @@
     .episode-links a:hover { color: var(--accent); }
     .episode-gallery {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 12px;
-      align-items: start;
+      align-items: stretch;
+      width: min(100%, 520px);
+      justify-self: end;
     }
     .episode-shot {
       display: block;
@@ -119,7 +122,10 @@
       background: var(--surface);
       cursor: zoom-in;
     }
-    .episode-shot.is-featured { grid-row: span 2; grid-column: span 2; }
+    .episode-shot.is-featured { grid-column: 1 / -1; }
+    .episode-gallery.is-duo .episode-shot,
+    .episode-gallery.is-triptych .episode-shot { grid-column: auto; }
+    .episode-gallery.is-triptych { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .episode-shot img {
       width: 100%;
       aspect-ratio: 1;
@@ -164,8 +170,10 @@
       .podcast-hero { grid-template-columns: 1fr; }
       .podcast-cover { max-width: 200px; }
       .podcast-meta h1 { white-space: normal; }
-      .episode-card { grid-template-columns: 1fr; gap: 18px; }
+      .episode-card { grid-template-columns: 1fr; gap: 20px; }
+      .episode-gallery { width: 100%; justify-self: stretch; }
       .episode-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .episode-gallery.is-triptych { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .episode-shot.is-featured { grid-column: 1 / -1; grid-row: auto; }
     }
   </style>
@@ -193,10 +201,10 @@
         <li class="nav-dropdown">
           <button>Podcast <span class="dropdown-arrow">▾</span></button>
           <ul class="dropdown-menu">
-            <li><a href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">Apple Podcast</a></li>
-            <li><a href="https://www.instagram.com/the.good.place_podcast/" target="_blank">Instagram</a></li>
-            <li><a href="https://www.xiaoyuzhoufm.com/podcast/652570afb292e77709a3cefe" target="_blank">小宇宙</a></li>
-            <li><a href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg3NDAyNzYxNw==&amp;action=getalbum&amp;album_id=4346635139062349828#wechat_redirect" target="_blank">微信公众号</a></li>
+            <li><a href="overview.html">Overview</a></li>
+            <li><a class="dropdown-subitem" href="season3.html">Season 3</a></li>
+            <li><a class="dropdown-subitem" href="season2.html">Season 2</a></li>
+            <li><a class="dropdown-subitem" href="season1.html">Season 1</a></li>
           </ul>
         </li>
         <li><a href="../photography.html">Album</a></li>
@@ -263,11 +271,11 @@
             </div>
           </div>
           <div class="episode-gallery">
-            <button class="episode-shot is-featured" type="button" data-lightbox-src="../images/podcast-season-2/s2e1-01.png" aria-label="Open S2E1 cover">
-              <img src="../images/podcast-season-2/s2e1-01.png" alt="S2E1 cover">
-            </button>
-            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-2/s2e1-2.png" aria-label="Open S2E1 image 2">
+            <button class="episode-shot is-featured" type="button" data-lightbox-src="../images/podcast-season-2/s2e1-2.png" aria-label="Open S2E1 timeline">
               <img src="../images/podcast-season-2/s2e1-2.png" alt="S2E1 image 2">
+            </button>
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-2/s2e1-01.png" aria-label="Open S2E1 cover">
+              <img src="../images/podcast-season-2/s2e1-01.png" alt="S2E1 cover">
             </button>
             <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-2/s2e1-3.png" aria-label="Open S2E1 image 3">
               <img src="../images/podcast-season-2/s2e1-3.png" alt="S2E1 image 3">
@@ -287,8 +295,8 @@
               <a href="https://mp.weixin.qq.com/s/zrvWBfdnrEFU9Qjz6QVBcA" target="_blank">微信图文</a>
             </div>
           </div>
-          <div class="episode-gallery">
-            <button class="episode-shot is-featured" type="button" data-lightbox-src="../images/podcast-season-2/s2e2-1.png" aria-label="Open S2E2 cover">
+          <div class="episode-gallery is-duo">
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-2/s2e2-1.png" aria-label="Open S2E2 cover">
               <img src="../images/podcast-season-2/s2e2-1.png" alt="S2E2 cover">
             </button>
             <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-2/s2e2-2.png" aria-label="Open S2E2 image 2">
@@ -307,8 +315,8 @@
               <a href="https://www.xiaoyuzhoufm.com/episodes/6893157e638b0158793ccc22" target="_blank">在小宇宙收听</a>
             </div>
           </div>
-          <div class="episode-gallery">
-            <button class="episode-shot is-featured" type="button" data-lightbox-src="../images/podcast-season-2/s2e3-1.png" aria-label="Open S2E3 cover">
+          <div class="episode-gallery is-duo">
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-2/s2e3-1.png" aria-label="Open S2E3 cover">
               <img src="../images/podcast-season-2/s2e3-1.png" alt="S2E3 cover">
             </button>
             <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-2/s2e3-2.png" aria-label="Open S2E3 image 2">
@@ -328,11 +336,11 @@
             </div>
           </div>
           <div class="episode-gallery">
-            <button class="episode-shot is-featured" type="button" data-lightbox-src="../images/podcast-season-2/s2e4-1.png" aria-label="Open S2E4 cover">
-              <img src="../images/podcast-season-2/s2e4-1.png" alt="S2E4 cover">
-            </button>
-            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-2/s2e4-2.png" aria-label="Open S2E4 image 2">
+            <button class="episode-shot is-featured" type="button" data-lightbox-src="../images/podcast-season-2/s2e4-2.png" aria-label="Open S2E4 timeline">
               <img src="../images/podcast-season-2/s2e4-2.png" alt="S2E4 image 2">
+            </button>
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-2/s2e4-1.png" aria-label="Open S2E4 cover">
+              <img src="../images/podcast-season-2/s2e4-1.png" alt="S2E4 cover">
             </button>
             <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-2/s2e4-3.png" aria-label="Open S2E4 image 3">
               <img src="../images/podcast-season-2/s2e4-3.png" alt="S2E4 image 3">
@@ -352,8 +360,8 @@
               <a href="https://mp.weixin.qq.com/s/auFO-mOT2hGdQce8tuOfcA" target="_blank">微信图文</a>
             </div>
           </div>
-          <div class="episode-gallery">
-            <button class="episode-shot is-featured" type="button" data-lightbox-src="../images/podcast-season-2/s2e5-1.png" aria-label="Open S2E5 cover">
+          <div class="episode-gallery is-duo">
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-2/s2e5-1.png" aria-label="Open S2E5 cover">
               <img src="../images/podcast-season-2/s2e5-1.png" alt="S2E5 cover">
             </button>
             <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-2/s2e5-2.png" aria-label="Open S2E5 image 2">
@@ -374,8 +382,8 @@
               <a href="https://mp.weixin.qq.com/s/j_5sz5w94PETetbNZOsukw" target="_blank">微信图文</a>
             </div>
           </div>
-          <div class="episode-gallery">
-            <button class="episode-shot is-featured" type="button" data-lightbox-src="../images/podcast-season-2/s2e6-1.png" aria-label="Open S2E6 cover">
+          <div class="episode-gallery is-triptych">
+            <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-2/s2e6-1.png" aria-label="Open S2E6 cover">
               <img src="../images/podcast-season-2/s2e6-1.png" alt="S2E6 cover">
             </button>
             <button class="episode-shot" type="button" data-lightbox-src="../images/podcast-season-2/s2e6-2.png" aria-label="Open S2E6 image 2">

@@ -151,10 +151,6 @@ nav {
   background: var(--surface);
 }
 
-.dropdown-menu li a.dropdown-subitem {
-  padding-left: 34px;
-}
-
 /* QR popover */
 .qr-modal {
   position: fixed;
