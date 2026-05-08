@@ -1,2 +1,7 @@
 [build]
   publish = "."
+
+[[redirects]]
+  from = "/photography.html"
+  to = "/travel.html"
+  status = 301

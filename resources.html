@@ -14,7 +14,7 @@
       display: flex;
       flex-direction: column;
       gap: 22px;
-      padding-bottom: 80px;
+      padding-bottom: 74px;
       max-width: 760px;
     }
     .resource-item {
@@ -72,6 +72,104 @@
       color: var(--border);
       cursor: default;
     }
+    .resources-footer {
+      grid-template-columns: 1.2fr 1fr 1fr;
+    }
+    .message-section {
+      max-width: 760px;
+      padding: 18px 0 92px;
+      border-top: 1px solid var(--border);
+    }
+    .message-section h2 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 300;
+      letter-spacing: -1px;
+      line-height: 1.08;
+      margin-bottom: 26px;
+      color: var(--text);
+    }
+    .message-form {
+      display: grid;
+      gap: 18px;
+    }
+    .message-form textarea,
+    .message-form input[type="text"],
+    .message-form input[type="email"] {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.34);
+      color: var(--text);
+      font: inherit;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    .message-form textarea {
+      min-height: 190px;
+      padding: 18px;
+      resize: vertical;
+    }
+    .message-form input[type="text"],
+    .message-form input[type="email"] {
+      height: 48px;
+      padding: 0 14px;
+    }
+    .message-form textarea:focus,
+    .message-form input[type="text"]:focus,
+    .message-form input[type="email"]:focus {
+      border-color: var(--accent);
+      background: rgba(255, 255, 255, 0.48);
+      box-shadow: 0 0 0 3px rgba(44, 95, 163, 0.12);
+    }
+    .message-form textarea::placeholder,
+    .message-form input::placeholder {
+      color: var(--muted);
+    }
+    .message-row {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      gap: 16px;
+    }
+    .message-field {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+    .message-check {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      color: var(--muted);
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .message-check input {
+      width: 15px;
+      height: 15px;
+      accent-color: var(--accent);
+    }
+    .message-submit {
+      justify-self: start;
+      border: 1px solid var(--text);
+      border-radius: 999px;
+      background: var(--text);
+      color: var(--bg);
+      cursor: pointer;
+      font: inherit;
+      font-size: 13px;
+      letter-spacing: 0.4px;
+      padding: 10px 22px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .message-submit:hover {
+      background: transparent;
+      color: var(--text);
+    }
+    @media (max-width: 768px) {
+      .resources-footer { grid-template-columns: 1fr; }
+      .message-row { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -103,9 +201,10 @@
             <li><a class="dropdown-subitem" href="podcast/season1.html">Season 1</a></li>
           </ul>
         </li>
-        <li><a href="photography.html">Album</a></li>
+        <li><a href="travel.html">Album</a></li>
         <li><a href="videography.html">Videography</a></li>
         <li><a href="resources.html" class="active">Resources</a></li>
+        <li><a href="resources.html#leave-a-message">Leave a Message</a></li>
       </ul>
     </nav>
   </header>
@@ -148,6 +247,38 @@
       </div>
     </div>
 
+    <section class="message-section" id="leave-a-message" aria-labelledby="message-title">
+      <h2 id="message-title">Leave a Message</h2>
+      <form class="message-form" action="https://formsubmit.co/lumierefpx@gmail.com" method="POST">
+        <input type="hidden" name="_subject" value="New message from lumierefeng.com">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="box">
+        <input type="text" name="_honey" tabindex="-1" autocomplete="off" style="display:none">
+
+        <textarea name="message" placeholder="Leave a message..." required></textarea>
+
+        <div class="message-row">
+          <div class="message-field">
+            <input type="text" name="name" placeholder="What should I call you?">
+            <label class="message-check">
+              <input type="checkbox" name="anonymous" value="Yes" data-toggle-field="name" data-toggle-value="Anonymous">
+              <span>Anonymous</span>
+            </label>
+          </div>
+
+          <div class="message-field">
+            <input type="email" name="contact" placeholder="How should I get back to you?">
+            <label class="message-check">
+              <input type="checkbox" name="no_reply_needed" value="Yes" data-toggle-field="contact" data-toggle-value="No need to get back">
+              <span>No need to get back</span>
+            </label>
+          </div>
+        </div>
+
+        <button class="message-submit" type="submit">Send Message</button>
+      </form>
+    </section>
+
   </main>
 
   <footer>
@@ -168,6 +299,17 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script>
+    document.querySelectorAll('[data-toggle-field]').forEach((checkbox) => {
+      const field = document.querySelector(`[name="${checkbox.dataset.toggleField}"]`);
+      if (!field) return;
+      const storedValue = checkbox.dataset.toggleValue || '';
+      checkbox.addEventListener('change', () => {
+        field.disabled = checkbox.checked;
+        field.value = checkbox.checked ? storedValue : '';
+      });
+    });
+  </script>
   <script>
     (() => {
       const token = localStorage.getItem('lf_token');
