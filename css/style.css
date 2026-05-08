@@ -395,6 +395,10 @@ footer {
 }
 .footer-email:hover { text-decoration: underline; }
 
+.footer-contact-block + .footer-contact-block {
+  margin-top: 28px;
+}
+
 .social-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
 .social-list a {
   font-size: 13px;
@@ -790,6 +794,13 @@ footer {
   margin-bottom: 42px;
 }
 
+.home-profile {
+  display: grid;
+  grid-template-columns: minmax(0, 720px) minmax(220px, 320px);
+  gap: clamp(36px, 6vw, 72px);
+  align-items: start;
+}
+
 .home-intro {
   max-width: 720px;
   display: grid;
@@ -805,6 +816,23 @@ footer {
 .home-intro strong {
   color: var(--text);
   font-weight: 500;
+}
+
+.home-signoff {
+  margin-top: 18px;
+}
+
+.home-photo {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.home-photo img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
 }
 
 .home-hero-sub {
@@ -1071,6 +1099,8 @@ footer {
   .blogs-layout { grid-template-columns: 1fr; gap: 40px; padding: 60px 0 80px; }
   .blogs-sidebar { position: static; }
   .home-grid { grid-template-columns: 1fr; }
+  .home-profile { grid-template-columns: 1fr; }
+  .home-photo { max-width: 260px; }
   .home-card { height: 220px; }
   .podcast-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
