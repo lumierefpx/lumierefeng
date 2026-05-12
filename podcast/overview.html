@@ -48,6 +48,16 @@
       gap: 12px;
       margin-top: 28px;
     }
+    .overview-actions.is-platform-grid,
+    .platform-actions.is-platform-grid {
+      display: grid;
+      gap: 12px;
+    }
+    .platform-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
     .overview-btn {
       display: inline-flex;
       align-items: center;
@@ -166,6 +176,7 @@
       .overview-season-cover { max-width: 180px; }
       .overview-actions,
       .platform-actions { flex-direction: column; align-items: stretch; }
+      .platform-row { flex-direction: column; align-items: stretch; }
       .overview-btn { width: 100%; }
     }
   </style>
@@ -217,11 +228,19 @@
         <h1>The Good Place 好地方</h1>
         <p>《The Good Place 好地方》是一档关于移动、选择、成长和安放自己的播客。从一次次搬家、旅行、离开和重启出发，记录人如何在不完美的世界里寻找自己的好地方。</p>
         <p>A podcast about searching for a place to live, a way to belong, and a version of life that feels honest enough to keep walking toward.</p>
-        <div class="overview-actions" aria-label="Podcast platform links">
-          <a class="overview-btn" href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">🍏Apple Podcast</a>
-          <a class="overview-btn" href="https://www.xiaoyuzhoufm.com/podcast/652570afb292e77709a3cefe" target="_blank">🪐小宇宙</a>
-          <a class="overview-btn" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg3NDAyNzYxNw==&amp;action=getalbum&amp;album_id=4346635139062349828#wechat_redirect" target="_blank">🛰️微信公众号</a>
-          <a class="overview-btn" href="https://www.instagram.com/the.good.place_podcast/" target="_blank">📸Instagram</a>
+        <div class="overview-actions is-platform-grid" aria-label="Podcast platform links">
+          <div class="platform-row">
+            <a class="overview-btn" href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">🍏Apple Podcast</a>
+            <a class="overview-btn" href="https://www.xiaoyuzhoufm.com/podcast/652570afb292e77709a3cefe" target="_blank">🪐小宇宙</a>
+            <a class="overview-btn" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg3NDAyNzYxNw==&amp;action=getalbum&amp;album_id=4346635139062349828#wechat_redirect" target="_blank">💬微信公众号</a>
+            <a class="overview-btn" href="https://www.instagram.com/the.good.place_podcast/" target="_blank">📸Instagram</a>
+          </div>
+          <div class="platform-row">
+            <a class="overview-btn" href="https://open.spotify.com/show/033fq6PLcKMVrW8a3Wv3hw" target="_blank">🟢Spotify</a>
+            <a class="overview-btn" href="https://xima.tv/1_5ULm1tR?_sonic=0" target="_blank">🏔喜马拉雅</a>
+            <a class="overview-btn" href="https://163cn.tv/6U1xMd9" target="_blank">☁️网易云</a>
+            <a class="overview-btn" href="https://c6.y.qq.com/base/fcgi-bin/u?__=ndM4DBtoMgxR" target="_blank">🐧QQ音乐</a>
+          </div>
         </div>
       </div>
     </section>
@@ -292,11 +311,19 @@
 
     <section class="overview-section">
       <p class="section-label">Listen and Follow</p>
-      <div class="platform-actions">
-        <a class="overview-btn" href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">Listen on Apple Podcast</a>
-        <a class="overview-btn" href="https://www.xiaoyuzhoufm.com/podcast/652570afb292e77709a3cefe" target="_blank">Listen on 小宇宙</a>
-        <a class="overview-btn" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg3NDAyNzYxNw==&amp;action=getalbum&amp;album_id=4346635139062349828#wechat_redirect" target="_blank">Read on 微信公众号</a>
-        <a class="overview-btn" href="https://www.instagram.com/the.good.place_podcast/" target="_blank">Follow on Instagram</a>
+      <div class="platform-actions is-platform-grid">
+        <div class="platform-row">
+          <a class="overview-btn" href="https://podcasts.apple.com/hk/podcast/the-good-place%E5%A5%BD%E5%9C%B0%E6%96%B9/id1711323222" target="_blank">Listen on Apple Podcast</a>
+          <a class="overview-btn" href="https://www.xiaoyuzhoufm.com/podcast/652570afb292e77709a3cefe" target="_blank">Listen on 小宇宙</a>
+          <a class="overview-btn" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg3NDAyNzYxNw==&amp;action=getalbum&amp;album_id=4346635139062349828#wechat_redirect" target="_blank">Read on 微信公众号</a>
+          <a class="overview-btn" href="https://www.instagram.com/the.good.place_podcast/" target="_blank">Follow on Instagram</a>
+        </div>
+        <div class="platform-row">
+          <a class="overview-btn" href="https://open.spotify.com/show/033fq6PLcKMVrW8a3Wv3hw" target="_blank">Listen on Spotify</a>
+          <a class="overview-btn" href="https://xima.tv/1_5ULm1tR?_sonic=0" target="_blank">Listen on 喜马拉雅</a>
+          <a class="overview-btn" href="https://163cn.tv/6U1xMd9" target="_blank">Listen on 网易云</a>
+          <a class="overview-btn" href="https://c6.y.qq.com/base/fcgi-bin/u?__=ndM4DBtoMgxR" target="_blank">Listen on QQ音乐</a>
+        </div>
       </div>
     </section>
   </main>
