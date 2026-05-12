@@ -9,7 +9,7 @@
   },
   {
     "id": "books-movies",
-    "title": "Books & Movies Recommendations",
+    "title": "Books & Movies that I Like",
     "subtitle": "Updating from time to time",
     "type": "page",
     "url": "resources/books-movies.html",
