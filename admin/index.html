@@ -85,6 +85,10 @@
     .preview img { max-width: 100%; border-radius: 8px; margin: 1.5em 0; }
     .resource-editor { display: none; }
     .resource-editor.on { display: block; }
+    .episode-editor { display: none; }
+    .episode-editor.on { display: block; }
+    .episode-image-row { display: flex; gap: 8px; align-items: flex-end; }
+    .episode-image-row input { flex: 1; }
     .resource-help { font-size: 12px; color: var(--muted); line-height: 1.6; margin-top: -8px; margin-bottom: 20px; }
 
     /* ── Bottom bar ── */
@@ -147,6 +151,7 @@
       <span class="topbar-label">New Post</span>
     </div>
     <div class="topbar-right">
+      <button class="btn btn-ghost" onclick="location.href='?episode=new'">添加单集</button>
       <button class="btn btn-ghost" onclick="pinPost()">置顶</button>
       <button class="btn btn-ghost" onclick="openModal()">Token</button>
     </div>
@@ -175,6 +180,36 @@
         <input type="text" id="resourceUrlIn" placeholder="https://...">
       </div>
       <p class="resource-help" id="resourceHelp">内容页会自动生成一个 Resources 里的详情页；外部链接会直接跳到你填写的网址。</p>
+    </div>
+
+    <div class="episode-editor" id="episodeEditor">
+      <div class="meta-row">
+        <div class="meta-field">
+          <label class="field-label" for="episodeNumberIn">集号</label>
+          <input type="text" id="episodeNumberIn" placeholder="S4E2">
+        </div>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="episodeAppleIn">Apple Podcast 链接</label>
+        <input type="text" id="episodeAppleIn" placeholder="https://podcasts.apple.com/...">
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="episodeXiaoyuzhouIn">小宇宙链接</label>
+        <input type="text" id="episodeXiaoyuzhouIn" placeholder="https://www.xiaoyuzhoufm.com/episode/...">
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="episodeWechatIn">微信图文链接 <span style="font-weight:400;text-transform:none;letter-spacing:0">(可空)</span></label>
+        <input type="text" id="episodeWechatIn" placeholder="https://mp.weixin.qq.com/...">
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="episodeImageIn">图片</label>
+        <div class="episode-image-row">
+          <input type="text" id="episodeImageIn" placeholder="../images/podcast-season4/s4e2.jpg">
+          <button class="btn btn-ghost" id="episodeImgBtn" type="button" onclick="document.getElementById('episodeImgPicker').click()">上传图片</button>
+          <input type="file" id="episodeImgPicker" accept="image/*" style="display:none" onchange="handleEpisodeImgFile(this.files[0]); this.value=''">
+        </div>
+      </div>
+      <p class="resource-help">发布后会添加到 Season 4 页面底部；微信链接留空时不会显示。</p>
     </div>
 
     <div id="postMeta">
@@ -278,6 +313,12 @@ function boot() {
   document.getElementById('dateIn').value = new Date().toISOString().slice(0,10);
 
   const params = new URLSearchParams(location.search);
+  const episodeParam = params.get('episode');
+  if (episodeParam) {
+    bootEpisode();
+    return;
+  }
+
   const resourceParam = params.get('resource');
   if (resourceParam) {
     bootResource(resourceParam);
@@ -904,8 +945,100 @@ async function publishResource() {
   }
 }
 
+// ── Season 4 episode editor ──────────────────────────────
+function bootEpisode() {
+  adminMode = 'episode';
+  document.querySelector('.topbar-label').textContent = 'New Season 4 Episode';
+  document.getElementById('pubBtn').textContent = '发布单集 →';
+  document.getElementById('titleIn').placeholder = '单集标题';
+  document.getElementById('postMeta').style.display = 'none';
+  document.getElementById('resourceEditor').classList.remove('on');
+  document.getElementById('episodeEditor').classList.add('on');
+  document.querySelector('.toolbar').style.display = 'none';
+  document.getElementById('bodyIn').style.display = 'none';
+  document.getElementById('previewPane').classList.remove('on');
+  setStatus('新建 Season 4 单集');
+}
+
+function makeEpisodeCardHtml({number, title, appleUrl, xiaoyuzhouUrl, wechatUrl, imagePath}) {
+  const e = s => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const links = [
+    `<a href="${e(appleUrl)}" target="_blank">在 Apple Podcast 收听</a>`,
+    `<a href="${e(xiaoyuzhouUrl)}" target="_blank">在小宇宙收听</a>`
+  ];
+  if (wechatUrl) links.push(`<a href="${e(wechatUrl)}" target="_blank">微信图文</a>`);
+  const linkHtml = links.map((link, i) => i ? `              <span>·</span>\n              ${link}` : `              ${link}`).join('\n');
+
+  return `        <article class="episode-card">\n` +
+    `          <div>\n` +
+    `            <p class="episode-kicker">${e(number)}</p>\n` +
+    `            <h2 class="episode-title">${e(title)}</h2>\n` +
+    `            <div class="episode-links">\n` +
+    `${linkHtml}\n` +
+    `            </div>\n` +
+    `          </div>\n` +
+    `          <div class="episode-gallery">\n` +
+    `            <button class="episode-shot is-featured" type="button" data-lightbox-src="${e(imagePath)}" aria-label="Open ${e(number)} cover">\n` +
+    `              <img src="${e(imagePath)}" alt="${e(number)} cover">\n` +
+    `            </button>\n` +
+    `          </div>\n` +
+    `        </article>`;
+}
+
+function patchSeason4Episodes(html, episode) {
+  const card = makeEpisodeCardHtml(episode);
+  const marker = /(\s*)<\/div>\s*<div class="season-nav is-bottom" aria-label="Podcast seasons">/;
+  const section = html.match(/<div class="episode-stack">[\s\S]*?<div class="season-nav is-bottom" aria-label="Podcast seasons">/);
+  if (!section) throw new Error('没有找到 Season 4 的 Episodes 区域');
+  const patchedSection = section[0].replace(marker, `\n${card}\n$1</div>\n      <div class="season-nav is-bottom" aria-label="Podcast seasons">`);
+  return html.replace(section[0], patchedSection);
+}
+
+async function publishEpisode() {
+  const number = document.getElementById('episodeNumberIn').value.trim().toUpperCase();
+  const title = document.getElementById('titleIn').value.trim();
+  const appleUrl = document.getElementById('episodeAppleIn').value.trim();
+  const xiaoyuzhouUrl = document.getElementById('episodeXiaoyuzhouIn').value.trim();
+  const wechatUrl = document.getElementById('episodeWechatIn').value.trim();
+  const imagePath = document.getElementById('episodeImageIn').value.trim();
+
+  if (!number) return setStatus('请填写集号，比如 S4E2', 'err');
+  if (!/^S4E\d+$/i.test(number)) return setStatus('集号格式请写成 S4E2 这样', 'err');
+  if (!title) return setStatus('请填写单集标题', 'err');
+  if (!appleUrl) return setStatus('请填写 Apple Podcast 链接', 'err');
+  if (!xiaoyuzhouUrl) return setStatus('请填写小宇宙链接', 'err');
+  if (!imagePath) return setStatus('请上传或填写图片路径', 'err');
+
+  const btn = document.getElementById('pubBtn');
+  btn.disabled = true;
+
+  try {
+    setStatus('读取 Season 4 页面…');
+    const { content, sha } = await ghGet('podcast/season4.html');
+    if (content.includes(`<p class="episode-kicker">${number}</p>`)) {
+      throw new Error(`${number} 已经存在`);
+    }
+    const nextHtml = patchSeason4Episodes(content, {number, title, appleUrl, xiaoyuzhouUrl, wechatUrl, imagePath});
+    setStatus('保存 Season 4 单集…');
+    await ghPut('podcast/season4.html', nextHtml, sha, `podcast season 4: add ${number}`);
+    setStatus(`发布成功 ✓ &nbsp;约 1-2 分钟后生效 &nbsp;<a href="https://lumierefeng.com/podcast/season4.html" target="_blank" style="color:var(--accent)">查看 Season 4 →</a>`, 'ok');
+    document.getElementById('episodeNumberIn').value = '';
+    document.getElementById('titleIn').value = '';
+    document.getElementById('episodeAppleIn').value = '';
+    document.getElementById('episodeXiaoyuzhouIn').value = '';
+    document.getElementById('episodeWechatIn').value = '';
+    document.getElementById('episodeImageIn').value = '';
+  } catch (err) {
+    console.error(err);
+    setStatus('发布失败: ' + err.message, 'err');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
 // ── Publish / Save ───────────────────────────────────────
 async function publish() {
+  if (adminMode === 'episode') return publishEpisode();
   if (adminMode === 'resource') return publishResource();
 
   const title   = document.getElementById('titleIn').value.trim();
@@ -1068,6 +1201,51 @@ async function handleImgFile(file) {
     setStatus('图片已上传 ✓ — 点 Write 继续写作', 'ok');
   } catch(err) {
     setStatus('图片上传失败: ' + err.message, 'err');
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function handleEpisodeImgFile(file) {
+  if (!file || !file.type.startsWith('image/')) return;
+
+  const btn = document.getElementById('episodeImgBtn');
+  btn.disabled = true;
+  setStatus('处理单集图片中…');
+
+  try {
+    const compressed = await compressImage(file);
+    const number = document.getElementById('episodeNumberIn').value.trim().toLowerCase();
+    const base = (number || file.name.replace(/\.[^.]+$/, 'episode'))
+      .replace(/[^a-zA-Z0-9_-]/g, '-')
+      .slice(0, 40);
+    const name = `${base}-${Date.now()}.jpg`;
+    const path = `images/podcast-season4/${name}`;
+
+    const b64 = await new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onload  = () => res(r.result.split(',')[1]);
+      r.onerror = rej;
+      r.readAsDataURL(compressed);
+    });
+
+    setStatus('上传单集图片中…');
+    const body = { message: `Upload podcast image: ${name}`, content: b64, branch: BRANCH };
+    const r = await fetch(`${API}/${path}`, {
+      method: 'PUT',
+      headers: { Authorization: `token ${getToken()}`, 'Content-Type': 'application/json', Accept: 'application/vnd.github.v3+json' },
+      body: JSON.stringify(body)
+    });
+    if (!r.ok) {
+      const e = await r.json().catch(() => ({}));
+      throw new Error(e.message || `HTTP ${r.status}`);
+    }
+
+    document.getElementById('episodeImageIn').value = `../${path}`;
+    setStatus('单集图片已上传 ✓', 'ok');
+  } catch(err) {
+    setStatus('单集图片上传失败: ' + err.message, 'err');
     console.error(err);
   } finally {
     btn.disabled = false;
